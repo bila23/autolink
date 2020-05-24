@@ -1,12 +1,60 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<!DOCTYPE html>
+<html lang="sv" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Facelet Title</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></link>
+        <title>Autolink</title>
+        <style>
+            button{
+                border: 1px solid transparent;
+                border-radius:15px;
+                font-weight: bold;
+                background-color: #39c1cd;
+                color: #fff;
+                font-size:19px;
+            }
+            button:active {
+                border: none;
+                box-shadow: 0 2px #666;
+                transform: translateY(1px);
+            }
+            button:hover{
+                box-shadow: 0 5px 10px rgba(0,0,0,.15);
+                border: none;
+            }
+            body{
+                background-image: url("images/login/home.png");
+                background-repeat: no-repeat;
+            }
+        </style>
     </h:head>
     <h:body>
-        Hello from Facelets
+        <h:form id="mf">
+            <div class="row" style="height: 100%;">
+                <div class="col s8 m8 l8 xl8 hide-on-small-only" style="height: 100%;"></div>
+                <div class="col s12 m12 l4 xl4" style="height: 100%;vertical-align: middle;">
+                    <img src="images/login/logo_login.png" alt="Logo de autolink"/>
+                    <div class="z-depth-5" style="background-color:#fff;border-radius:45px;padding: 25px">
+                            <div class="input-field" style="padding-bottom:25px">
+                                <input type="text" placeholder="Correo electronico" class="form-control validate" name = "username" id="id_username"/>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" placeholder="Contrasena" name = "pwd" class="form-control validate" id="id_pwd"/>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                                <button class="waves-effect waves-light btn">Ingresar</button>
+                            </div>                    
+                            <div class="input-field center-align">
+                                <a href="#" style="color: #022238;">¿Recuperar tu contrasena?</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </h:body>
 </html>
-
