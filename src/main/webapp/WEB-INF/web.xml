@@ -190,7 +190,7 @@
     <!-- LOGIN CONFIG -->
     <login-config>
         <auth-method>FORM</auth-method>
-        <realm-name>jdbc-realm</realm-name>
+        <realm-name>jdbc-realm-autolink</realm-name>
         <form-login-config>
             <form-login-page>/init.xhtml</form-login-page>
             <form-error-page>/init.xhtml</form-error-page>

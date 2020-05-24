@@ -11,6 +11,8 @@
 package com.terzus.autolink.commons;
 
 import com.bila.framework.commons.FacesHelper;
+import com.terzus.autolink.model.Usuario;
+import com.terzus.autolink.service.UsuarioService;
 import com.terzus.autolink.vo.LoginVO;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -37,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginController implements Serializable{
 
     @Getter @Setter private LoginVO vo;
-    //@Inject private UsuarioService userService;
+    @Inject private UsuarioService userService;
     
     public LoginController(){
         vo = new LoginVO();
@@ -51,19 +53,63 @@ public class LoginController implements Serializable{
         else{
             try{
                 String user = vo.getUsername().toLowerCase();
+                
+                /*Usuario admin = new Usuario();
+                Usuario taller = new Usuario();
+                Usuario prov = new Usuario();
+                Usuario aseg = new Usuario();
+                
+                admin.setFechacreacion(new Date());
+                admin.setEstado(1);
+                admin.setIdtipo(1);
+                admin.setNombre("Usuario administrador");
+                admin.setPass("admin");
+                admin.setUser("admin@gmail.com");
+                admin.setUsuariocrea("WJUAREZ");
+                
+                taller.setFechacreacion(new Date());
+                taller.setEstado(1);
+                taller.setIdtipo(3);
+                taller.setNombre("Usuario taller");
+                taller.setPass("taller");
+                taller.setUser("taller@gmail.com");
+                taller.setUsuariocrea("WJUAREZ");
+                
+                prov.setFechacreacion(new Date());
+                prov.setEstado(1);
+                prov.setIdtipo(4);
+                prov.setNombre("Usuario prov");
+                prov.setPass("prov");
+                prov.setUser("prov@gmail.com");
+                prov.setUsuariocrea("WJUAREZ");
+                
+                
+                aseg.setFechacreacion(new Date());
+                aseg.setEstado(1);
+                aseg.setIdtipo(2);
+                aseg.setNombre("Usuario aseg");
+                aseg.setPass("aseg");
+                aseg.setUser("aseg@gmail.com");
+                aseg.setUsuariocrea("WJUAREZ");
+                
+                userService.save(admin);
+                userService.save(taller);
+                userService.save(prov);
+                userService.save(aseg);*/
+                
                 //VERIFICO SI EL USUARIO EXISTE
-                /*Usuario model = userService.findByKey(user);
+                Usuario model = userService.findByUser(user);
                 if(model == null){
                     FacesHelper.errorMessage("El usuario que ha ingresado no existe");
                     return "init";
-                }else if(model.getEstado() == null || !model.getEstado().equals("A")){
+                }else if(model.getEstado() == 0){
                     FacesHelper.errorMessage("Su usuario se encuentra inactivo, no tiene permisos para ingresar al sistema");
                     return "init";                    
                 }else{
                     HttpServletRequest request = FacesHelper.getRequest();
                     request.login(user, vo.getPassword());
                     return "/html/private/index.xhtml?faces-redirect=true";
-                }*/
+                }
             }catch(Exception e){
                 FacesHelper.errorMessage("Su usuario y/o contrasena son incorrectos");
                 return "init";

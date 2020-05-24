@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByUser", query = "SELECT u FROM Usuario u WHERE UPPER(u.user) = :user")
 })
 public class Usuario implements Serializable {
 
@@ -65,9 +66,8 @@ public class Usuario implements Serializable {
     private String nombre;
     @Column(name = "idtipo")
     private Integer idtipo;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private int estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -126,11 +126,11 @@ public class Usuario implements Serializable {
         this.idtipo = idtipo;
     }
 
-    public byte[] getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
