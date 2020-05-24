@@ -38,15 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ofertaproveedor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o"),
-    @NamedQuery(name = "Ofertaproveedor.findById", query = "SELECT o FROM Ofertaproveedor o WHERE o.id = :id"),
-    @NamedQuery(name = "Ofertaproveedor.findByIdsolicitud", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud"),
-    @NamedQuery(name = "Ofertaproveedor.findByIdrepuesto", query = "SELECT o FROM Ofertaproveedor o WHERE o.idrepuesto = :idrepuesto"),
-    @NamedQuery(name = "Ofertaproveedor.findByIdproveedor", query = "SELECT o FROM Ofertaproveedor o WHERE o.idproveedor = :idproveedor"),
-    @NamedQuery(name = "Ofertaproveedor.findByCantidad", query = "SELECT o FROM Ofertaproveedor o WHERE o.cantidad = :cantidad"),
-    @NamedQuery(name = "Ofertaproveedor.findByEstado", query = "SELECT o FROM Ofertaproveedor o WHERE o.estado = :estado"),
-    @NamedQuery(name = "Ofertaproveedor.findByTiempo", query = "SELECT o FROM Ofertaproveedor o WHERE o.tiempo = :tiempo"),
-    @NamedQuery(name = "Ofertaproveedor.findByPrecio", query = "SELECT o FROM Ofertaproveedor o WHERE o.precio = :precio")})
+    @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o")
+})
 public class Ofertaproveedor implements Serializable {
 
     private static final long serialVersionUID = 1L;

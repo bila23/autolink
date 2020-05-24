@@ -46,15 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "aseguradora")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a"),
-    @NamedQuery(name = "Aseguradora.findById", query = "SELECT a FROM Aseguradora a WHERE a.id = :id"),
-    @NamedQuery(name = "Aseguradora.findByNombreaseguradora", query = "SELECT a FROM Aseguradora a WHERE a.nombreaseguradora = :nombreaseguradora"),
-    @NamedQuery(name = "Aseguradora.findByCargo", query = "SELECT a FROM Aseguradora a WHERE a.cargo = :cargo"),
-    @NamedQuery(name = "Aseguradora.findByRazonsocial", query = "SELECT a FROM Aseguradora a WHERE a.razonsocial = :razonsocial"),
-    @NamedQuery(name = "Aseguradora.findByNit", query = "SELECT a FROM Aseguradora a WHERE a.nit = :nit"),
-    @NamedQuery(name = "Aseguradora.findByIva", query = "SELECT a FROM Aseguradora a WHERE a.iva = :iva"),
-    @NamedQuery(name = "Aseguradora.findByUsuariocrea", query = "SELECT a FROM Aseguradora a WHERE a.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Aseguradora.findByFechacreacion", query = "SELECT a FROM Aseguradora a WHERE a.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a")
+})
 public class Aseguradora implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -85,7 +78,7 @@ public class Aseguradora implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
     @OneToMany(mappedBy = "idusuario")
     private List<Aseguradora> aseguradoraList;

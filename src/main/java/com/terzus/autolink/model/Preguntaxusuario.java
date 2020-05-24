@@ -37,11 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "preguntaxusuario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Preguntaxusuario.findAll", query = "SELECT p FROM Preguntaxusuario p"),
-    @NamedQuery(name = "Preguntaxusuario.findById", query = "SELECT p FROM Preguntaxusuario p WHERE p.id = :id"),
-    @NamedQuery(name = "Preguntaxusuario.findByIdusuario", query = "SELECT p FROM Preguntaxusuario p WHERE p.idusuario = :idusuario"),
-    @NamedQuery(name = "Preguntaxusuario.findByIdpregunta", query = "SELECT p FROM Preguntaxusuario p WHERE p.idpregunta = :idpregunta"),
-    @NamedQuery(name = "Preguntaxusuario.findByRespuesta", query = "SELECT p FROM Preguntaxusuario p WHERE p.respuesta = :respuesta")})
+    @NamedQuery(name = "Preguntaxusuario.findAll", query = "SELECT p FROM Preguntaxusuario p")
+})
 public class Preguntaxusuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

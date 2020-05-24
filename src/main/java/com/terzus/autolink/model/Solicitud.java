@@ -44,25 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "solicitud")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s"),
-    @NamedQuery(name = "Solicitud.findById", query = "SELECT s FROM Solicitud s WHERE s.id = :id"),
-    @NamedQuery(name = "Solicitud.findByIdtaller", query = "SELECT s FROM Solicitud s WHERE s.idtaller = :idtaller"),
-    @NamedQuery(name = "Solicitud.findByIdaseguradora", query = "SELECT s FROM Solicitud s WHERE s.idaseguradora = :idaseguradora"),
-    @NamedQuery(name = "Solicitud.findByIdmarca", query = "SELECT s FROM Solicitud s WHERE s.idmarca = :idmarca"),
-    @NamedQuery(name = "Solicitud.findByIdusuario", query = "SELECT s FROM Solicitud s WHERE s.idusuario = :idusuario"),
-    @NamedQuery(name = "Solicitud.findByAniocarro", query = "SELECT s FROM Solicitud s WHERE s.aniocarro = :aniocarro"),
-    @NamedQuery(name = "Solicitud.findByTipovehiculo", query = "SELECT s FROM Solicitud s WHERE s.tipovehiculo = :tipovehiculo"),
-    @NamedQuery(name = "Solicitud.findByPlaca", query = "SELECT s FROM Solicitud s WHERE s.placa = :placa"),
-    @NamedQuery(name = "Solicitud.findByChasis", query = "SELECT s FROM Solicitud s WHERE s.chasis = :chasis"),
-    @NamedQuery(name = "Solicitud.findByMotor", query = "SELECT s FROM Solicitud s WHERE s.motor = :motor"),
-    @NamedQuery(name = "Solicitud.findByPoliza", query = "SELECT s FROM Solicitud s WHERE s.poliza = :poliza"),
-    @NamedQuery(name = "Solicitud.findBySiniestro", query = "SELECT s FROM Solicitud s WHERE s.siniestro = :siniestro"),
-    @NamedQuery(name = "Solicitud.findByNombreasegurado", query = "SELECT s FROM Solicitud s WHERE s.nombreasegurado = :nombreasegurado"),
-    @NamedQuery(name = "Solicitud.findByCodigosolicitud", query = "SELECT s FROM Solicitud s WHERE s.codigosolicitud = :codigosolicitud"),
-    @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT s FROM Solicitud s WHERE s.estado = :estado"),
-    @NamedQuery(name = "Solicitud.findByComentariostaller", query = "SELECT s FROM Solicitud s WHERE s.comentariostaller = :comentariostaller"),
-    @NamedQuery(name = "Solicitud.findByFechainicio", query = "SELECT s FROM Solicitud s WHERE s.fechainicio = :fechainicio"),
-    @NamedQuery(name = "Solicitud.findByFechafin", query = "SELECT s FROM Solicitud s WHERE s.fechafin = :fechafin")})
+    @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s")
+})
 public class Solicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;

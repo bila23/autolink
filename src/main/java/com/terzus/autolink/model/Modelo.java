@@ -41,12 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "modelo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Modelo.findAll", query = "SELECT m FROM Modelo m"),
-    @NamedQuery(name = "Modelo.findById", query = "SELECT m FROM Modelo m WHERE m.id = :id"),
-    @NamedQuery(name = "Modelo.findByNombremodelo", query = "SELECT m FROM Modelo m WHERE m.nombremodelo = :nombremodelo"),
-    @NamedQuery(name = "Modelo.findByIdmarca", query = "SELECT m FROM Modelo m WHERE m.idmarca = :idmarca"),
-    @NamedQuery(name = "Modelo.findByUsuariocrea", query = "SELECT m FROM Modelo m WHERE m.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Modelo.findByFechacreacion", query = "SELECT m FROM Modelo m WHERE m.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Modelo.findAll", query = "SELECT m FROM Modelo m")
+})
 public class Modelo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,7 +64,7 @@ public class Modelo implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
 
     public Modelo() {

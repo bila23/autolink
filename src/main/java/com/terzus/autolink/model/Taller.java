@@ -43,15 +43,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "taller")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Taller.findAll", query = "SELECT t FROM Taller t"),
-    @NamedQuery(name = "Taller.findById", query = "SELECT t FROM Taller t WHERE t.id = :id"),
-    @NamedQuery(name = "Taller.findByNombreTaller", query = "SELECT t FROM Taller t WHERE t.nombreTaller = :nombreTaller"),
-    @NamedQuery(name = "Taller.findByTelefono", query = "SELECT t FROM Taller t WHERE t.telefono = :telefono"),
-    @NamedQuery(name = "Taller.findByCargo", query = "SELECT t FROM Taller t WHERE t.cargo = :cargo"),
-    @NamedQuery(name = "Taller.findByRazonsocial", query = "SELECT t FROM Taller t WHERE t.razonsocial = :razonsocial"),
-    @NamedQuery(name = "Taller.findByDireccion", query = "SELECT t FROM Taller t WHERE t.direccion = :direccion"),
-    @NamedQuery(name = "Taller.findByUsuariocrea", query = "SELECT t FROM Taller t WHERE t.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Taller.findByFechacreacion", query = "SELECT t FROM Taller t WHERE t.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Taller.findAll", query = "SELECT t FROM Taller t")
+})
 public class Taller implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,7 +75,7 @@ public class Taller implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
     @JoinColumn(name = "idusuario", referencedColumnName = "id")
     @ManyToOne

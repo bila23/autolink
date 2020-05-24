@@ -40,15 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "callcenter")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Callcenter.findAll", query = "SELECT c FROM Callcenter c"),
-    @NamedQuery(name = "Callcenter.findById", query = "SELECT c FROM Callcenter c WHERE c.id = :id"),
-    @NamedQuery(name = "Callcenter.findByNombreempresa", query = "SELECT c FROM Callcenter c WHERE c.nombreempresa = :nombreempresa"),
-    @NamedQuery(name = "Callcenter.findByRazonsocial", query = "SELECT c FROM Callcenter c WHERE c.razonsocial = :razonsocial"),
-    @NamedQuery(name = "Callcenter.findByCargo", query = "SELECT c FROM Callcenter c WHERE c.cargo = :cargo"),
-    @NamedQuery(name = "Callcenter.findByTelefono", query = "SELECT c FROM Callcenter c WHERE c.telefono = :telefono"),
-    @NamedQuery(name = "Callcenter.findByIdusuario", query = "SELECT c FROM Callcenter c WHERE c.idusuario = :idusuario"),
-    @NamedQuery(name = "Callcenter.findByUsuariocrea", query = "SELECT c FROM Callcenter c WHERE c.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Callcenter.findByFechacreacion", query = "SELECT c FROM Callcenter c WHERE c.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Callcenter.findAll", query = "SELECT c FROM Callcenter c")
+})
 public class Callcenter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -78,7 +71,7 @@ public class Callcenter implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
 
     public Callcenter() {

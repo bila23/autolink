@@ -43,17 +43,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "proveedor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Proveedor.findAll", query = "SELECT p FROM Proveedor p"),
-    @NamedQuery(name = "Proveedor.findById", query = "SELECT p FROM Proveedor p WHERE p.id = :id"),
-    @NamedQuery(name = "Proveedor.findByNombreproveedor", query = "SELECT p FROM Proveedor p WHERE p.nombreproveedor = :nombreproveedor"),
-    @NamedQuery(name = "Proveedor.findByDireccion", query = "SELECT p FROM Proveedor p WHERE p.direccion = :direccion"),
-    @NamedQuery(name = "Proveedor.findByTelefono", query = "SELECT p FROM Proveedor p WHERE p.telefono = :telefono"),
-    @NamedQuery(name = "Proveedor.findByCargo", query = "SELECT p FROM Proveedor p WHERE p.cargo = :cargo"),
-    @NamedQuery(name = "Proveedor.findByRazonsocial", query = "SELECT p FROM Proveedor p WHERE p.razonsocial = :razonsocial"),
-    @NamedQuery(name = "Proveedor.findByCuentabancaria", query = "SELECT p FROM Proveedor p WHERE p.cuentabancaria = :cuentabancaria"),
-    @NamedQuery(name = "Proveedor.findByNit", query = "SELECT p FROM Proveedor p WHERE p.nit = :nit"),
-    @NamedQuery(name = "Proveedor.findByUsuariocrea", query = "SELECT p FROM Proveedor p WHERE p.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Proveedor.findByFechacreacion", query = "SELECT p FROM Proveedor p WHERE p.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Proveedor.findAll", query = "SELECT p FROM Proveedor p")
+})
 public class Proveedor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,7 +81,7 @@ public class Proveedor implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
     @JoinColumn(name = "idusuario", referencedColumnName = "id")
     @ManyToOne

@@ -42,12 +42,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "repuesto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Repuesto.findAll", query = "SELECT r FROM Repuesto r"),
-    @NamedQuery(name = "Repuesto.findById", query = "SELECT r FROM Repuesto r WHERE r.id = :id"),
-    @NamedQuery(name = "Repuesto.findByNombrerepuesto", query = "SELECT r FROM Repuesto r WHERE r.nombrerepuesto = :nombrerepuesto"),
-    @NamedQuery(name = "Repuesto.findByValor", query = "SELECT r FROM Repuesto r WHERE r.valor = :valor"),
-    @NamedQuery(name = "Repuesto.findByUsuariocrea", query = "SELECT r FROM Repuesto r WHERE r.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Repuesto.findByFechacreacion", query = "SELECT r FROM Repuesto r WHERE r.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Repuesto.findAll", query = "SELECT r FROM Repuesto r")
+})
 public class Repuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,7 +65,7 @@ public class Repuesto implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
 
     public Repuesto() {

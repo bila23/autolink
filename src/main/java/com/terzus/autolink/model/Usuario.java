@@ -44,14 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByUser", query = "SELECT u FROM Usuario u WHERE u.user = :user"),
-    @NamedQuery(name = "Usuario.findByPass", query = "SELECT u FROM Usuario u WHERE u.pass = :pass"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
-    @NamedQuery(name = "Usuario.findByIdtipo", query = "SELECT u FROM Usuario u WHERE u.idtipo = :idtipo"),
-    @NamedQuery(name = "Usuario.findByUsuariocrea", query = "SELECT u FROM Usuario u WHERE u.usuariocrea = :usuariocrea"),
-    @NamedQuery(name = "Usuario.findByFechacreacion", query = "SELECT u FROM Usuario u WHERE u.fechacreacion = :fechacreacion")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -78,7 +72,7 @@ public class Usuario implements Serializable {
     @Column(name = "usuariocrea")
     private String usuariocrea;
     @Column(name = "fechacreacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
     @OneToMany(mappedBy = "idusuario")
     private List<Taller> tallerList;
