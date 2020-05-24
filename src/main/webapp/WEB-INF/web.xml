@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>SISINV</display-name>
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name> 
+        <param-value>true</param-value> 
+    </context-param>
+    <context-param>
+        <param-name>org.omnifaces.COMBINED_RESOURCE_HANDLER_CACHE_TTL</param-name>
+        <param-value>3628800</param-value> <!-- 6 weeks -->
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>none</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>gzipResponseFilter</filter-name>
+        <filter-class>org.omnifaces.filter.GzipResponseFilter</filter-class>
+        <init-param>
+            <description>The threshold size in bytes. Must be a number between 0 and 9999. Defaults to 150.</description>
+            <param-name>threshold</param-name>
+            <param-value>150</param-value>
+        </init-param>
+        <init-param>
+            <description>The mimetypes which needs to be compressed. Must be a commaseparated string. Defaults to the below values.</description>
+            <param-name>mimetypes</param-name>
+            <param-value>
+                text/plain, text/html, text/xml, text/css, text/javascript, text/csv, text/rtf,
+                application/xml, application/xhtml+xml, application/javascript, application/json,
+                image/svg+xml, application/x-www-form-urlencoded
+            </param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>resourcesCache</filter-name>
+        <filter-class>org.omnifaces.filter.CacheControlFilter</filter-class>
+        <init-param>
+            <param-name>expires</param-name>
+            <param-value>10d</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>Auth Filter</filter-name>
+        <filter-class>com.terzus.autolink.commons.AuthFilter</filter-class>
+        <init-param>
+            <param-name>init_page</param-name>
+            <param-value>/autolink/init.xhtml</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Auth Filter</filter-name>
+        <url-pattern>/faces/html/private/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>gzipResponseFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>resourcesCache</filter-name>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.jpeg</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>faces/html/private/index.xhtml</welcome-file>
+    </welcome-file-list>
+    <mime-mapping>
+        <extension>ttf</extension>
+        <mime-type>application/x-font-ttf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff</extension>
+        <mime-type>application/x-font-woff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff2</extension>
+        <mime-type>application/x-font-woff2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eot</extension>
+        <mime-type>application/x-font-eot</mime-type>
+    </mime-mapping>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <!--<error-page>
+        <error-code>401</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>-->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/error/500.xhtml</location>
+    </error-page>
+    <!--SECURITY ADMIN-->
+    <security-constraint>
+        <display-name>Restricted to users with role</display-name>
+        <web-resource-collection>
+            <web-resource-name>Restricted Access</web-resource-name>
+            <url-pattern>/faces/html/private/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!--SECURITY TALLER-->
+    <security-constraint>
+        <display-name>Restricted to users with role</display-name>
+        <web-resource-collection>
+            <web-resource-name>Restricted Access</web-resource-name>
+            <url-pattern>/faces/html/private/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>TALLER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!--SECURITY ASEGURADORA-->
+    <security-constraint>
+        <display-name>Restricted to users with role</display-name>
+        <web-resource-collection>
+            <web-resource-name>Restricted Access</web-resource-name>
+            <url-pattern>/faces/html/private/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ASEGURADORA</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!--SECURITY PROVEEDOR-->
+    <security-constraint>
+        <display-name>Restricted to users with role</display-name>
+        <web-resource-collection>
+            <web-resource-name>Restricted Access</web-resource-name>
+            <url-pattern>/faces/html/private/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>PROVEEDOR</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!-- ROLES -->
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+    <security-role>
+        <role-name>TALLER</role-name>
+    </security-role>
+    <security-role>
+        <role-name>ASEGURADORA</role-name>
+    </security-role>
+    <security-role>
+        <role-name>PROVEEDOR</role-name>
+    </security-role>
+    <!-- LOGIN CONFIG -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>jdbc-realm</realm-name>
+        <form-login-config>
+            <form-login-page>/init.xhtml</form-login-page>
+            <form-error-page>/init.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+</web-app>
