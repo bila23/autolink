@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "solicitud")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s")
+    @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s"),
+    @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado ORDER BY s.id DESC")
 })
 public class Solicitud implements Serializable {
 
