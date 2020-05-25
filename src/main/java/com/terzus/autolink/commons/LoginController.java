@@ -102,13 +102,25 @@ public class LoginController implements Serializable{
                 if(model == null){
                     FacesHelper.errorMessage("El usuario que ha ingresado no existe");
                     return "init";
-                }else if(model.getEstado() == 0){
+                }else if(model.getEstado() == 0 ){
                     FacesHelper.errorMessage("Su usuario se encuentra inactivo, no tiene permisos para ingresar al sistema");
-                    return "init";                    
+                    return "init";      
+                }else if(model.getIdtipo() == null || model.getIdtipo() == 0){
+                    FacesHelper.errorMessage("Su usuario no posee ningun rol, favor reportarlo al administrador del sistema");
+                    return "init";
                 }else{
                     HttpServletRequest request = FacesHelper.getRequest();
                     request.login(user, vo.getPassword());
-                    return "/html/private/index.xhtml?faces-redirect=true";
+                    
+                    //VERIFICO EL ROL DEL USUARIO, ASI LO REDIRECCIONO A UNA U OTRA PAGINA
+                    if(model.getIdtipo() == 1)
+                        return "/html/private/admin/index.xhtml?faces-redirect=true";
+                    else if(model.getIdtipo() == 2)
+                        return "/html/private/aseguradora/index.xhtml?faces-redirect=true";
+                    else if(model.getIdtipo() == 3)
+                        return "/html/private/taller/index.xhtml?faces-redirect=true";
+                    else if(model.getIdtipo() == 4)
+                        return "/html/private/proveedor/index.xhtml?faces-redirect=true";
                 }
             }catch(Exception e){
                 FacesHelper.errorMessage("Su usuario y/o contrasena son incorrectos");

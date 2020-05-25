@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="sv" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"  
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></link>
+        <title>Autolink</title>
+        <c:set var="ctx" value="#{request.contextPath}"/>
+        <style>
+            #banner {
+                background: url('${ctx}/images/theme/HEADER.png');
+                height: 115px;
+                background-position: center;
+                margin-bottom: 0px
+            }
+            button{
+                outline:none;border: 1px solid transparent;vertical-align:middle;text-align:center;display:inline-block;border-radius:15px;padding:8px 10px;font-weight: bold;
+            }
+            button:active {
+                border: none;
+                box-shadow: 0 2px #666;
+                transform: translateY(1px);
+            }
+            button:hover{
+                box-shadow: 0 5px 10px rgba(0,0,0,.15);
+                border: none;
+            }
+            body .ui-tabs .ui-tabs-nav .ui-tabs-header.ui-state-active {
+                background-color: #08263a;
+                border: 1px solid #08263a;
+            }
+            @media screen and (min-width: 768px) {
+                .ui-tabs .ui-tabs-navscroller {
+                    overflow: hidden;
+                    padding-left: 182px !important;
+                }
+            }
+            body .ui-tabs .ui-tabs-panels {
+                border: 1px solid #c8c8c8;
+                border-top: 20px solid #08263a;
+                background-color: #fff;
+                color: #333;
+                padding: 0;
+                margin: 0;
+                position: static;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <f:metadata>
+            <o:enableRestorableView/>
+        </f:metadata>
+        <div id="banner">
+            <div class="row" style="height:100%">
+                <div class="col s6" style="height: 100%;">
+                    <img style="margin-top:2%" src="${ctx}/images/theme/logo_2.png"/>
+                </div>
+                <div class="col s6 valign-wrapper" style="color: #fff; font-weight: bold; height: 100%;">
+                    <div class="right-align" style="width: 100%;">
+                        Usuario: #{request.userPrincipal.name} - 
+                        <a style="color:#fff" href="${ctx}/logoutServlet">[Salir]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ui:insert name="content"></ui:insert>  
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </h:body>
+</html>
+
