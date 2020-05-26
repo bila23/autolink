@@ -24,6 +24,7 @@ import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -51,6 +52,16 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
+    }
+    
+    public void save(Solicitud model, String user) throws Exception{
+        model.setEstado("ING");
+        model.setFechacreacion(new Date());
+        Taller taller = tallerDao.findByUser(user);
+        if(taller != null)
+            model.setIdtaller(taller.getId());
+        model.setUsuariocrea(user);
+        dao.save(model);
     }
     
     public List<Aseguradora> findAsegActive() throws Exception{

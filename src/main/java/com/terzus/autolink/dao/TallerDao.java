@@ -16,6 +16,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * @author CEL
@@ -44,5 +45,14 @@ public class TallerDao extends Dao<Taller, Integer>{
     
     public List<Taller> findActive() throws Exception{
         return findWithNamedQuery("Taller.findActive");
+    }
+    
+    public Taller findByUser(String user) throws Exception{
+        if(user == null || user.equals("")) return null;
+        Query q = em.createNamedQuery("Taller.findByUser");
+        q.setParameter("user", user.toUpperCase());
+        List<Taller> list = q.getResultList();
+        if(list == null || list.isEmpty()) return null;
+        return list.get(0);
     }
 }

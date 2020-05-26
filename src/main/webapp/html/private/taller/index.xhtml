@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
-                    <p:tabView scrollable="true">
+                    <p:tabView scrollable="true" id="tab">
                         <p:ajax event="tabChange" listener="#{tallerSolController.onTabChange}" update="mf:msg dting dtanu dtdpp dteas dtcpd dtcpa"/>
                         <p:tab title="FORMULARIO" id="for">
                             <div class="row">
@@ -18,85 +18,101 @@
                                     <h4>Ingreso de Solicitudes</h4>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col s12">
-                                    <h6>1) Ingrese los datos generales de la solicitud:</h6>
-                                </div>
-                            </div>
                             <div class="card-panel hoverable">
-                                <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.nombreasegurado}" class="validate" id="nombreasegurado" a:autofocus="true"/>
-                                        <h:outputLabel value="Nombre de asegurado:" for="nombreasegurado"/>
+                                <h:panelGroup rendered="#{tallerSolController.showSaveBtn}">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <h6>1) Ingrese los datos generales de la solicitud:</h6>
+                                        </div>
                                     </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.tipovehiculo}" class="validate" id="tipovehiculo"/>
-                                        <h:outputLabel value="Tipo de vehiculo:" for="tipovehiculo"/>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.nombreasegurado}" class="validate" id="nombreasegurado" a:autofocus="true"/>
+                                            <h:outputLabel value="Nombre de asegurado:" for="nombreasegurado"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.tipovehiculo}" class="validate" id="tipovehiculo"/>
+                                            <h:outputLabel value="Tipo de vehiculo:" for="tipovehiculo"/>
+                                        </div>
                                     </div>
-                                </div>
-                               <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:selectOneMenu value="#{tallerSolController.model.idaseguradora}" class="validate" id="idaseguradora">
-                                            <f:selectItems value="#{tallerSolController.asegList}" var="a" itemLabel="#{a.nombreaseguradora}" itemValue="#{a.id}"/>
-                                        </h:selectOneMenu>
-                                        <h:outputLabel value="Aseguradora:" for="idaseguradora"/>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:selectOneMenu value="#{tallerSolController.model.idaseguradora}" class="validate" id="idaseguradora">
+                                                <f:selectItems value="#{tallerSolController.asegList}" var="a" itemLabel="#{a.nombreaseguradora}" itemValue="#{a.id}"/>
+                                            </h:selectOneMenu>
+                                            <h:outputLabel value="Aseguradora:" for="idaseguradora"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:selectOneMenu value="#{tallerSolController.model.idmarca}" class="validate" id="idmarca">
+                                                <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
+                                                <f:selectItems value="#{tallerSolController.marcaList}" var="m" itemLabel="#{m.nombremarca}" itemValue="#{m.id}"/>
+                                                <p:ajax listener="#{tallerSolController.chargeModelos()}" update="modelo" process="@this" onsuccess="showSelect()"/>
+                                            </h:selectOneMenu>
+                                            <h:outputLabel value="Marca:" for="idmarca"/>
+                                        </div>
                                     </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:selectOneMenu value="#{tallerSolController.model.idmarca}" class="validate" id="idmarca">
-                                            <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
-                                            <f:selectItems value="#{tallerSolController.marcaList}" var="m" itemLabel="#{m.nombremarca}" itemValue="#{m.id}"/>
-                                            <p:ajax listener="#{tallerSolController.chargeModelos()}" update="modelo" process="@this" onsuccess="showSelect()"/>
-                                        </h:selectOneMenu>
-                                        <h:outputLabel value="Marca:" for="idmarca"/>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <p:selectOneMenu value="#{tallerSolController.model.idmodelo}" id="modelo">
+                                                <f:selectItem itemLabel="Seleccione un modelo" itemValue="0"/>
+                                                <f:selectItems value="#{tallerSolController.modeloList}" var="mo" itemLabel="#{mo.nombremodelo}" itemValue="#{mo.id}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro"/>
+                                            <h:outputLabel value="Anio de carro:" for="aniocarro"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <p:selectOneMenu value="#{tallerSolController.model.idmodelo}" id="modelo">
-                                            <f:selectItem itemLabel="Seleccione un modelo" itemValue="0"/>
-                                            <f:selectItems value="#{tallerSolController.modeloList}" var="mo" itemLabel="#{mo.nombremodelo}" itemValue="#{mo.id}"/>
-                                        </p:selectOneMenu>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa"/>
+                                            <h:outputLabel value="Placa:" for="placa"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis"/>
+                                            <h:outputLabel value="Chasis:" for="chasis"/>
+                                        </div>
                                     </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro"/>
-                                        <h:outputLabel value="Anio de carro:" for="aniocarro"/>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor"/>
+                                            <h:outputLabel value="Motor:" for="motor"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza"/>
+                                            <h:outputLabel value="Poliza:" for="poliza"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa"/>
-                                        <h:outputLabel value="Placa:" for="placa"/>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro"/>
+                                            <h:outputLabel value="Siniestro:" for="siniestro"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.comentariostaller}" id="comentariostaller"/>
+                                            <h:outputLabel value="Comentarios:" for="comentariostaller"/>
+                                        </div>
                                     </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis"/>
-                                        <h:outputLabel value="Chasis:" for="chasis"/>
+                                </h:panelGroup>
+                                <h:panelGroup id="pgSaveBtn" rendered="#{tallerSolController.showSaveBtn}">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveSolicitud()}" update="@form"/>
+                                        </div>
                                     </div>
-                                </div>
-                               <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor"/>
-                                        <h:outputLabel value="Motor:" for="motor"/>
+                                </h:panelGroup>
+                                <h:panelGroup id="pgDetailForm" rendered="#{!tallerSolController.showSaveBtn}">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <h6>2) Ingrese los repuestos asociados a la solicitud:</h6>
+                                        </div>
                                     </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza"/>
-                                        <h:outputLabel value="Poliza:" for="poliza"/>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <h6>3) Ingrese las imagenes asociadas a la solicitud:</h6>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro"/>
-                                        <h:outputLabel value="Siniestro:" for="siniestro"/>
-                                    </div>
-                                    <div class="input-field col s12 m12 l6">
-                                        <h:inputText value="#{tallerSolController.model.comentariostaller}" class="validate" id="comentariostaller"/>
-                                        <h:outputLabel value="Comentarios:" for="comentariostaller"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <p:commandButton value="Guardar" class="waves-effect waves-light btn"/>
-                                    </div>
-                                </div>
+                                </h:panelGroup>
                             </div>
                         </p:tab>
                         <p:tab title="INGRESADAS" id="ing">
