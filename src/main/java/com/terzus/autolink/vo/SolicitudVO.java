@@ -50,4 +50,8 @@ public class SolicitudVO implements Serializable{
     private String comentariosproveedores;
     private Date fechainicio;
     private Date fechafin;
+    private Integer idmodelo;
+    private String modelo;
+    private Date fechacreacion;
+    private String usuariocrea;
 }

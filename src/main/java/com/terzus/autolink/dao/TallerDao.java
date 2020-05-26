@@ -12,6 +12,7 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Taller;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,5 +40,9 @@ public class TallerDao extends Dao<Taller, Integer>{
     @Override
     public EntityManager getEntityManager() {
         return em;
+    }
+    
+    public List<Taller> findActive() throws Exception{
+        return findWithNamedQuery("Taller.findActive");
     }
 }

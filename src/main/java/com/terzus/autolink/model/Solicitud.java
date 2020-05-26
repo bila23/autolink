@@ -62,6 +62,8 @@ public class Solicitud implements Serializable {
     private Integer idaseguradora;
     @Column(name = "idmarca")
     private Integer idmarca;
+    @Column(name = "idmodelo")
+    private Integer idmodelo;
     @Column(name = "idusuario")
     private Integer idusuario;
     @Column(name = "aniocarro")
@@ -112,6 +114,12 @@ public class Solicitud implements Serializable {
     private Date fechafin;
     @OneToMany(mappedBy = "idsolicitud")
     private List<Fotoxsolicitud> fotoxsolicitudList;
+    @Size(max = 50)
+    @Column(name = "usrcrea")
+    private String usuariocrea;
+    @Column(name = "feccrea")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechacreacion;
 
     public Solicitud() {
     }
@@ -174,6 +182,22 @@ public class Solicitud implements Serializable {
 
     public void setTipovehiculo(String tipovehiculo) {
         this.tipovehiculo = tipovehiculo;
+    }
+
+    public String getUsuariocrea() {
+        return usuariocrea;
+    }
+
+    public void setUsuariocrea(String usuariocrea) {
+        this.usuariocrea = usuariocrea;
+    }
+
+    public Date getFechacreacion() {
+        return fechacreacion;
+    }
+
+    public void setFechacreacion(Date fechacreacion) {
+        this.fechacreacion = fechacreacion;
     }
 
     public String getPlaca() {
@@ -262,6 +286,14 @@ public class Solicitud implements Serializable {
 
     public void setComentariosproveedores(String comentariosproveedores) {
         this.comentariosproveedores = comentariosproveedores;
+    }
+
+    public Integer getIdmodelo() {
+        return idmodelo;
+    }
+
+    public void setIdmodelo(Integer idmodelo) {
+        this.idmodelo = idmodelo;
     }
 
     public Date getFechainicio() {

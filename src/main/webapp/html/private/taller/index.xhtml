@@ -1,16 +1,111 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <ui:composition  xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../template/noAdminTemplate.xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="content">
+        <style>
+            .ui-selectonemenu{
+                width: 100% !important
+            }
+        </style>
         <h:form id="mf">
             <div class="row">
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
                     <p:tabView scrollable="true">
                         <p:ajax event="tabChange" listener="#{tallerSolController.onTabChange}" update="mf:msg dting dtanu dtdpp dteas dtcpd dtcpa"/>
+                        <p:tab title="FORMULARIO" id="for">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h4>Ingreso de Solicitudes</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <h6>1) Ingrese los datos generales de la solicitud:</h6>
+                                </div>
+                            </div>
+                            <div class="card-panel hoverable">
+                                <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.nombreasegurado}" class="validate" id="nombreasegurado" a:autofocus="true"/>
+                                        <h:outputLabel value="Nombre de asegurado:" for="nombreasegurado"/>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.tipovehiculo}" class="validate" id="tipovehiculo"/>
+                                        <h:outputLabel value="Tipo de vehiculo:" for="tipovehiculo"/>
+                                    </div>
+                                </div>
+                               <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:selectOneMenu value="#{tallerSolController.model.idaseguradora}" class="validate" id="idaseguradora">
+                                            <f:selectItems value="#{tallerSolController.asegList}" var="a" itemLabel="#{a.nombreaseguradora}" itemValue="#{a.id}"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Aseguradora:" for="idaseguradora"/>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:selectOneMenu value="#{tallerSolController.model.idmarca}" class="validate" id="idmarca">
+                                            <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
+                                            <f:selectItems value="#{tallerSolController.marcaList}" var="m" itemLabel="#{m.nombremarca}" itemValue="#{m.id}"/>
+                                            <p:ajax listener="#{tallerSolController.chargeModelos()}" update="modelo" process="@this" onsuccess="showSelect()"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Marca:" for="idmarca"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <p:selectOneMenu value="#{tallerSolController.model.idmodelo}" id="modelo">
+                                            <f:selectItem itemLabel="Seleccione un modelo" itemValue="0"/>
+                                            <f:selectItems value="#{tallerSolController.modeloList}" var="mo" itemLabel="#{mo.nombremodelo}" itemValue="#{mo.id}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro"/>
+                                        <h:outputLabel value="Anio de carro:" for="aniocarro"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa"/>
+                                        <h:outputLabel value="Placa:" for="placa"/>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis"/>
+                                        <h:outputLabel value="Chasis:" for="chasis"/>
+                                    </div>
+                                </div>
+                               <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor"/>
+                                        <h:outputLabel value="Motor:" for="motor"/>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza"/>
+                                        <h:outputLabel value="Poliza:" for="poliza"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro"/>
+                                        <h:outputLabel value="Siniestro:" for="siniestro"/>
+                                    </div>
+                                    <div class="input-field col s12 m12 l6">
+                                        <h:inputText value="#{tallerSolController.model.comentariostaller}" class="validate" id="comentariostaller"/>
+                                        <h:outputLabel value="Comentarios:" for="comentariostaller"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <p:commandButton value="Guardar" class="waves-effect waves-light btn"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:tab>
                         <p:tab title="INGRESADAS" id="ing">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dting" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
+                                </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
                                 </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />
@@ -28,6 +123,9 @@
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
+                                </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />
                                 </p:column>
@@ -43,6 +141,9 @@
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtdpp" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
+                                </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
                                 </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />
@@ -63,6 +164,9 @@
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
+                                </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />
                                 </p:column>
@@ -79,6 +183,9 @@
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
+                                </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />
                                 </p:column>
@@ -94,6 +201,9 @@
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcpa" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
+                                </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
                                 </p:column>
                                 <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
                                     <h:outputText value="#{r1.aniocarro}" />

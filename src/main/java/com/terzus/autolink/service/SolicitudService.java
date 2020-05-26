@@ -14,10 +14,12 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.AseguradoraDao;
 import com.terzus.autolink.dao.MarcaDao;
+import com.terzus.autolink.dao.ModeloDao;
 import com.terzus.autolink.dao.SolicitudDao;
 import com.terzus.autolink.dao.TallerDao;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
+import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -44,10 +46,23 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private TallerDao tallerDao;
     @Inject private AseguradoraDao asegDao;
     @Inject private MarcaDao marcaDao;
+    @Inject private ModeloDao modeloDao;
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
+    }
+    
+    public List<Aseguradora> findAsegActive() throws Exception{
+        return asegDao.findActive();
+    }
+    
+    public List<Marca> findMarcaActive() throws Exception{
+        return marcaDao.findActive();
+    }
+    
+    public List<Modelo> findActiveByMarca(Integer idMarca) throws Exception{
+        return modeloDao.findActiveByMarca(idMarca);
     }
     
     private SolicitudVO modelToVO(Solicitud model) throws Exception{
@@ -68,6 +83,10 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             Taller taller = tallerDao.findByKey(model.getIdtaller());
             if(taller != null)
                 vo.setTaller(taller.getNombreTaller());
+        }
+        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+            Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
+            vo.setModelo(modelo.getNombremodelo());
         }
         return vo;
     }

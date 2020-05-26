@@ -12,6 +12,7 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Marca;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,5 +40,9 @@ public class MarcaDao extends Dao<Marca, Integer>{
     @Override
     public EntityManager getEntityManager() {
         return em;
+    }
+    
+    public List<Marca> findActive() throws Exception{
+        return findWithNamedQuery("Marca.findActive");
     }
 }

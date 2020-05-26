@@ -12,6 +12,10 @@ package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
+import com.terzus.autolink.model.Aseguradora;
+import com.terzus.autolink.model.Marca;
+import com.terzus.autolink.model.Modelo;
+import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -43,10 +47,17 @@ public class TallerSolController implements Serializable{
     @Inject private SolicitudService solService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
+    @Getter @Setter private List<Aseguradora> asegList;
+    @Getter @Setter private List<Marca> marcaList;
+    @Getter @Setter private List<Modelo> modeloList;
+    @Getter @Setter private Solicitud model;
     
     @PostConstruct
     public void init(){
         try{
+            model = new Solicitud();
+            asegList = solService.findAsegActive();
+            marcaList = solService.findMarcaActive();
             solList = solService.findIngresadas();
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -85,7 +96,18 @@ public class TallerSolController implements Serializable{
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
-            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de cambiar el estado de la solicitud");            
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de cambiar el estado de la solicitud");
+        }
+    }
+    
+    public void chargeModelos(){
+        try{
+            if(model != null)
+                if(model.getIdmarca() != null && model.getIdmarca() > 0)
+                    modeloList = solService.findActiveByMarca(model.getIdmarca());
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar los modelos de carro");
         }
     }
 

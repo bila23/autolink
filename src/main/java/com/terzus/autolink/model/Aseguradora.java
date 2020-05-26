@@ -46,7 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "aseguradora")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a")
+    @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a"),
+    @NamedQuery(name = "Aseguradora.findActive", query = "SELECT a FROM Aseguradora a WHERE a.estado = '1' ORDER BY a.nombreaseguradora")
 })
 public class Aseguradora implements Serializable {
 
