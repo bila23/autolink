@@ -49,5 +49,12 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
         parameters.put("estado", estado.toUpperCase());
         return findWithNamedQuery("Solicitud.findByEstado", parameters);
     }
+    
+    public void updateEstado(int id, String state) throws Exception{
+        Map<String, Object> parameters = new HashMap();
+        parameters.put("id", id);
+        parameters.put("estado", state);
+        super.executeUpdateOrDelete("Solicitud.updateEstado", parameters);
+    }
 
 }

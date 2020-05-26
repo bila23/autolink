@@ -11,6 +11,7 @@
 package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
+import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class TallerSolController implements Serializable{
 
     @Inject private SolicitudService solService;
     @Getter @Setter private List<SolicitudVO> solList;
+    @Getter @Setter private int codeChange;
     
     @PostConstruct
     public void init(){
@@ -48,7 +50,7 @@ public class TallerSolController implements Serializable{
             solList = solService.findIngresadas();
         }catch(Exception e){
             log.error(e.getMessage(), e);
-            FacesHelper.error("Ha ocurrido un error al recuperar las solicitudes. Favor intente nuevamente");
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar las solicitudes. Favor intente nuevamente");
         }
     }
     
@@ -70,7 +72,20 @@ public class TallerSolController implements Serializable{
                     solList = solService.findCerradaAseg();
         }catch(Exception e){
             log.error(e.getMessage(), e);
-            FacesHelper.error("Ha ocurrido un error al tratar de recuperar las solicitudes");
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
+        }
+    }
+    
+    public void despProvToEntSatis(){
+        try{
+            if(codeChange > 0){
+                solService.updateEstado(codeChange, "ESC");
+                solList = solService.findDespProveedor();
+                FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de cambiar el estado de la solicitud");            
         }
     }
 

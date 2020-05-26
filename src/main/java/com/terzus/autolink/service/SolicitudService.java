@@ -76,10 +76,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         if(list == null || list.isEmpty()) return null;
         List<SolicitudVO> lst = new ArrayList();
         int i = 0, size = list.size();
-        SolicitudVO vo = null;
         for(i = 0; i<size; i++){
-            vo = modelToVO(list.get(i));
-            lst.add(vo);
+            lst.add(modelToVO(list.get(i)));
         }
         return lst;
     }
@@ -89,6 +87,11 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         List<Solicitud> list = dao.findByEstado(estado);
         if(list == null || list.isEmpty()) return null;
         return listModelToVO(list);
+    }
+    
+    public void updateEstado(int id, String state) throws Exception{
+        if(id <= 0 || state == null || state.equals("") || state.length() != 3) return;
+        dao.updateEstado(id, state.toUpperCase());
     }
     
     public List<SolicitudVO> findIngresadas() throws Exception{
