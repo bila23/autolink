@@ -1,5 +1,5 @@
 /*---------------------------------------------------------
-* FILE: SolicitudDao.java
+* FILE: RepuestoSolicitudDao.java
 * PRODUCT: autolink
 *----------------------------------------------------------
 * IMPORTANT NOTICE
@@ -11,7 +11,7 @@
 package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
-import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.model.Respuestoxsolicitud;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,19 +23,19 @@ import javax.persistence.PersistenceContext;
  * @author CEL
  * <b>Created by: </b>will
  * <b>For: </b>autolink
- * <b>On: </b>May 24, 2020 7:49:25 PM
+ * <b>On: </b>May 25, 2020 11:33:12 PM
  * <b>Purpose</b> 
  * <p>
- *      DAO para manejo de solicitudes
+ *      
  * </p>
  */
 @Stateless
-public class SolicitudDao extends Dao<Solicitud, Integer>{
+public class RepuestoSolicitudDao extends Dao<Respuestoxsolicitud, Integer>{
     
-    public SolicitudDao(){
-        super(Solicitud.class);
+    public RepuestoSolicitudDao(){
+        super(Respuestoxsolicitud.class);
     }
-    
+
     @PersistenceContext(unitName = "PU")
     private EntityManager em;
 
@@ -44,18 +44,9 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
         return em;
     }
     
-    public List<Solicitud> findByEstado(String estado) throws Exception{
-        Map<String, Object> parameters = new HashMap();
-        parameters.put("estado", estado.toUpperCase());
-        return findWithNamedQuery("Solicitud.findByEstado", parameters);
+    public List<Respuestoxsolicitud> findBySolicitud(int id) throws Exception{
+        Map<String, Object> param = new HashMap();
+        param.put("idsolicitud", id);
+        return findWithNamedQuery("Respuestoxsolicitud.findBySolicitud", param);
     }
-    
-    public void updateEstado(int id, String state) throws Exception{
-        Map<String, Object> parameters = new HashMap();
-        parameters.put("id", id);
-        parameters.put("estado", state);
-        super.executeUpdateOrDelete("Solicitud.updateEstado", parameters);
-    }
-    
-
 }

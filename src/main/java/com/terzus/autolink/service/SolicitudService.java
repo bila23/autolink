@@ -15,11 +15,13 @@ import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.AseguradoraDao;
 import com.terzus.autolink.dao.MarcaDao;
 import com.terzus.autolink.dao.ModeloDao;
+import com.terzus.autolink.dao.RepuestoDao;
 import com.terzus.autolink.dao.SolicitudDao;
 import com.terzus.autolink.dao.TallerDao;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
+import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -48,13 +50,18 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private AseguradoraDao asegDao;
     @Inject private MarcaDao marcaDao;
     @Inject private ModeloDao modeloDao;
+    @Inject private RepuestoDao repDao;
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
     }
     
-    public void save(Solicitud model, String user) throws Exception{
+    public List<Repuesto> findRepuestoActive() throws Exception{
+        return repDao.findActive();
+    }
+    
+    public int save(Solicitud model, String user) throws Exception{
         model.setEstado("ING");
         model.setFechacreacion(new Date());
         Taller taller = tallerDao.findByUser(user);
@@ -62,6 +69,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             model.setIdtaller(taller.getId());
         model.setUsuariocrea(user);
         dao.save(model);
+        return 32;
     }
     
     public List<Aseguradora> findAsegActive() throws Exception{

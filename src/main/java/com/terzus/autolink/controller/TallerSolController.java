@@ -15,8 +15,11 @@ import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
+import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
 import java.util.List;
@@ -45,6 +48,7 @@ import org.primefaces.event.TabChangeEvent;
 public class TallerSolController implements Serializable{
 
     @Inject private SolicitudService solService;
+    @Inject private RepuestoSolicitudService repSolService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
     @Getter @Setter private List<Aseguradora> asegList;
@@ -52,6 +56,10 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private List<Modelo> modeloList;
     @Getter @Setter private Solicitud model;
     @Getter @Setter private boolean showSaveBtn;
+    @Getter @Setter private List<Repuesto> repList;
+    @Getter @Setter private int repuesto;
+    @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
+    private int idSol;
     
     @PostConstruct
     public void init(){
@@ -61,6 +69,7 @@ public class TallerSolController implements Serializable{
             asegList = solService.findAsegActive();
             marcaList = solService.findMarcaActive();
             solList = solService.findIngresadas();
+            repList = solService.findRepuestoActive();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar las solicitudes. Favor intente nuevamente");
@@ -142,13 +151,39 @@ public class TallerSolController implements Serializable{
             else if(model.getSiniestro()== null || model.getSiniestro().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el siniestro");
             else{
-                solService.save(model, FacesHelper.getUserLogin());
+                idSol = solService.save(model, FacesHelper.getUserLogin());
                 showSaveBtn = false;
                 FacesHelper.successMessage(Constants.EXITO, "Se ha guardado la solicitud correctamente");
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al ingresar la solicitud");
+        }
+    }
+    
+    public void saveRepSol(){
+        try{
+            if(repuesto > 0){
+                repSolService.save(idSol, repuesto);
+                repVOList = repSolService.findBySolicitud(idSol);
+                FacesHelper.successMessage(Constants.EXITO, "Se ha guardado el repuesto");
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al asociar un repuesto a la solicitud");
+        }
+    }
+    
+    public void deleteRepSol(int id){
+        try{
+            if(id > 0){
+                repSolService.deleteById(id);
+                repVOList = repSolService.findBySolicitud(idSol);
+                FacesHelper.successMessage(Constants.EXITO, "Se ha eliminado el repuesto");
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al eliminar un repuesto");
         }
     }
 

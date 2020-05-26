@@ -108,6 +108,31 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col s12 m12 l6">
+                                            <h:selectOneMenu value="#{tallerSolController.repuesto}" class="validate" id="repuesto" style="display: initial !important; border-color: #c7c5c5">
+                                                <f:selectItem itemLabel="Seleccione un repuesto" itemValue="0"/>
+                                                <f:selectItems value="#{tallerSolController.repList}" var="r" itemLabel="#{r.nombrerepuesto}" itemValue="#{r.id}"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="col s12 m12 l6">
+                                            <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{tallerSolController.repVOList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="5">
+                                                <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
+                                                    <h:outputText value="#{rep.repuesto}" />
+                                                </p:column>
+                                                <p:column headerText="Eliminar" style="text-align:center;width: 10%">
+                                                    <p:commandLink actionListener="#{tallerSolController.deleteRepSol(rep.id)}" update="mf:msg repTable">
+                                                        <i class="material-icons">delete</i>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col s12">
                                             <h6>3) Ingrese las imagenes asociadas a la solicitud:</h6>
                                         </div>

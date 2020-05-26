@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Modelo.findAll", query = "SELECT m FROM Modelo m"),
-    @NamedQuery(name = "Modelo.findActiveByMarca", query = "SELECT m FROM Modelo m WHERE m.idmarca = :idmarca")
+    @NamedQuery(name = "Modelo.findActiveByMarca", query = "SELECT m FROM Modelo m WHERE m.idmarca = :idmarca AND m.estado = '1' ORDER BY m.nombremodelo")
 })
 public class Modelo implements Serializable {
 
