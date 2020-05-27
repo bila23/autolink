@@ -151,4 +151,15 @@ public class AsegSolController implements Serializable{
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar la solicitud");
         }
     }
+    
+    public void changeStateSol(String state){
+        try{
+            solService.updateEstado(codSol, state);
+            solList = solService.findIngresadas();
+            FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado el estado de la solicitud correctamente");  
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar la solicitud");
+        }
+    }
 }
