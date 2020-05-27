@@ -59,6 +59,7 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private List<Repuesto> repList;
     @Getter @Setter private int repuesto;
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
+    @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     private int idSol;
     
     @PostConstruct
@@ -184,6 +185,27 @@ public class TallerSolController implements Serializable{
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al eliminar un repuesto");
+        }
+    }
+    
+    public void finishSolicitud(){
+        try{
+            idSol = 0;
+            model = new Solicitud();
+            showSaveBtn = true;
+            FacesHelper.successMessage(Constants.EXITO, "Se ha finalizado la solicitud");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al finalizar la solicitud");
+        }
+    }
+    
+    public void showRep(int idSol){
+        try{
+            repSolList = repSolService.findBySolicitud(idSol);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de ver los repuestos de la solicitud");
         }
     }
 

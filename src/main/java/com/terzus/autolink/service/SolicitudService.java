@@ -69,7 +69,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             model.setIdtaller(taller.getId());
         model.setUsuariocrea(user);
         dao.save(model);
-        return 32;
+        return model.getId();
     }
     
     public List<Aseguradora> findAsegActive() throws Exception{

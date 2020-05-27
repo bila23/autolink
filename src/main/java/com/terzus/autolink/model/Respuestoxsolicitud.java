@@ -57,9 +57,9 @@ public class Respuestoxsolicitud implements Serializable {
     @Size(max = 65535)
     @Column(name = "estado")
     private String estado;
-    @Lob
     @Column(name = "aplica")
-    private byte[] aplica;
+    @Size(max = 1)
+    private String aplica;
 
     public Respuestoxsolicitud() {
     }
@@ -100,11 +100,11 @@ public class Respuestoxsolicitud implements Serializable {
         this.estado = estado;
     }
 
-    public byte[] getAplica() {
+    public String getAplica() {
         return aplica;
     }
 
-    public void setAplica(byte[] aplica) {
+    public void setAplica(String aplica) {
         this.aplica = aplica;
     }
 

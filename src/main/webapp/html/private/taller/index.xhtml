@@ -11,7 +11,7 @@
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
                     <p:tabView scrollable="true" id="tab">
-                        <p:ajax event="tabChange" listener="#{tallerSolController.onTabChange}" update="mf:msg dting dtanu dtdpp dteas dtcpd dtcpa"/>
+                        <p:ajax event="tabChange" listener="#{tallerSolController.onTabChange}" update="mf:msg dting dtanu dtdpp dteas dtcpd dtcpa pgfor"/>
                         <p:tab title="FORMULARIO" id="for">
                             <div class="row">
                                 <div class="col s12">
@@ -19,7 +19,7 @@
                                 </div>
                             </div>
                             <div class="card-panel hoverable">
-                                <h:panelGroup rendered="#{tallerSolController.showSaveBtn}">
+                                <h:panelGroup rendered="#{tallerSolController.showSaveBtn}" id="pgfor">
                                     <div class="row">
                                         <div class="col s12">
                                             <h6>1) Ingrese los datos generales de la solicitud:</h6>
@@ -137,6 +137,11 @@
                                             <h6>3) Ingrese las imagenes asociadas a la solicitud:</h6>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <p:commandButton value="Finalizar solicitud" class="waves-effect waves-light btn" actionListener="#{tallerSolController.finishSolicitud()}" update="@form"/>
+                                        </div>
+                                    </div>
                                 </h:panelGroup>
                             </div>
                         </p:tab>
@@ -157,6 +162,11 @@
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                </p:column>
                             </p:dataTable>
                         </p:tab>
                         <p:tab title="ANULADAS" id="anu">
@@ -175,6 +185,11 @@
                                 </p:column>
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -195,7 +210,12 @@
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="">
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column headerText="" style="width:18%;text-align: center">
                                     <p:commandButton value="Entreg. a sat." class="waves-effect waves-light btn" actionListener="#{tallerSolController.setCodeChange(r1.id)}" onsuccess="PF('dlgEsc').show()"/>
                                 </p:column>
                             </p:dataTable>
@@ -217,6 +237,11 @@
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                </p:column>
                             </p:dataTable>
                         </p:tab>
                         <p:tab title="CERR. POR DESIERTA" id="cpd">
@@ -235,6 +260,11 @@
                                 </p:column>
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -255,6 +285,11 @@
                                 <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                </p:column>
                             </p:dataTable>
                         </p:tab>
                     </p:tabView>
@@ -269,6 +304,13 @@
                     <p:spacer width="7"/>
                     <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgEsc').hide();" type="button"/>
                 </div>
+            </p:dialog>
+            <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
+                <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{tallerSolController.repSolList}">
+                    <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
+                        <h:outputText value="#{r1.repuesto}" />
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>

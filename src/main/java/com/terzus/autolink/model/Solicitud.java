@@ -24,6 +24,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
@@ -52,7 +53,14 @@ public class Solicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name = "solCounter",
+            table = "contadores",
+            pkColumnName = "tabla",
+            pkColumnValue = "solicitud",
+            valueColumnName = "valor",
+            initialValue = 1,
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "solCounter")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
