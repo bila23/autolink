@@ -160,7 +160,7 @@
                     <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgCotAb').hide();" type="button"/>
                 </div>
             </p:dialog>
-            <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud">
+            <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud" width="750px">
                 <div class="row">
                     <div class="input-field col s12">
                         <h:inputTextarea class="materialize-textarea" id="com" value="#{asegSolController.com}"/>
@@ -169,6 +169,25 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <p:commandButton update="mf:msg" class="waves-effect waves-light btn" value="Guardar comentario" actionListener="#{asegSolController.updateComentario()}"/>
+                        </div>
+                    </div>
+                    <div class="row" style='height: 10px'>
+                        <div class="input-field col s12">
+                            <p>Si desea cambiar el estado de la solicitud, haga click en el estado que desee:</p>  
+                        </div>
+                    </div>
+                    <div class="row" style='height: 10px'>
+                        <div class="input-field col s12 m12 l3" style="text-align: center">
+                            <p:commandLink actionListener="#{asegSolController.changeStateSol('ANU')}" value="[Anulada]" update="mf:msg :mf:tab:dting" onsuccess="PF('dglInfo').hide()"/>
+                        </div>
+                        <div class="input-field col s12 m12 l3" style="text-align: center">
+                            <p:commandLink actionListener="#{asegSolController.changeStateSol('CPD')}" value="[Cerrada por Desierta]" update="mf:msg :mf:tab:dting" onsuccess="PF('dglInfo').hide()"/>
+                        </div>
+                        <div class="input-field col s12 m12 l3" style="text-align: center">
+                            <p:commandLink actionListener="#{asegSolController.changeStateSol('CEA')}" value="[Cerrada por aseguradora]" update="mf:msg :mf:tab:dting" onsuccess="PF('dglInfo').hide()"/>
+                        </div>
+                        <div class="input-field col s12 m12 l3" style="text-align: center">
+                            <p:commandLink actionListener="#{asegSolController.changeStateSol('CPA')}" value="[Cerrada parcialmente]" update="mf:msg :mf:tab:dting" onsuccess="PF('dglInfo').hide()"/>
                         </div>
                     </div>
                 </div>
