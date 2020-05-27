@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition  xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../template/noAdminTemplate.xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../template/noAdminTemplate.xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:of="http://omnifaces.org/functions">
     <ui:define name="content">
         <h:form id="mf">
             <div class="row">
@@ -10,9 +10,7 @@
                         <p:tab title="INGRESADAS" id="ing">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dting" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}" style="text-align:center">
-                                    <h:outputText value="#{r1.fechacreacion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                    </h:outputText>
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -38,10 +36,11 @@
                         </p:tab>
                         <p:tab title="COTIZACION ABIERTA" id="coa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcoa" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
-                                <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
-                                    <h:outputText value="#{r1.fechacreacion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                    </h:outputText>
+                                <p:column headerText="Inicio" sortBy="#{r1.fechainicio}">
+                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm:ss')}
+                                </p:column>
+                                <p:column headerText="Fin" sortBy="#{r1.fechafin}">
+                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -150,14 +149,23 @@
                     </p:column>
                 </p:dataTable>
             </p:dialog>
-            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" modal="true" resizable="false" showHeader="false" closeOnEscape="true">
-                <div class="form-group">
-                    <div style="padding-bottom:25px">
-                        Esta seguro que desea mover la solicitud al estado "Cotizacion Abierta"?
+            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" closeOnEscape="true" closable="true" focus="minMax">
+                <div class="row">
+                    <div class="col s12">
+                        <span style="width: 60%">
+                            Para pasar la solicitud a "Cotizacion Abierta" debe definir el tiempo de vigencia para que los proveedores <br/>generen sus ofertas. El tiempo maximo son 36 horas
+                        </span>
                     </div>
-                    <p:commandButton update="mf:msg :mf:tab:dting" onsuccess="PF('dlgCotAb').hide();" value="Si" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
-                    <p:spacer width="7"/>
-                    <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgCotAb').hide();" type="button"/>
+                </div>
+                <div class="row">
+                    <div class="col s12 input-field" style="text-align: center">
+                        <p:spinner id="minMax" value="#{asegSolController.horas}" min="0" max="100" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton onsuccess="PF('dlgCotAb').hide();" update="mf:msg :mf:tab:dting" value="Guardar" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
+                    </div>
                 </div>
             </p:dialog>
             <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud" width="750px">

@@ -49,6 +49,7 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
+    @Getter @Setter private int horas;
     @Getter @Setter private String com;
     
     @PostConstruct
@@ -107,7 +108,12 @@ public class AsegSolController implements Serializable{
     
     public void changeCotAbierta(){
         try{
-            if(codSol > 0){
+            if(horas == 0)
+                FacesHelper.warningMessage(Constants.WARNING, "Debe definir el tiempo de vigencia de la solicitud");
+            else if(horas > 36)
+                FacesHelper.warningMessage(Constants.WARNING, "El tiempo de vigencia debe ser menor o igual a 36 horas");
+            else if(codSol > 0){
+                solService.updateHorasVigencia(codSol, horas);
                 solService.updateEstado(codSol, "COA");
                 solList = solService.findIngresadas();
                 FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");

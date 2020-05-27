@@ -13,6 +13,21 @@
         <title>Autolink</title>
         <c:set var="ctx" value="#{request.contextPath}"/>
         <style>
+            .ui-spinner-button {
+                cursor: default;
+                display: block;
+                font-size: .5em;
+                height: 50%;
+                margin: 0;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                right: auto;
+                text-align: center;
+                vertical-align: middle;
+                width: 16px;
+                z-index: 100;
+            }
             #banner {
                 background: url('${ctx}/images/theme/HEADER.png');
                 height: 115px;

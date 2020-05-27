@@ -26,6 +26,7 @@ import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -55,6 +56,24 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
+    }
+    
+    public void updateHorasVigencia(int idSol, int horas) throws Exception{
+        Solicitud model = dao.findByKey(idSol);
+        if(model != null){
+            Date ini = new Date();
+            Date end = addHoursToDate(ini, horas);
+            model.setFechainicio(ini);
+            model.setFechafin(end);
+            dao.update(model);
+        }
+    }
+    
+    private Date addHoursToDate(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
     }
     
     public List<Repuesto> findRepuestoActive() throws Exception{

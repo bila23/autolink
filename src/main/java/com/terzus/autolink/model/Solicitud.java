@@ -115,10 +115,10 @@ public class Solicitud implements Serializable {
     @Column(name = "comentariosproveedores")
     private String comentariosproveedores;
     @Column(name = "fechainicio")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechainicio;
     @Column(name = "fechafin")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechafin;
     @OneToMany(mappedBy = "idsolicitud")
     private List<Fotoxsolicitud> fotoxsolicitudList;
