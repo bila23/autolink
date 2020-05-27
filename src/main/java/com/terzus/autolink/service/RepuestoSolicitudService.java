@@ -44,10 +44,19 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         return dao;
     }
     
+    public void updateAplica(String aplica, int id) throws Exception{
+        if(aplica == null || aplica.equals("") || id == 0) return;
+        dao.updateAplica(aplica.toUpperCase(), id);
+    }
+    
     private RepuestoSolicitudVO modelToVO(Respuestoxsolicitud model) throws Exception{
         if(model == null) return null;
         RepuestoSolicitudVO vo = new RepuestoSolicitudVO();
         PropertyUtils.copyProperties(vo, model);
+        if(vo.getAplica() != null && vo.getAplica().equals("S"))
+            vo.setAplicaBoolean(true);
+        else
+            vo.setAplicaBoolean(false);
         if(vo.getIdrepuesto() != null && vo.getIdrepuesto() > 0){
             Repuesto rep = repDao.findByKey(vo.getIdrepuesto());
             if(rep != null)
