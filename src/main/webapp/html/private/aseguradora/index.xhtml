@@ -23,13 +23,16 @@
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
-                                    <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable2" onsuccess="PF('dlgRepValidate').show()">
+                                <p:column headerText="Acciones" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable2" onsuccess="PF('dlgRepValidate').show()" title="Ver repuestos">
                                         <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                    <p:commandLink actionListener="#{asegSolController.recoverSol(r1.id)}" onsuccess="PF('dglInfo').show()" title="Informacion" update="mf:com">
+                                        <i class="material-icons">info</i>
                                     </p:commandLink>
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="text-align: center">
-                                    <p:commandButton value="Cot. abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta(r1.id)}" update="mf:msg dting"/>
+                                    <p:commandButton value="Cot. abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -146,6 +149,29 @@
                         </p:selectBooleanButton>
                     </p:column>
                 </p:dataTable>
+            </p:dialog>
+            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" modal="true" resizable="false" showHeader="false" closeOnEscape="true">
+                <div class="form-group">
+                    <div style="padding-bottom:25px">
+                        Esta seguro que desea mover la solicitud al estado "Cotizacion Abierta"?
+                    </div>
+                    <p:commandButton update="mf:msg :mf:tab:dting" onsuccess="PF('dlgCotAb').hide();" value="Si" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
+                    <p:spacer width="7"/>
+                    <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgCotAb').hide();" type="button"/>
+                </div>
+            </p:dialog>
+            <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <h:inputTextarea class="materialize-textarea" id="com" value="#{asegSolController.com}"/>
+                        <h:outputLabel for="com">Comentario de aseguradora:</h:outputLabel>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:commandButton update="mf:msg" class="waves-effect waves-light btn" value="Guardar comentario" actionListener="#{asegSolController.updateComentario()}"/>
+                        </div>
+                    </div>
+                </div>
             </p:dialog>
         </h:form>
     </ui:define>

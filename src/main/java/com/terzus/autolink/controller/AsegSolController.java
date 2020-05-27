@@ -13,12 +13,14 @@ package com.terzus.autolink.controller;
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Respuestoxsolicitud;
+import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -46,7 +48,10 @@ public class AsegSolController implements Serializable{
     @Inject private RepuestoSolicitudService repSolService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
+    @Getter @Setter private int codSol;
+    @Getter @Setter private String com;
     
+    @PostConstruct
     public void init(){
         try{
             solList = solService.findIngresadas();
@@ -100,11 +105,47 @@ public class AsegSolController implements Serializable{
         }
     }
     
-    public void changeCotAbierta(int idSol){
+    public void changeCotAbierta(){
         try{
-            solService.updateEstado(idSol, "COA");
-            solList = solService.findIngresadas();
-            FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
+            if(codSol > 0){
+                solService.updateEstado(codSol, "COA");
+                solList = solService.findIngresadas();
+                FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar la solicitud");
+        }
+    }
+    
+    public void recoverSol(int codSol){
+        try{
+            this.codSol = codSol;
+            if(codSol > 0){
+                Solicitud sol = solService.findByKey(codSol);
+                if(sol != null)
+                    this.com = sol.getComentariosaseguradora();
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar el comentario");
+        }
+    }
+    
+    public void updateComentario(){
+        try{
+            if(codSol > 0){
+                if(com == null || com.equals(""))
+                    FacesHelper.warningMessage(Constants.WARNING, "El comentario no puede ir vacio");
+                else{
+                    Solicitud sol = solService.findByKey(codSol);
+                    if(sol != null){
+                        sol.setComentariosaseguradora(com);
+                        solService.update(sol);
+                        FacesHelper.successMessage(Constants.EXITO, "Se ha guardado correctamente el comentario");                        
+                    }
+                }
+            }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar la solicitud");
