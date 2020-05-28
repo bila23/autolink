@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Respuestoxsolicitud.findAll", query = "SELECT r FROM Respuestoxsolicitud r"),
     @NamedQuery(name = "Respuestoxsolicitud.updateAplica", query = "UPDATE Respuestoxsolicitud r SET r.aplica = :aplica WHERE r.id = :id"),
-    @NamedQuery(name = "Respuestoxsolicitud.findBySolicitud", query = "SELECT r FROM Respuestoxsolicitud r WHERE r.idsolicitud = :idsolicitud ORDER BY r.id")
+    @NamedQuery(name = "Respuestoxsolicitud.findBySolicitud", query = "SELECT r FROM Respuestoxsolicitud r WHERE r.idsolicitud = :idsolicitud ORDER BY r.id"),
+    @NamedQuery(name = "Respuestoxsolicitud.findAplicaBySolicitud", query = "SELECT r FROM Respuestoxsolicitud r WHERE r.idsolicitud = :idsolicitud AND r.aplica = 'S' ORDER BY r.id")
 })
 public class Respuestoxsolicitud implements Serializable {
 

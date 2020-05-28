@@ -17,7 +17,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -38,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ofertaproveedor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o")
+    @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o"),
+    @NamedQuery(name = "Ofertaproveedor.findBySolicitudAndProveedorAndRepuesto", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor AND o.idrepuesto = :idrepuesto")
 })
 public class Ofertaproveedor implements Serializable {
 
@@ -59,12 +59,11 @@ public class Ofertaproveedor implements Serializable {
     @Size(max = 50)
     @Column(name = "estado")
     private String estado;
-    @Lob
+    @Size(max = 1)
     @Column(name = "ganador")
-    private byte[] ganador;
+    private String ganador;
     @Column(name = "tiempo")
     private Integer tiempo;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precio")
     private Double precio;
 
@@ -123,11 +122,11 @@ public class Ofertaproveedor implements Serializable {
         this.estado = estado;
     }
 
-    public byte[] getGanador() {
+    public String getGanador() {
         return ganador;
     }
 
-    public void setGanador(byte[] ganador) {
+    public void setGanador(String ganador) {
         this.ganador = ganador;
     }
 

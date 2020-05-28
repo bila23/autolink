@@ -24,6 +24,7 @@ import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
+import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +53,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private MarcaDao marcaDao;
     @Inject private ModeloDao modeloDao;
     @Inject private RepuestoDao repDao;
+    @Inject private RepuestoSolicitudService rsService;
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
@@ -103,7 +105,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return modeloDao.findActiveByMarca(idMarca);
     }
     
-    private SolicitudVO modelToVO(Solicitud model) throws Exception{
+    private SolicitudVO modelToVO(Solicitud model, int codprv) throws Exception{
         if(model == null) return null;
         SolicitudVO vo = new SolicitudVO();
         PropertyUtils.copyProperties(vo, model);
@@ -126,24 +128,34 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
             vo.setModelo(modelo.getNombremodelo());
         }
+        List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
+        vo.setRepAplicaList(repList);
         return vo;
     }
     
-    private List<SolicitudVO> listModelToVO(List<Solicitud> list) throws Exception{
+    
+    private List<SolicitudVO> listModelToVO(List<Solicitud> list, int codprv) throws Exception{
         if(list == null || list.isEmpty()) return null;
         List<SolicitudVO> lst = new ArrayList();
         int i = 0, size = list.size();
         for(i = 0; i<size; i++){
-            lst.add(modelToVO(list.get(i)));
+            lst.add(modelToVO(list.get(i), codprv));
         }
         return lst;
+    }
+    
+    public List<SolicitudVO> findByEstado(String estado, int codprv) throws Exception{
+        if(estado == null || estado.equals("")) return null;
+        List<Solicitud> list = dao.findByEstado(estado);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVO(list, codprv);
     }
     
     public List<SolicitudVO> findByEstado(String estado) throws Exception{
         if(estado == null || estado.equals("")) return null;
         List<Solicitud> list = dao.findByEstado(estado);
         if(list == null || list.isEmpty()) return null;
-        return listModelToVO(list);
+        return listModelToVO(list, 0);
     }
     
     public void updateEstado(int id, String state) throws Exception{
@@ -165,6 +177,10 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     
     public List<SolicitudVO> findCotAbierta() throws Exception{
         return findByEstado("COA");
+    }
+    
+    public List<SolicitudVO> findCotAbierta(int codprv) throws Exception{
+        return findByEstado("COA", codprv);
     }
     
     public List<SolicitudVO> findCerradaDesierta() throws Exception{

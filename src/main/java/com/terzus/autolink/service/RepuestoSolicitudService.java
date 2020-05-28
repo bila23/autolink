@@ -14,6 +14,7 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.RepuestoDao;
 import com.terzus.autolink.dao.RepuestoSolicitudDao;
+import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
@@ -38,6 +39,7 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
     
     @Inject private RepuestoSolicitudDao dao;
     @Inject private RepuestoDao repDao;
+    @Inject private OfertaProvService opService;
 
     @Override
     public Dao<Respuestoxsolicitud, Integer> getDao() {
@@ -49,7 +51,7 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         dao.updateAplica(aplica.toUpperCase(), id);
     }
     
-    private RepuestoSolicitudVO modelToVO(Respuestoxsolicitud model) throws Exception{
+    private RepuestoSolicitudVO modelToVO(Respuestoxsolicitud model, int codprv) throws Exception{
         if(model == null) return null;
         RepuestoSolicitudVO vo = new RepuestoSolicitudVO();
         PropertyUtils.copyProperties(vo, model);
@@ -62,21 +64,41 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
             if(rep != null)
                 vo.setRepuesto(rep.getNombrerepuesto());
         }
+        //RECUPERO LOS DATOS DE LAS OFERTAS
+        if(codprv > 0){
+            Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(model.getIdsolicitud(), codprv, vo.getIdrepuesto());
+            if(op == null) return vo;
+            vo.setCantidad(vo.getCantidad());
+            vo.setGanador(vo.getGanador());
+            vo.setPrecio(vo.getPrecio());
+            vo.setTiempo(op.getTiempo());
+        }
+        
         return vo;
     }
     
-    private List<RepuestoSolicitudVO> modelListToVOList(List<Respuestoxsolicitud> list) throws Exception{
+    private List<RepuestoSolicitudVO> modelListToVOList(List<Respuestoxsolicitud> list, int codprv) throws Exception{
         if(list == null || list.isEmpty()) return null;
         List<RepuestoSolicitudVO> lst = new ArrayList();
         for(Respuestoxsolicitud model : list){
-            lst.add(modelToVO(model));
+            lst.add(modelToVO(model, codprv));
         }
         return lst;
     }
     
     public List<RepuestoSolicitudVO> findBySolicitud(int id) throws Exception{
         if(id == 0) return null;
-        return modelListToVOList(dao.findBySolicitud(id));
+        return modelListToVOList(dao.findBySolicitud(id), 0);
+    }
+    
+    public List<RepuestoSolicitudVO> findAplicaBySolicitud(int id, int codprv) throws Exception{
+        if(id == 0) return null;
+        return modelListToVOList(dao.findAplicaBySolicitud(id), codprv);        
+    }
+    
+    public List<RepuestoSolicitudVO> findAplicaBySolicitud(int id) throws Exception{
+        if(id == 0) return null;
+        return modelListToVOList(dao.findAplicaBySolicitud(id), 0);        
     }
     
     public void save(int idSol, int idRep) throws Exception{

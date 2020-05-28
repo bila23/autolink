@@ -12,6 +12,7 @@ package com.terzus.autolink.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -54,4 +55,6 @@ public class SolicitudVO implements Serializable{
     private String modelo;
     private Date fechacreacion;
     private String usuariocrea;
+    private List<RepuestoSolicitudVO> repAplicaList;
+    
 }

@@ -91,6 +91,15 @@ public class AsegSolController implements Serializable{
         }
     }
     
+    public void showRepAplica(int idSol){
+        try{
+            repSolList = repSolService.findAplicaBySolicitud(idSol);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de ver los repuestos de la solicitud");
+        }
+    }
+    
     public void aplicaRep(int idSol, int idRep){
         try{
             Respuestoxsolicitud model = repSolService.findByKey(idRep);

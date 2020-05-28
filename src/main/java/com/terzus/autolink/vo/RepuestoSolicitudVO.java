@@ -33,4 +33,9 @@ public class RepuestoSolicitudVO implements Serializable{
     private String repuesto;
     private String aplica;
     private boolean aplicaBoolean;
+    private Integer idproveedor;
+    private Integer cantidad;
+    private Integer tiempo;
+    private Double precio;
+    private String ganador;
 }
