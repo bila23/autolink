@@ -59,7 +59,7 @@ public class Ofertaproveedor implements Serializable {
     @Size(max = 50)
     @Column(name = "estado")
     private String estado;
-    @Size(max = 1)
+    @Size(max = 100)
     @Column(name = "ganador")
     private String ganador;
     @Column(name = "tiempo")

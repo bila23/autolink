@@ -75,7 +75,7 @@
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="width:8%;text-align: center">
-                                    <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                    <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                 </p:column>

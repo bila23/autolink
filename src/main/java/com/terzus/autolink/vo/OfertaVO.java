@@ -1,5 +1,5 @@
 /*---------------------------------------------------------
-* FILE: RepuestoSolicitudVO.java
+* FILE: OfertaVO.java
 * PRODUCT: autolink
 *----------------------------------------------------------
 * IMPORTANT NOTICE
@@ -17,26 +17,21 @@ import lombok.Data;
  * @author CEL
  * <b>Created by: </b>will
  * <b>For: </b>autolink
- * <b>On: </b>May 25, 2020 11:42:27 PM
+ * <b>On: </b>May 27, 2020 8:41:49 PM
  * <b>Purpose</b> 
  * <p>
  *      
  * </p>
  */
 @Data
-public class RepuestoSolicitudVO implements Serializable{
-
-    private Integer id;
-    private Integer idrepuesto;
-    private Integer idsolicitud;
-    private String estado;
-    private String repuesto;
-    private String aplica;
-    private boolean aplicaBoolean;
-    private Integer idproveedor;
+public class OfertaVO implements Serializable{
+    
     private Integer cantidad;
     private Integer tiempo;
     private Double precio;
-    private String ganador;
-    private String estadoOferta;
+    private String estado;
+    private Integer idrepuesto;
+    private Integer idsolicitud;
+    private Integer idproveedor;
+
 }

@@ -68,10 +68,11 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         if(codprv > 0){
             Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(model.getIdsolicitud(), codprv, vo.getIdrepuesto());
             if(op == null) return vo;
-            vo.setCantidad(vo.getCantidad());
-            vo.setGanador(vo.getGanador());
-            vo.setPrecio(vo.getPrecio());
+            vo.setCantidad(op.getCantidad());
+            vo.setGanador(op.getGanador());
+            vo.setPrecio(op.getPrecio());
             vo.setTiempo(op.getTiempo());
+            vo.setEstadoOferta(op.getEstado());
         }
         
         return vo;

@@ -12,10 +12,13 @@ package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
+import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Usuario;
+import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.UsuarioService;
+import com.terzus.autolink.vo.OfertaVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -47,16 +50,21 @@ public class ProvSolController implements Serializable{
     @Inject private SolicitudService solService;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private UsuarioService userService;
+    @Inject private OfertaProvService opService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
+    @Getter @Setter private int codRep;
     @Getter @Setter private int codPrv;
+    @Getter @Setter private OfertaVO vo;
     
     @PostConstruct
     public void init(){
         try{
+            vo = new OfertaVO();
             Usuario userModel = userService.findByUser(FacesHelper.getUserLogin());
-            solList = solService.findCotAbierta(userModel.getId());
+            this.codPrv = userModel.getId();
+            solList = solService.findCotAbierta(this.codPrv);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
@@ -68,7 +76,7 @@ public class ProvSolController implements Serializable{
             String id = event.getTab().getId();
             if(id != null)
                 if(id.equals("coa"))
-                    solList = solService.findCotAbierta();
+                    solList = solService.findCotAbierta(this.codPrv);
                 else if(id.equals("goc"))
                     solList = solService.findGenOrdCompra();
                 else if(id.equals("dpp"))
@@ -76,6 +84,50 @@ public class ProvSolController implements Serializable{
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
+        }
+    }
+    
+    public void prepareOferta(int codSol, int codRep){
+        this.codSol = codSol;
+        this.codRep = codRep;
+        try{
+            Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(codSol, codPrv, codRep);
+            if(op != null){
+                vo.setEstado(op.getEstado());
+                vo.setPrecio(op.getPrecio());
+                vo.setTiempo(op.getTiempo());
+            }else
+                vo = new OfertaVO();
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar la oferta del proveedor");
+        }
+    }
+    
+    public void saveOferta(){
+        try{
+            Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(codSol, codPrv, codRep);
+            if(op != null){
+                op.setEstado(vo.getEstado());
+                op.setPrecio(vo.getPrecio());
+                op.setTiempo(vo.getTiempo());
+                opService.update(op);
+            }else if(op == null){
+                Ofertaproveedor model = new Ofertaproveedor();
+                model.setEstado(vo.getEstado());
+                model.setIdproveedor(codPrv);
+                model.setIdrepuesto(codRep);
+                model.setIdsolicitud(codSol);
+                model.setPrecio(vo.getPrecio());
+                model.setTiempo(vo.getTiempo());
+                opService.save(model);
+            }
+            vo = new OfertaVO();
+            solList = solService.findCotAbierta(this.codPrv);
+            FacesHelper.successMessage(Constants.EXITO, "Se ha guardado su oferta correctamente");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de guardar la oferta del proveedor");
         }
     }
 
