@@ -50,6 +50,7 @@ public class AsegSolController implements Serializable{
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private OfertaProvService opService;
     @Getter @Setter private List<SolicitudVO> solList;
+    @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<OfertaProveedorVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
@@ -208,6 +209,29 @@ public class AsegSolController implements Serializable{
     public void prepareWinner(int idSol, int idProv){
         this.idSol = idSol;
         this.idProv = idProv;
+    }
+    
+    public void generateOrdenCompra(int idSol, int idProv){
+        try{
+            this.voOrdenCompra = solService.genOrdCompra(idSol, idProv);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar la orden de compra");
+        }
+    }
+    
+    public double totalOrden(List<RepuestoSolicitudVO> list){
+        try{
+            double total = 0.0;
+            for(RepuestoSolicitudVO vo : list){
+                total += vo.getPrecio();
+            }
+            return total;
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar el total de la orden de compra");
+        }
+        return 0.0;
     }
     
 

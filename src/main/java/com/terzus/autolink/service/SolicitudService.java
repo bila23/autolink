@@ -21,6 +21,7 @@ import com.terzus.autolink.dao.TallerDao;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
+import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
@@ -53,6 +54,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private MarcaDao marcaDao;
     @Inject private ModeloDao modeloDao;
     @Inject private RepuestoDao repDao;
+    @Inject private OfertaProvService opService;
     @Inject private RepuestoSolicitudService rsService;
 
     @Override
@@ -130,6 +132,13 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
+        
+        //VERIFICO SI LA SOLIICTUD TIENE UN GANADOR
+        Proveedor prov = opService.findWinnerBySolicitud(vo.getId());
+        if(prov != null){
+            vo.setIdProvWinner(prov.getId());
+            vo.setProveedorWinner(prov.getNombreproveedor());
+        }
         return vo;
     }
     
@@ -201,7 +210,13 @@ public class SolicitudService extends Service<Solicitud, Integer>{
 
     public List<SolicitudVO> findGenOrdCompra() throws Exception{
         return findByEstado("GOC");
-    }    
+    }
+    
+    public SolicitudVO genOrdCompra(int idSol, int codprv) throws Exception{
+        Solicitud model = dao.findByKey(idSol);
+        if(model == null) return null;
+        return modelToVO(model, codprv);
+    }   
 
     public List<SolicitudVO> findDespProveedor() throws Exception{
         return findByEstado("DEP");

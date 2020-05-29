@@ -120,8 +120,11 @@
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
-                                    <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                <p:column headerText="Proveedor ganador" sortBy="#{r1.proveedorWinner}">
+                                    <h:outputText value="#{r1.proveedorWinner}" />
+                                </p:column>
+                                <p:column style="width:8%;text-align: center">
+                                    <p:commandLink title="Ver orden de compra" actionListener="#{asegSolController.generateOrdenCompra(r1.id, r1.idProvWinner)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgOrden').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                 </p:column>
@@ -233,6 +236,58 @@
                     <p:spacer width="7"/>
                     <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgWinner').hide();" type="button"/>
                 </div>
+            </p:dialog>
+            <p:dialog widgetVar="dlgOrden" id="dlgOrden" modal="true" closeOnEscape="true" header="Orden de compra" closable="true" width="450px" position="top">
+                <h:panelGroup id="pgDlgOrden">
+                    <div class="row">
+                        <div class="col s12" style="text-align: right">
+                            <span style="font-weight: bold">Fecha de creacion: </span> #{of:formatDate(asegSolController.voOrdenCompra.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <span style="font-weight: bold">Codigo: </span> #{asegSolController.voOrdenCompra.codigosolicitud}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <span style="font-weight: bold">Proveedor ganador: </span> #{asegSolController.voOrdenCompra.proveedorWinner}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <span style="font-weight: bold">Carro: </span> #{asegSolController.voOrdenCompra.marca} / #{asegSolController.voOrdenCompra.modelo} / #{asegSolController.voOrdenCompra.aniocarro}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="winnerTable" var="r1" value="#{asegSolController.voOrdenCompra.repAplicaList}">
+                                <p:column headerText="Repuesto">
+                                    <h:outputText value="#{r1.repuesto}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{r1.precio}"/>
+                                </p:column>
+                                <p:column headerText="Estado">
+                                    <h:outputText value="#{r1.estadoOferta}"/>
+                                </p:column>
+                                <p:column headerText="Tiempo (horas)">
+                                    <h:outputText value="#{r1.tiempo}"/>
+                                </p:column>
+                                <p:summaryRow>
+                                    <p:column colspan="3" style="text-align:right">
+                                        <h:outputText value="Total:" />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{asegSolController.totalOrden(asegSolController.voOrdenCompra.repAplicaList)}">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:summaryRow>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
             </p:dialog>
         </h:form>
     </ui:define>

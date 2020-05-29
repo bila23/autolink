@@ -86,4 +86,9 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         if(idSol == 0 || idProv == 0) return;
         dao.updateGanador(idSol, idProv);
     }
+    
+    public Proveedor findWinnerBySolicitud(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        return dao.findWinnerBySolicitud(idSol);
+    }
 }

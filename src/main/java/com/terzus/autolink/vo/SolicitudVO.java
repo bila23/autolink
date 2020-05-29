@@ -56,5 +56,7 @@ public class SolicitudVO implements Serializable{
     private Date fechacreacion;
     private String usuariocrea;
     private List<RepuestoSolicitudVO> repAplicaList;
+    private int idProvWinner;
+    private String proveedorWinner;
     
 }

@@ -12,8 +12,10 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Ofertaproveedor;
+import com.terzus.autolink.model.Proveedor;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -30,6 +32,8 @@ import javax.persistence.Query;
  */
 @Stateless
 public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
+    
+    @Inject private ProveedorDao provDao;
     
     public OfertaProvDao(){
         super(Ofertaproveedor.class);
@@ -64,5 +68,17 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         q.setParameter("idsolicitud", idSol);
         q.setParameter("idproveedor", idProv);
         q.executeUpdate();
+    }
+    
+    public Proveedor findWinnerBySolicitud(int idSol) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findWinnerBySolicitud");
+        q.setParameter("idsolicitud", idSol);
+        List<Ofertaproveedor> list = q.getResultList();
+        if(list == null || list.isEmpty()) return null;
+        Ofertaproveedor model = list.get(0);
+        if(model.getIdproveedor() == null || model.getIdproveedor() == 0) return null;
+        Proveedor proveedor = provDao.findByKey(model.getIdproveedor());
+        if(proveedor == null) return null;
+        return proveedor;
     }
 }
