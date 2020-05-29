@@ -58,4 +58,11 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         q.setParameter("idsolicitud", idSol);
         return q.getResultList();
     }
+    
+    public void updateGanador(int idSol, int idProv) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.updateGanador");
+        q.setParameter("idsolicitud", idSol);
+        q.setParameter("idproveedor", idProv);
+        q.executeUpdate();
+    }
 }

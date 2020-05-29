@@ -81,4 +81,9 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
             lst.add(modelToVO(model));
         return lst;
     }
+    
+    public void updateGanador(int idSol, int idProv) throws Exception{
+        if(idSol == 0 || idProv == 0) return;
+        dao.updateGanador(idSol, idProv);
+    }
 }

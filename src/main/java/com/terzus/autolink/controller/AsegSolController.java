@@ -53,6 +53,8 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private List<OfertaProveedorVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
+    @Getter @Setter private int idProv;
+    @Getter @Setter private int idSol;
     @Getter @Setter private int horas;
     @Getter @Setter private String com;
     
@@ -190,4 +192,23 @@ public class AsegSolController implements Serializable{
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las ofertas de la solicitud");
         }
     }
+    
+    public void defineWinner(){
+        try{
+            opService.updateGanador(idSol, idProv);
+            solService.updateEstado(idSol, "GOC");
+            solList = solService.findPendAprobar();
+            FacesHelper.successMessage(Constants.EXITO, "Se ha definido el ganador correctamente");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de definir el ganador");
+        }
+    }
+    
+    public void prepareWinner(int idSol, int idProv){
+        this.idSol = idSol;
+        this.idProv = idProv;
+    }
+    
+
 }

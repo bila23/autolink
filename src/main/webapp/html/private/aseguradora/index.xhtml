@@ -203,7 +203,12 @@
             <p:dialog widgetVar="dlgOfertas" id="dlgOfertas" modal="true" closeOnEscape="true" header="Ofertas de Proveedores" dynamic="true" closable="true">
                 <p:dataTable emptyMessage="No hay ofertas" sortBy="#{r1.proveedor}" id="ofertaTable" var="r1" value="#{asegSolController.opList}" expandableRowGroups="true">
                     <p:headerRow>
-                        <p:column colspan="4">#{r1.proveedor}</p:column>
+                        <p:column colspan="4">
+                            <h:outputText style="padding-right: 7px" value="#{r1.proveedor}"/>
+                            <p:commandLink onsuccess="PF('dlgWinner').show();"  actionListener="#{asegSolController.prepareWinner(r1.idsolicitud, r1.idproveedor)}">
+                                [Definir como ganador]
+                            </p:commandLink>
+                        </p:column>
                     </p:headerRow>
                     <p:column headerText="Repuesto">
                         <h:outputText value="#{r1.repuesto}"/>
@@ -218,6 +223,16 @@
                         <h:outputText value="#{r1.tiempo}"/>
                     </p:column>
                 </p:dataTable>
+            </p:dialog>
+            <p:dialog showHeader="false" widgetVar="dlgWinner" id="dlgWinner" modal="true" closeOnEscape="true" dynamic="true" closable="true">
+                <div class="form-group">
+                    <div style="padding-bottom:25px">
+                        Esta seguro que desea elegirlo como ganador?
+                    </div>
+                    <p:commandButton update="mf:msg :mf:tab:dtppa" onsuccess="PF('dlgWinner').hide(); PF('dlgOfertas').hide();" value="Si" class="waves-effect waves-light btn" actionListener="#{asegSolController.defineWinner()}"/>
+                    <p:spacer width="7"/>
+                    <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgWinner').hide();" type="button"/>
+                </div>
             </p:dialog>
         </h:form>
     </ui:define>
