@@ -15,6 +15,7 @@ import com.terzus.autolink.model.Usuario;
 import java.security.MessageDigest;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -33,6 +34,8 @@ import javax.xml.bind.DatatypeConverter;
 @Stateless
 public class UsuarioDao extends Dao<Usuario, Integer>{
 
+    @Inject private ProveedorDao provDao;
+    
     public UsuarioDao(){
         super(Usuario.class);
     }

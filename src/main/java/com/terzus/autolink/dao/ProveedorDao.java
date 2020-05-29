@@ -12,9 +12,11 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Proveedor;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * @author CEL
@@ -39,5 +41,13 @@ public class ProveedorDao extends Dao<Proveedor, Integer>{
     @Override
     public EntityManager getEntityManager() {
         return em;
+    }
+    
+    public Proveedor findByUser(String user) throws Exception{
+        Query q = em.createNamedQuery("Proveedor.findByUser");
+        q.setParameter("idusuario", user.toUpperCase());
+        List<Proveedor> list = q.getResultList();
+        if(list == null || list.isEmpty()) return null;
+        return list.get(0);
     }
 }

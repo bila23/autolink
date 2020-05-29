@@ -13,11 +13,9 @@ package com.terzus.autolink.controller;
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Ofertaproveedor;
-import com.terzus.autolink.model.Usuario;
 import com.terzus.autolink.service.OfertaProvService;
-import com.terzus.autolink.service.RepuestoSolicitudService;
+import com.terzus.autolink.service.ProveedorService;
 import com.terzus.autolink.service.SolicitudService;
-import com.terzus.autolink.service.UsuarioService;
 import com.terzus.autolink.vo.OfertaVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -48,8 +46,7 @@ import org.primefaces.event.TabChangeEvent;
 public class ProvSolController implements Serializable{
     
     @Inject private SolicitudService solService;
-    @Inject private RepuestoSolicitudService repSolService;
-    @Inject private UsuarioService userService;
+    @Inject private ProveedorService provService;
     @Inject private OfertaProvService opService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
@@ -62,8 +59,7 @@ public class ProvSolController implements Serializable{
     public void init(){
         try{
             vo = new OfertaVO();
-            Usuario userModel = userService.findByUser(FacesHelper.getUserLogin());
-            this.codPrv = userModel.getId();
+            this.codPrv = provService.findIdProvByUser(FacesHelper.getUserLogin());
             solList = solService.findCotAbierta(this.codPrv);
         }catch(Exception e){
             log.error(e.getMessage(), e);

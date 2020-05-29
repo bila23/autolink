@@ -43,7 +43,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "proveedor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Proveedor.findAll", query = "SELECT p FROM Proveedor p")
+    @NamedQuery(name = "Proveedor.findAll", query = "SELECT p FROM Proveedor p"),
+    @NamedQuery(name = "Proveedor.findByUser", query = "SELECT p FROM Proveedor p WHERE UPPER(p.idusuario.user) = :idusuario")
 })
 public class Proveedor implements Serializable {
 

@@ -130,14 +130,14 @@
                     </p:tabView>
                 </div>
             </div>
-            <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
+            <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px" closable="true">
                 <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{asegSolController.repSolList}">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
                     </p:column>
                 </p:dataTable>
             </p:dialog>
-            <p:dialog widgetVar="dlgRepValidate" id="dlgRepValidate" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
+            <p:dialog widgetVar="dlgRepValidate" id="dlgRepValidate" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px" closable="true">
                 <p:dataTable emptyMessage="No hay repuestos" id="repSolTable2" var="r1" value="#{asegSolController.repSolList}">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
@@ -168,7 +168,7 @@
                     </div>
                 </div>
             </p:dialog>
-            <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud" width="750px">
+            <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud" width="750px" closable="true">
                 <div class="row">
                     <div class="input-field col s12">
                         <h:inputTextarea class="materialize-textarea" id="com" value="#{asegSolController.com}"/>
