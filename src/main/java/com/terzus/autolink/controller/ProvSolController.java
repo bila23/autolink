@@ -74,7 +74,7 @@ public class ProvSolController implements Serializable{
                 if(id.equals("coa"))
                     solList = solService.findCotAbierta(this.codPrv);
                 else if(id.equals("goc"))
-                    solList = solService.findGenOrdCompra();
+                    solList = solService.findGenOrdCompra(this.codPrv);
                 else if(id.equals("dpp"))
                     solList = solService.findDespProveedor();
         }catch(Exception e){
@@ -127,4 +127,14 @@ public class ProvSolController implements Serializable{
         }
     }
 
+    public void updateDespProv(int idSol){
+        try{
+            solService.updateEstado(idSol, "DEP");
+            solList = solService.findGenOrdCompra(this.codPrv);
+            FacesHelper.successMessage(Constants.EXITO, "Se ha cambiado el estado de la solicitud correctamente");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de cambiar el estado de la solicitud");
+        }
+    }
 }

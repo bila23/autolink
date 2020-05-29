@@ -212,11 +212,15 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return findByEstado("GOC");
     }
     
+    public List<SolicitudVO> findGenOrdCompra(int codprv) throws Exception{
+        return findByEstado("GOC", codprv);
+    }
+    
     public SolicitudVO genOrdCompra(int idSol, int codprv) throws Exception{
         Solicitud model = dao.findByKey(idSol);
         if(model == null) return null;
         return modelToVO(model, codprv);
-    }   
+    }
 
     public List<SolicitudVO> findDespProveedor() throws Exception{
         return findByEstado("DEP");
