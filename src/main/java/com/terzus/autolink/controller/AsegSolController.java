@@ -14,8 +14,10 @@ import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.vo.OfertaProveedorVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -46,7 +48,9 @@ public class AsegSolController implements Serializable{
 
     @Inject private SolicitudService solService;
     @Inject private RepuestoSolicitudService repSolService;
+    @Inject private OfertaProvService opService;
     @Getter @Setter private List<SolicitudVO> solList;
+    @Getter @Setter private List<OfertaProveedorVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
     @Getter @Setter private int horas;
@@ -175,6 +179,15 @@ public class AsegSolController implements Serializable{
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar la solicitud");
+        }
+    }
+    
+    public void showOfertasBySolicitud(int idSol){
+        try{
+            opList = opService.findBySolicitud(idSol);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las ofertas de la solicitud");
         }
     }
 }

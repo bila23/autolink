@@ -74,8 +74,8 @@
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
-                                    <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                <p:column headerText="Ver ofertas" style="width:8%;text-align: center">
+                                    <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                 </p:column>
@@ -199,6 +199,25 @@
                         </div>
                     </div>
                 </div>
+            </p:dialog>
+            <p:dialog widgetVar="dlgOfertas" id="dlgOfertas" modal="true" closeOnEscape="true" header="Ofertas de Proveedores" dynamic="true" closable="true">
+                <p:dataTable emptyMessage="No hay ofertas" sortBy="#{r1.proveedor}" id="ofertaTable" var="r1" value="#{asegSolController.opList}" expandableRowGroups="true">
+                    <p:headerRow>
+                        <p:column colspan="4">#{r1.proveedor}</p:column>
+                    </p:headerRow>
+                    <p:column headerText="Repuesto">
+                        <h:outputText value="#{r1.repuesto}"/>
+                    </p:column>
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{r1.precio}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{r1.estado}"/>
+                    </p:column>
+                    <p:column headerText="Tiempo (horas)">
+                        <h:outputText value="#{r1.tiempo}"/>
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>

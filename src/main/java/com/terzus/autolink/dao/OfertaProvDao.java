@@ -52,4 +52,10 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         if(list == null || list.isEmpty()) return null;
         return list.get(0);
     }
+    
+    public List<Ofertaproveedor> findBySolicitud(int idSol) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findBySolicitud");
+        q.setParameter("idsolicitud", idSol);
+        return q.getResultList();
+    }
 }

@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o"),
+    @NamedQuery(name = "Ofertaproveedor.findBySolicitud", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud ORDER BY o.idproveedor, o.idrepuesto"),
     @NamedQuery(name = "Ofertaproveedor.findBySolicitudAndProveedorAndRepuesto", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor AND o.idrepuesto = :idrepuesto")
 })
 public class Ofertaproveedor implements Serializable {
