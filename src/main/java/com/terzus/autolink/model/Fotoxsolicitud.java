@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "fotoxsolicitud")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Fotoxsolicitud.findAll", query = "SELECT f FROM Fotoxsolicitud f")
+    @NamedQuery(name = "Fotoxsolicitud.findAll", query = "SELECT f FROM Fotoxsolicitud f"),
+    @NamedQuery(name = "Fotoxsolicitud.findBySolicitud", query = "SELECT f FROM Fotoxsolicitud f WHERE f.idsolicitud.id = :idSol ORDER BY f.id")
 })
 public class Fotoxsolicitud implements Serializable {
 
