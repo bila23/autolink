@@ -61,9 +61,7 @@
                         <p:tab title="PENDIENTE POR APROBAR" id="ppa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtppa" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
-                                    <h:outputText value="#{r1.fechacreacion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                    </h:outputText>
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -84,9 +82,7 @@
                         <p:tab title="CERRADA POR ASEGURADORA" id="cpa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcpa" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
-                                    <h:outputText value="#{r1.fechacreacion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                    </h:outputText>
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -107,9 +103,7 @@
                         <p:tab title="GENERAR ORDEN DE COMPRA" id="goc">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtgoc" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
-                                    <h:outputText value="#{r1.fechacreacion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                    </h:outputText>
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />

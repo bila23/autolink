@@ -10,6 +10,7 @@
 */
 package com.terzus.autolink.service;
 
+import com.bila.framework.commons.GeneralFunction;
 import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.AseguradoraDao;
@@ -92,6 +93,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             model.setIdtaller(taller.getId());
         model.setUsuariocrea(user);
         dao.save(model);
+        model.setCodigosolicitud("SOL-" + GeneralFunction.getYear() + "-" + model.getId());
+        dao.update(model);
         return model.getId();
     }
     

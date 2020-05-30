@@ -147,6 +147,9 @@
                         </p:tab>
                         <p:tab title="INGRESADAS" id="ing">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dting" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -171,6 +174,9 @@
                         </p:tab>
                         <p:tab title="ANULADAS" id="anu">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtanu" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -195,6 +201,9 @@
                         </p:tab>
                         <p:tab title="DESP. POR PROVEEDOR" id="dpp">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtdpp" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -222,6 +231,9 @@
                         </p:tab>
                         <p:tab title="ENT. A SAT. CLIENTE" id="eas">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dteas" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -246,6 +258,9 @@
                         </p:tab>
                         <p:tab title="CERR. POR DESIERTA" id="cpd">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcpd" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -270,6 +285,9 @@
                         </p:tab>
                         <p:tab title="CERR. POR ASEG." id="cpa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcpa" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
