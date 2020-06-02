@@ -18,7 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -54,9 +53,8 @@ public class Tipousuario implements Serializable {
     @Size(max = 50)
     @Column(name = "nombretipo")
     private String nombretipo;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -87,11 +85,11 @@ public class Tipousuario implements Serializable {
         this.nombretipo = nombretipo;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

@@ -19,7 +19,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -43,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Repuesto.findAll", query = "SELECT r FROM Repuesto r"),
-    @NamedQuery(name = "Repuesto.findActive", query = "SELECT r FROM Repuesto r WHERE r.estado = '1' ORDER BY r.nombrerepuesto")
+    @NamedQuery(name = "Repuesto.findActive", query = "SELECT r FROM Repuesto r WHERE r.estado = 'A' ORDER BY r.nombrerepuesto")
 })
 public class Repuesto implements Serializable {
 
@@ -59,9 +58,8 @@ public class Repuesto implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor")
     private BigDecimal valor;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -100,11 +98,11 @@ public class Repuesto implements Serializable {
         this.valor = valor;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

@@ -19,7 +19,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -75,9 +74,8 @@ public class Proveedor implements Serializable {
     @Size(max = 50)
     @Column(name = "nit")
     private String nit;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -159,11 +157,11 @@ public class Proveedor implements Serializable {
         this.nit = nit;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

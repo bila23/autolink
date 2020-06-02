@@ -67,7 +67,7 @@ public class Usuario implements Serializable {
     @Column(name = "idtipo")
     private Integer idtipo;
     @Column(name = "estado")
-    private int estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -126,11 +126,11 @@ public class Usuario implements Serializable {
         this.idtipo = idtipo;
     }
 
-    public int getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

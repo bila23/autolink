@@ -19,7 +19,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -44,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Taller.findAll", query = "SELECT t FROM Taller t"),
-    @NamedQuery(name = "Taller.findActive", query = "SELECT t FROM Taller t WHERE t.estado = '1' ORDER BY t.nombreTaller"),
+    @NamedQuery(name = "Taller.findActive", query = "SELECT t FROM Taller t WHERE t.estado = 'A' ORDER BY t.nombreTaller"),
     @NamedQuery(name = "Taller.findByUser", query = "SELECT t FROM Taller t WHERE t.idusuario = (SELECT u.id FROM Usuario u WHERE UPPER(u.user) = :user)")
 })
 public class Taller implements Serializable {
@@ -70,9 +69,8 @@ public class Taller implements Serializable {
     @Size(max = 50)
     @Column(name = "direccion")
     private String direccion;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -138,11 +136,11 @@ public class Taller implements Serializable {
         this.direccion = direccion;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

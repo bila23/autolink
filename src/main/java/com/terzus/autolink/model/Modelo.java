@@ -18,7 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -42,7 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Modelo.findAll", query = "SELECT m FROM Modelo m"),
-    @NamedQuery(name = "Modelo.findActiveByMarca", query = "SELECT m FROM Modelo m WHERE m.idmarca = :idmarca AND m.estado = '1' ORDER BY m.nombremodelo")
+    @NamedQuery(name = "Modelo.findActiveByMarca", query = "SELECT m FROM Modelo m WHERE m.idmarca = :idmarca AND m.estado = 'A' ORDER BY m.nombremodelo")
 })
 public class Modelo implements Serializable {
 
@@ -58,9 +57,8 @@ public class Modelo implements Serializable {
     @Size(max = 50)
     @Column(name = "idmarca")
     private String idmarca;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -99,11 +97,11 @@ public class Modelo implements Serializable {
         this.idmarca = idmarca;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

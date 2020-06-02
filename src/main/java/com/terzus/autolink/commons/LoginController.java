@@ -102,7 +102,7 @@ public class LoginController implements Serializable{
                 if(model == null){
                     FacesHelper.errorMessage("El usuario que ha ingresado no existe");
                     return "init";
-                }else if(model.getEstado() == 0 ){
+                }else if(model.getEstado().equals("I")){
                     FacesHelper.errorMessage("Su usuario se encuentra inactivo, no tiene permisos para ingresar al sistema");
                     return "init";      
                 }else if(model.getIdtipo() == null || model.getIdtipo() == 0){

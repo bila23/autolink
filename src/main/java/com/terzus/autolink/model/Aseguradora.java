@@ -20,7 +20,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -47,7 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a"),
-    @NamedQuery(name = "Aseguradora.findActive", query = "SELECT a FROM Aseguradora a WHERE a.estado = '1' ORDER BY a.nombreaseguradora")
+    @NamedQuery(name = "Aseguradora.findActive", query = "SELECT a FROM Aseguradora a WHERE a.estado = 'A' ORDER BY a.nombreaseguradora")
 })
 public class Aseguradora implements Serializable {
 
@@ -72,9 +71,8 @@ public class Aseguradora implements Serializable {
     @Size(max = 50)
     @Column(name = "iva")
     private String iva;
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private String estado;
     @Size(max = 50)
     @Column(name = "usuariocrea")
     private String usuariocrea;
@@ -142,11 +140,11 @@ public class Aseguradora implements Serializable {
         this.iva = iva;
     }
 
-    public byte[] getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
