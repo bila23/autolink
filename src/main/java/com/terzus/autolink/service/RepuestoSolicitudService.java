@@ -17,7 +17,9 @@ import com.terzus.autolink.dao.RepuestoSolicitudDao;
 import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Respuestoxsolicitud;
+import com.terzus.autolink.vo.OfertaProveedorVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
+import com.terzus.autolink.vo.RepuestosAllSolVO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -44,6 +46,30 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
     @Override
     public Dao<Respuestoxsolicitud, Integer> getDao() {
         return dao;
+    }
+    
+    public List<RepuestosAllSolVO> findAllRepAndOfertas(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        List<Respuestoxsolicitud> list = dao.findBySolicitud(idSol);
+        if(list == null || list.isEmpty()) return null;
+        RepuestosAllSolVO vo = null;
+        int i = 0, size = list.size();
+        Respuestoxsolicitud model = null;
+        List<RepuestosAllSolVO> lst = new ArrayList();
+        List<OfertaProveedorVO> opList = null;
+        for(i = 0; i<size; i++){
+            model = list.get(i);
+            vo = new RepuestosAllSolVO();
+            PropertyUtils.copyProperties(vo, model);
+            if(vo.getAplica() == null || vo.getAplica().equals("N"))
+                vo.setAplica("No");
+            else
+                vo.setAplica("Si");
+            opList = opService.findBySolAndRep(vo.getIdsolicitud(), vo.getIdrepuesto());
+            vo.setOpList(opList);
+            lst.add(vo);
+        }
+        return lst;
     }
     
     public void updateAplica(String aplica, int id) throws Exception{

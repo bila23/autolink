@@ -47,6 +47,13 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         return em;
     }
     
+    public List<Ofertaproveedor> findBySolAndRep(int idSol, int idRep) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findBySolAndRep");
+        q.setParameter("idsolicitud", idSol);
+        q.setParameter("idrepuesto", idRep);
+        return q.getResultList();
+    }
+    
     public Ofertaproveedor findBySolicitudAndProveedorAndRepuesto(int idSol, int idProv, int idRep) throws Exception{
         Query q = em.createNamedQuery("Ofertaproveedor.findBySolicitudAndProveedorAndRepuesto");
         q.setParameter("idsolicitud", idSol);

@@ -27,6 +27,7 @@ import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
+import com.terzus.autolink.vo.RepuestosAllSolVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +64,56 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return dao;
     }
     
+    private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception{
+        if(model.getIdaseguradora() != null && model.getIdaseguradora() > 0){
+            Aseguradora aseg = asegDao.findByKey(model.getIdaseguradora());
+            if(aseg != null)
+                vo.setAseguradora(aseg.getNombreaseguradora());
+        }
+        if(model.getIdmarca() != null && model.getIdmarca() > 0){
+            Marca marca = marcaDao.findByKey(model.getIdmarca());
+            if(marca != null)
+                vo.setMarca(marca.getNombremarca());
+        }
+        if(model.getIdtaller() != null && model.getIdtaller() > 0){
+            Taller taller = tallerDao.findByKey(model.getIdtaller());
+            if(taller != null)
+                vo.setTaller(taller.getNombreTaller());
+        }
+        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+            Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
+            vo.setModelo(modelo.getNombremodelo());
+        }
+        return vo;
+    }
+    
+    /**
+     * Ver la informacion completa de la solicitud
+     * @param idSol codigo de la solicitud - int
+     * @return objeto de tipo SolicitudVO
+     * @throws Exception 
+     */
+    public SolicitudVO seeInfoSol(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        Solicitud model = dao.findByKey(idSol);
+        if(model == null) return null;
+        SolicitudVO vo = new SolicitudVO();
+        PropertyUtils.copyProperties(vo, model);
+        vo = injectFK(model, vo);
+        //RECUPERO TODOS LOS REPUESTOS
+        List<RepuestosAllSolVO> list = rsService.findAllRepAndOfertas(idSol);
+        if(list != null && !list.isEmpty())
+            vo.setRepAllList(list);
+        return vo;
+    }
+    
+    /**
+     * Pone la hora de vigencia de la solicitud para que los proveedores
+     * puedan ofertar
+     * @param idSol codigo de la solicitud - int
+     * @param horas cantidad de horas en la que estara activa la solicitud - int
+     * @throws Exception 
+     */
     public void updateHorasVigencia(int idSol, int horas) throws Exception{
         Solicitud model = dao.findByKey(idSol);
         if(model != null){

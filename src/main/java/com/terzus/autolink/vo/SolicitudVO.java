@@ -58,5 +58,6 @@ public class SolicitudVO implements Serializable{
     private List<RepuestoSolicitudVO> repAplicaList;
     private int idProvWinner;
     private String proveedorWinner;
+    private List<RepuestosAllSolVO> repAllList;
     
 }

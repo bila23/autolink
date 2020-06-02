@@ -47,6 +47,11 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         return dao;
     }
     
+    public List<OfertaProveedorVO> findBySolAndRep(int idSol, int idRep) throws Exception{
+        if(idSol == 0 || idRep == 0) return null;
+        return listModelToVO(dao.findBySolAndRep(idSol, idRep));
+    }
+    
     public Ofertaproveedor findBySolicitudAndProveedorAndRepuesto(int idSol, int idProv, int idRep) throws Exception{
         if(idSol == 0 || idProv == 0 || idRep == 0) return null;
         return dao.findBySolicitudAndProveedorAndRepuesto(idSol, idProv, idRep);
