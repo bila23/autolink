@@ -17,7 +17,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -55,13 +54,14 @@ public class Respuestoxsolicitud implements Serializable {
     private Integer idrepuesto;
     @Column(name = "idsolicitud")
     private Integer idsolicitud;
-    @Lob
-    @Size(max = 65535)
+    @Size(max = 100)
     @Column(name = "estado")
     private String estado;
     @Column(name = "aplica")
     @Size(max = 1)
     private String aplica;
+    @Column(name = "cantidad")
+    private Integer cantidad;
 
     public Respuestoxsolicitud() {
     }
@@ -108,6 +108,14 @@ public class Respuestoxsolicitud implements Serializable {
 
     public void setAplica(String aplica) {
         this.aplica = aplica;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     @Override

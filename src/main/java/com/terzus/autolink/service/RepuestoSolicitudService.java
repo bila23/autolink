@@ -128,12 +128,13 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         return modelListToVOList(dao.findAplicaBySolicitud(id), 0);        
     }
     
-    public void save(int idSol, int idRep) throws Exception{
+    public void save(int idSol, int idRep, int cantidad) throws Exception{
         Respuestoxsolicitud model = new Respuestoxsolicitud();
         model.setEstado("A");
         model.setAplica("N");
         model.setIdrepuesto(idRep);
         model.setIdsolicitud(idSol);
+        model.setCantidad(cantidad);
         dao.save(model);
     }
 

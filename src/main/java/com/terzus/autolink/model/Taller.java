@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Taller.findAll", query = "SELECT t FROM Taller t"),
     @NamedQuery(name = "Taller.findActive", query = "SELECT t FROM Taller t WHERE t.estado = 'A' ORDER BY t.nombreTaller"),
-    @NamedQuery(name = "Taller.findByUser", query = "SELECT t FROM Taller t WHERE t.idusuario = (SELECT u.id FROM Usuario u WHERE UPPER(u.user) = :user)")
+    @NamedQuery(name = "Taller.findByUser", query = "SELECT t FROM Taller t WHERE UPPER(t.idusuario.user) = :user")
 })
 public class Taller implements Serializable {
 

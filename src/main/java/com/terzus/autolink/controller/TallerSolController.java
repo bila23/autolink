@@ -58,6 +58,7 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private boolean showSaveBtn;
     @Getter @Setter private List<Repuesto> repList;
     @Getter @Setter private int repuesto;
+    @Getter @Setter private Integer cantidad;
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     private int idSol;
@@ -164,8 +165,12 @@ public class TallerSolController implements Serializable{
     
     public void saveRepSol(){
         try{
-            if(repuesto > 0){
-                repSolService.save(idSol, repuesto);
+            if(cantidad == null || cantidad == 0)
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la cantidad de repuestos");
+            else if(repuesto == 0)
+                FacesHelper.warningMessage(Constants.WARNING, "Debe seleccionar un repuesto");
+            else if(repuesto > 0){
+                repSolService.save(idSol, repuesto, cantidad);
                 repVOList = repSolService.findBySolicitud(idSol);
                 FacesHelper.successMessage(Constants.EXITO, "Se ha guardado el repuesto");
             }

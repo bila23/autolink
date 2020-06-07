@@ -33,6 +33,7 @@ public class RepuestosAllSolVO implements Serializable{
     private String estado;
     private String aplica;
     private String repuesto;
+    private Integer cantidad;
     private List<OfertaProveedorVO> opList;
     
 }

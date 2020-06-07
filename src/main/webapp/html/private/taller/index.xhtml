@@ -108,14 +108,18 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col s12 m12 l6">
+                                        <div class="col s12 m12 l7 input-field">
                                             <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar repuestos" value="#{tallerSolController.repuesto}" class="validate" id="repuesto" style="border-color: #c7c5c5" >
                                                 <f:selectItem itemLabel="Seleccione un repuesto" itemValue="0"/>
                                                 <f:selectItems value="#{tallerSolController.repList}" var="r" itemLabel="#{r.nombrerepuesto}" itemValue="#{r.id}"/>
                                             </p:selectOneMenu>
                                         </div>
-                                        <div class="col s12 m12 l6">
-                                            <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable"/>
+                                        <div class="col s12 m12 l2 input-field">
+                                            <h:inputText value="#{tallerSolController.cantidad}" id="cantidad" style="text-align:center"/>
+                                            <h:outputLabel value="Cantidad:" for="cantidad"/>
+                                        </div>
+                                        <div class="col s12 m12 l3 input-field">
+                                            <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable mf:msg"/>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -123,6 +127,9 @@
                                             <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{tallerSolController.repVOList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="5">
                                                 <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
                                                     <h:outputText value="#{rep.repuesto}" />
+                                                </p:column>
+                                                <p:column headerText="Cantidad" sortBy="#{rep.cantidad}" style="text-align:center">
+                                                    <h:outputText value="#{rep.cantidad}" />
                                                 </p:column>
                                                 <p:column headerText="Eliminar" style="text-align:center;width: 10%">
                                                     <p:commandLink actionListener="#{tallerSolController.deleteRepSol(rep.id)}" update="mf:msg repTable">
