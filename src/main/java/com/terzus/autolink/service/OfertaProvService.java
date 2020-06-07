@@ -18,6 +18,7 @@ import com.terzus.autolink.dao.RepuestoDao;
 import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
+import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.OfertaProveedorVO;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,27 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
     @Override
     public Dao<Ofertaproveedor, Integer> getDao() {
         return dao;
+    }
+    
+    public List<OfertaPrecioVO> findOfertaTotalBySol(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        List<Object[]> list = dao.findProvTotalBySolicitud(idSol);
+        if(list == null || list.isEmpty()) return null;
+        List<OfertaPrecioVO> lst = new ArrayList();
+        OfertaPrecioVO vo = null;
+        int i = 0, size = list.size();
+        Object[] obj = null;
+        for(i=0; i<size; i++){
+            obj = list.get(i);
+            vo = new OfertaPrecioVO();
+            vo.setIdProveedor((int) obj[0]);
+            vo.setIdSol(idSol);
+            vo.setNumero(i + 1);
+            vo.setPrecioTotal((double) obj[1]);
+            vo.setList(findBySolicitud(idSol));
+            lst.add(vo);
+        }
+        return lst;
     }
     
     public List<OfertaProveedorVO> findBySolAndRep(int idSol, int idRep) throws Exception{

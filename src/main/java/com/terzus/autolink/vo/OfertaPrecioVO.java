@@ -1,5 +1,5 @@
 /*---------------------------------------------------------
-* FILE: OfertaProveedorVO.java
+* FILE: OfertaPrecioVO.java
 * PRODUCT: autolink
 *----------------------------------------------------------
 * IMPORTANT NOTICE
@@ -11,31 +11,26 @@
 package com.terzus.autolink.vo;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 /**
  * @author CEL
  * <b>Created by: </b>will
  * <b>For: </b>autolink
- * <b>On: </b>May 28, 2020 5:59:10 PM
+ * <b>On: </b>Jun 6, 2020 10:13:56 PM
  * <b>Purpose</b> 
  * <p>
  *      
  * </p>
  */
 @Data
-public class OfertaProveedorVO implements Serializable{
+public class OfertaPrecioVO implements Serializable{
 
-    private Integer id;
-    private Integer idsolicitud;
-    private Integer idrepuesto;
-    private Integer idproveedor;
-    private Integer cantidad;
-    private String estado;
-    private String ganador;
-    private Integer tiempo;
-    private Double precio;
-    private String proveedor;
-    private String repuesto;
-    private Integer numero;
+    private int idProveedor;
+    private double precioTotal;
+    private int idSol;
+    private int numero;
+    private List<OfertaProveedorVO> list;
+    
 }

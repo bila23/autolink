@@ -88,4 +88,10 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         if(proveedor == null) return null;
         return proveedor;
     }
+    
+    public List<Object[]> findProvTotalBySolicitud(int idSol) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findProvTotalBySolicitud");
+        q.setParameter("idsolicitud", idSol);
+        return q.getResultList();
+    }
 }

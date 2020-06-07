@@ -109,10 +109,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col s12 m12 l6">
-                                            <h:selectOneMenu value="#{tallerSolController.repuesto}" class="validate" id="repuesto" style="display: initial !important; border-color: #c7c5c5">
+                                            <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar repuestos" value="#{tallerSolController.repuesto}" class="validate" id="repuesto" style="border-color: #c7c5c5" >
                                                 <f:selectItem itemLabel="Seleccione un repuesto" itemValue="0"/>
                                                 <f:selectItems value="#{tallerSolController.repList}" var="r" itemLabel="#{r.nombrerepuesto}" itemValue="#{r.id}"/>
-                                            </h:selectOneMenu>
+                                            </p:selectOneMenu>
                                         </div>
                                         <div class="col s12 m12 l6">
                                             <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable"/>
@@ -331,5 +331,10 @@
                 </p:dataTable>
             </p:dialog>
         </h:form>
+        <script>
+            $(document).ready(function(){
+              $('select').formSelect();
+            });
+        </script>
     </ui:define>
 </ui:composition>

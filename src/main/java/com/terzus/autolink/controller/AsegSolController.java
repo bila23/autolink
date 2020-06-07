@@ -17,7 +17,7 @@ import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
-import com.terzus.autolink.vo.OfertaProveedorVO;
+import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -51,7 +51,7 @@ public class AsegSolController implements Serializable{
     @Inject private OfertaProvService opService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private SolicitudVO voOrdenCompra;
-    @Getter @Setter private List<OfertaProveedorVO> opList;
+    @Getter @Setter private List<OfertaPrecioVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
     @Getter @Setter private int idProv;
@@ -187,7 +187,7 @@ public class AsegSolController implements Serializable{
     
     public void showOfertasBySolicitud(int idSol){
         try{
-            opList = opService.findBySolicitud(idSol);
+            opList = opService.findOfertaTotalBySol(idSol);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las ofertas de la solicitud");

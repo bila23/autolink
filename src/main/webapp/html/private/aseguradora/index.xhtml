@@ -12,14 +12,20 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}" style="text-align:center">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
-                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                    <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                    <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Acciones" style="width:8%;text-align: center">
                                     <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable2" onsuccess="PF('dlgRepValidate').show()" title="Ver repuestos">
@@ -29,8 +35,8 @@
                                         <i class="material-icons">info</i>
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="text-align: center">
-                                    <p:commandButton value="Cot. abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
+                                <p:column style="text-align: center">
+                                    <p:commandButton style="font-size:10px" value="Cot. abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -42,14 +48,20 @@
                                 <p:column headerText="Fin" sortBy="#{r1.fechafin}">
                                     #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
-                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                    <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                    <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="width:8%;text-align: center">
                                     <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
@@ -63,14 +75,20 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
-                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                    <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                    <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Ver ofertas" style="width:8%;text-align: center">
                                     <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
@@ -84,14 +102,20 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
-                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                    <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                    <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="width:8%;text-align: center">
                                     <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
@@ -105,14 +129,20 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
-                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
                                 <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                    <h:outputText value="#{r1.siniestro}" />
+                                </p:column>
+                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                    <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Proveedor ganador" sortBy="#{r1.proveedorWinner}">
                                     <h:outputText value="#{r1.proveedorWinner}" />
@@ -197,28 +227,42 @@
                     </div>
                 </div>
             </p:dialog>
-            <p:dialog widgetVar="dlgOfertas" id="dlgOfertas" modal="true" closeOnEscape="true" header="Ofertas de Proveedores" dynamic="true" closable="true">
-                <p:dataTable emptyMessage="No hay ofertas" sortBy="#{r1.proveedor}" id="ofertaTable" var="r1" value="#{asegSolController.opList}" expandableRowGroups="true">
-                    <p:headerRow>
-                        <p:column colspan="4">
-                            <h:outputText style="padding-right: 7px" value="#{r1.proveedor}"/>
-                            <p:commandLink onsuccess="PF('dlgWinner').show();"  actionListener="#{asegSolController.prepareWinner(r1.idsolicitud, r1.idproveedor)}">
-                                [Definir como ganador]
-                            </p:commandLink>
-                        </p:column>
-                    </p:headerRow>
-                    <p:column headerText="Repuesto">
-                        <h:outputText value="#{r1.repuesto}"/>
+            <p:dialog widgetVar="dlgOfertas" id="dlgOfertas" modal="true" closeOnEscape="true" header="Ofertas de Proveedores" dynamic="true" closable="true" position="top">
+                <p:dataTable emptyMessage="No hay ofertas" id="ofertaTable" var="r1" value="#{asegSolController.opList}">
+                    <p:column style="width:16px">
+                        <p:rowToggler />
                     </p:column>
-                    <p:column headerText="Precio">
-                        <h:outputText value="#{r1.precio}"/>
+                    <p:column headerText="Ofertas" style="text-align: center">
+                        <h:outputText value="Cotizacion #{r1.numero}"/>
                     </p:column>
-                    <p:column headerText="Estado">
-                        <h:outputText value="#{r1.estado}"/>
+                    <p:column headerText="Total($)" style="text-align: center">
+                        <h:outputText value="#{r1.precioTotal}">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
                     </p:column>
-                    <p:column headerText="Tiempo (horas)">
-                        <h:outputText value="#{r1.tiempo}"/>
+                    <p:column style="text-align: center">
+                        <p:commandLink onsuccess="PF('dlgWinner').show();"  actionListener="#{asegSolController.prepareWinner(r1.idSol, r1.idProveedor)}">
+                            <h:outputText value="[Definir como ganador]" />
+                        </p:commandLink>
                     </p:column>
+                    <p:rowExpansion>
+                        <p:dataTable var="o" value="#{r1.list}">
+                            <p:column headerText="Repuesto">
+                                <h:outputText value="#{o.repuesto}"/>
+                            </p:column>
+                            <p:column headerText="Precio" style="text-align: center">
+                                <h:outputText value="#{o.precio}">
+                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado" style="text-align: center">
+                                <h:outputText value="#{o.estado}"/>
+                            </p:column>
+                            <p:column headerText="Tiempo (horas)" style="text-align: center">
+                                <h:outputText value="#{o.tiempo}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:rowExpansion>
                 </p:dataTable>
             </p:dialog>
             <p:dialog showHeader="false" widgetVar="dlgWinner" id="dlgWinner" modal="true" closeOnEscape="true" dynamic="true" closable="true">
