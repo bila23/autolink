@@ -48,6 +48,17 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         return dao;
     }
     
+    /**
+     * Recupero los repuestos que posee una solicitud
+     * @param idSol int - codigo de la solicitud
+     * @return Lista de objetos Respuestoxsolicitud
+     * @throws Exception 
+     */
+    public List<Respuestoxsolicitud> findRepuestosBySolicitud(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        return dao.findBySolicitud(idSol);
+    }
+    
     public List<RepuestosAllSolVO> findAllRepAndOfertas(int idSol) throws Exception{
         if(idSol == 0) return null;
         List<Respuestoxsolicitud> list = dao.findBySolicitud(idSol);
@@ -99,6 +110,21 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
             vo.setPrecio(op.getPrecio());
             vo.setTiempo(op.getTiempo());
             vo.setEstadoOferta(op.getEstado());
+            if(vo.getEstadoOferta() != null && !vo.getEstadoOferta().equals("")){
+                switch (vo.getEstadoOferta()) {
+                    case "NO":
+                        vo.setEstadoOferta("Nuevo Original");
+                        break;
+                    case "NE":
+                        vo.setEstadoOferta("Nuevo Equivalente");
+                        break;
+                    case "US":
+                        vo.setEstadoOferta("Usado");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         
         return vo;

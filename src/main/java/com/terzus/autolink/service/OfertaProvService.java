@@ -18,6 +18,7 @@ import com.terzus.autolink.dao.RepuestoDao;
 import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
+import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.OfertaProveedorVO;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
     @Inject private OfertaProvDao dao;
     @Inject private RepuestoDao repDao;
     @Inject private ProveedorDao provDao;
+    @Inject private RepuestoSolicitudService repSolService;
 
     @Override
     public Dao<Ofertaproveedor, Integer> getDao() {
@@ -67,6 +69,46 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
             lst.add(vo);
         }
         return lst;
+    }
+    
+    /**
+     * Recupero la oferta optima de una solicitud
+     * @param idSol int: codigo de solicitud
+     * @return OfertaPrecioVO
+     * @throws Exception 
+     */
+    public OfertaPrecioVO findOfertaOptima(int idSol) throws Exception{
+        if(idSol == 0) return null;
+        
+        //RECUPERO LOS REPUESTOS QUE ESTAN EN LA SOLICITUD
+        List<Respuestoxsolicitud> repList = repSolService.findRepuestosBySolicitud(idSol);
+        if(repList == null || repList.isEmpty()) return null;
+        
+        OfertaPrecioVO vo = new OfertaPrecioVO();
+        vo.setIdProveedor(-17);
+        
+        double total = 0.0;
+        
+        List<OfertaProveedorVO> ofertaList = new ArrayList();
+        OfertaProveedorVO opv = null;
+        Ofertaproveedor ofertaLess = null;
+        Repuesto rep = null;
+        for(Respuestoxsolicitud model : repList){
+            if(model.getAplica() != null && model.getAplica().equals("S")){
+                ofertaLess = dao.findBySolAndRepOrderMinPrice(idSol, model.getIdrepuesto());
+                if(ofertaLess != null){
+                    opv = modelToVO(ofertaLess);
+                    total += opv.getPrecio();
+                    ofertaList.add(opv);
+                }
+            }
+        }
+        
+        vo.setList(ofertaList);
+        vo.setPrecioTotal(total);
+        vo.setNumero(-17);
+        vo.setIdSol(idSol);
+        return vo;
     }
     
     public List<OfertaProveedorVO> findBySolAndRep(int idSol, int idRep) throws Exception{

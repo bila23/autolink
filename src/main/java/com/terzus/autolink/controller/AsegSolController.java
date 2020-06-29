@@ -21,6 +21,7 @@ import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -77,9 +78,10 @@ public class AsegSolController implements Serializable{
                     solList = solService.findIngresadas();
                 else if(id.equals("coa"))
                     solList = solService.findCotAbierta();
-                else if(id.equals("ppa"))
+                else if(id.equals("ppa")){
+                    //AQUI SE AGREGA LA COTIZACION OPTIMA
                     solList = solService.findPendAprobar();
-                else if(id.equals("cpa"))
+                }else if(id.equals("cpa"))
                     solList = solService.findCerradaAseg();
                 else if(id.equals("goc"))
                     solList = solService.findGenOrdCompra();
@@ -187,7 +189,10 @@ public class AsegSolController implements Serializable{
     
     public void showOfertasBySolicitud(int idSol){
         try{
-            opList = opService.findOfertaTotalBySol(idSol);
+            OfertaPrecioVO optima = opService.findOfertaOptima(idSol);
+            opList = new ArrayList();
+            opList.add(optima);
+            opList.addAll(opService.findOfertaTotalBySol(idSol));
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las ofertas de la solicitud");

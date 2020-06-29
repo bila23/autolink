@@ -187,7 +187,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
         
-        //VERIFICO SI LA SOLIICTUD TIENE UN GANADOR
+        //VERIFICO SI LA SOLICITUD TIENE UN GANADOR
         Proveedor prov = opService.findWinnerBySolicitud(vo.getId());
         if(prov != null){
             vo.setIdProvWinner(prov.getId());

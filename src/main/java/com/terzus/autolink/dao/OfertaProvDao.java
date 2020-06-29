@@ -47,6 +47,15 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         return em;
     }
     
+    public Ofertaproveedor findBySolAndRepOrderMinPrice(int idSol, int idRep) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findBySolAndRepOrderMinPrice");
+        q.setParameter("idsolicitud", idSol);
+        q.setParameter("idrepuesto", idRep);
+        List<Ofertaproveedor> list = q.getResultList();
+        if(list == null || list.isEmpty()) return null;
+        return list.get(0);
+    }
+    
     public List<Ofertaproveedor> findBySolAndRep(int idSol, int idRep) throws Exception{
         Query q = em.createNamedQuery("Ofertaproveedor.findBySolAndRep");
         q.setParameter("idsolicitud", idSol);

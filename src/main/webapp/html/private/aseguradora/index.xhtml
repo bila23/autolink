@@ -233,7 +233,8 @@
                         <p:rowToggler />
                     </p:column>
                     <p:column headerText="Ofertas" style="text-align: center">
-                        <h:outputText value="Cotizacion #{r1.numero}"/>
+                        <h:outputText value="Cotizacion #{r1.numero}" rendered="#{r1.numero != -17}"/>
+                        <h:outputText value="Cotizacion optima" rendered="#{r1.numero == -17}"/>
                     </p:column>
                     <p:column headerText="Total($)" style="text-align: center">
                         <h:outputText value="#{r1.precioTotal}">
