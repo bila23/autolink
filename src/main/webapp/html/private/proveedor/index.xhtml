@@ -47,7 +47,13 @@
                                 <p:rowExpansion>
                                     <p:dataTable emptyMessage="No hay repuestos" var="r11" value="#{r1.repAplicaList}">
                                         <p:column headerText="Repuesto">
-                                            <h:outputText value="#{r11.repuesto}" />
+                                            <h:outputText value="#{r11.repuesto} "/><br/>
+                                            <h:panelGroup rendered="#{r11.cantidad == 1}">
+                                                <span style="font-size:11px;font-weight:bold">Item requerido: #{r11.cantidad}</span>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{r11.cantidad > 1}">
+                                                <span style="font-size:11px;font-weight:bold">Items requeridos: #{r11.cantidad}</span>
+                                            </h:panelGroup>
                                         </p:column>
                                         <p:column headerText="Estado">
                                             <h:outputText value="#{r11.estadoOferta}" />
@@ -55,11 +61,11 @@
                                         <p:column headerText="Tiempo">
                                             <h:outputText value="#{r11.tiempo}" />
                                         </p:column>
-                                        <p:column headerText="Precio">
+                                        <p:column headerText="Precio Unitario">
                                             <h:outputText value="#{r11.precio}" />
                                         </p:column>
                                         <p:column style="text-align:center;width: 16px">
-                                            <p:commandLink actionListener="#{provSolController.prepareOferta(r11.idsolicitud, r11.idrepuesto)}" update="mf:pgOferta" onsuccess="PF('dlgOferta').show()">
+                                            <p:commandLink actionListener="#{provSolController.prepareOferta(r11.idsolicitud, r11.idrepuesto, r11.cantidad)}" update="mf:pgOferta" onsuccess="PF('dlgOferta').show()">
                                                 <i class="material-icons">content_paste</i>
                                             </p:commandLink>
                                         </p:column>
@@ -146,7 +152,7 @@
             <p:dialog widgetVar="dlgOferta" id="dlgOferta" modal="true" closeOnEscape="true" header="Generar oferta" dynamic="true">
                 <h:panelGroup id="pgOferta">
                     <div class="row">
-                        <div class="col s12 input-field">
+                        <div class="col s12 m12 l6 input-field">
                             <div>Estado:</div>
                             <p:selectOneMenu value="#{provSolController.vo.estado}" class="validate" id="estado">
                                 <f:selectItem itemLabel="Nuevo Original" itemValue="NO"/>
@@ -154,25 +160,30 @@
                                 <f:selectItem itemLabel="Usado" itemValue="US"/>
                             </p:selectOneMenu>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 input-field">
-                            <div>Precio:</div>
+                        <div class="col s12 m12 l6 input-field">
+                            <div>Precio unitario:</div>
                             <h:inputText value="#{provSolController.vo.precio}" class="validate" id="precio"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 input-field">
-                            <div>Tiempo:</div>
+                            <div>Cantidad de items (#item(s): #{provSolController.cantidad}):</div>
+                            <h:inputText value="#{provSolController.vo.cantidad}" class="validate" id="cantidad"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 input-field">
+                            <div>Tiempo (dias):</div>
                             <h:inputText value="#{provSolController.vo.tiempo}" class="validate" id="tiempo"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 input-field">
-                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" actionListener="#{provSolController.saveOferta()}" update="mf:msg mf:tab:dtcoa"/>
+                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" actionListener="#{provSolController.saveOferta()}" update="mf:msg"/>
                         </div>
                     </div>
                 </h:panelGroup>
+                <p:ajax event="close" update="mf:tab:dtcoa" listener="#{provSolController.findCotAbierta()}" />
             </p:dialog>
             <p:dialog widgetVar="dlgOrden" id="dlgOrden" modal="true" closeOnEscape="true" header="Orden de compra" closable="true" width="450px" position="top">
                 <h:panelGroup id="pgDlgOrden">

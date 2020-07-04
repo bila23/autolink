@@ -52,6 +52,7 @@ public class ProvSolController implements Serializable{
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
     @Getter @Setter private int codRep;
+    @Getter @Setter private int cantidad;
     @Getter @Setter private int codPrv;
     @Getter @Setter private OfertaVO vo;
     
@@ -60,10 +61,19 @@ public class ProvSolController implements Serializable{
         try{
             vo = new OfertaVO();
             this.codPrv = provService.findIdProvByUser(FacesHelper.getUserLogin());
-            solList = solService.findCotAbierta(this.codPrv);
+            findCotAbierta();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
+        }
+    }
+    
+    public void findCotAbierta(){
+        try{
+            solList = solService.findCotAbierta(this.codPrv);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");            
         }
     }
     
@@ -72,7 +82,7 @@ public class ProvSolController implements Serializable{
             String id = event.getTab().getId();
             if(id != null)
                 if(id.equals("coa"))
-                    solList = solService.findCotAbierta(this.codPrv);
+                    findCotAbierta();
                 else if(id.equals("goc"))
                     solList = solService.findGenOrdCompra(this.codPrv);
                 else if(id.equals("dpp"))
@@ -83,15 +93,17 @@ public class ProvSolController implements Serializable{
         }
     }
     
-    public void prepareOferta(int codSol, int codRep){
+    public void prepareOferta(int codSol, int codRep, int cantidad){
         this.codSol = codSol;
         this.codRep = codRep;
+        this.cantidad = cantidad;
         try{
             Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(codSol, codPrv, codRep);
             if(op != null){
                 vo.setEstado(op.getEstado());
                 vo.setPrecio(op.getPrecio());
                 vo.setTiempo(op.getTiempo());
+                vo.setCantidad(op.getCantidad());
             }else
                 vo = new OfertaVO();
         }catch(Exception e){
@@ -102,11 +114,29 @@ public class ProvSolController implements Serializable{
     
     public void saveOferta(){
         try{
+            //VALIDO EL FORMULARIO
+            if(vo.getPrecio() == null || vo.getPrecio() == 0){
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el precio unitario del repuesto");
+                return;
+            }else if(vo.getCantidad() == null || vo.getCantidad() == 0){
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la cantidad de items");
+                return;
+            }else if(vo.getTiempo() == null || vo.getCantidad() == 0){
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el tiempo de entrega");
+                return;
+            }
+            
+            //VALIDO EL NUMERO DE CANTIDAD INGRESADO
+            if(this.cantidad < vo.getCantidad()){
+                FacesHelper.warningMessage(Constants.WARNING, "Ha ingresado una cantidad mayor a la solicitada de items");
+                return;
+            }
             Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(codSol, codPrv, codRep);
             if(op != null){
                 op.setEstado(vo.getEstado());
                 op.setPrecio(vo.getPrecio());
                 op.setTiempo(vo.getTiempo());
+                op.setCantidad((vo.getCantidad()));
                 opService.update(op);
             }else if(op == null){
                 Ofertaproveedor model = new Ofertaproveedor();
@@ -116,10 +146,10 @@ public class ProvSolController implements Serializable{
                 model.setIdsolicitud(codSol);
                 model.setPrecio(vo.getPrecio());
                 model.setTiempo(vo.getTiempo());
+                model.setCantidad(vo.getCantidad());
                 opService.save(model);
             }
             vo = new OfertaVO();
-            solList = solService.findCotAbierta(this.codPrv);
             FacesHelper.successMessage(Constants.EXITO, "Se ha guardado su oferta correctamente");
         }catch(Exception e){
             log.error(e.getMessage(), e);
