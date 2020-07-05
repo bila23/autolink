@@ -32,5 +32,6 @@ public class OfertaPrecioVO implements Serializable{
     private int idSol;
     private int numero;
     private List<OfertaProveedorVO> list;
+    private Long totalRepuestosAplica;
     
 }

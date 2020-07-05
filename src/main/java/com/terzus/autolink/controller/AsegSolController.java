@@ -59,6 +59,7 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private int idSol;
     @Getter @Setter private int horas;
     @Getter @Setter private String com;
+    @Getter @Setter private String totalRepuestosLabel;
     
     @PostConstruct
     public void init(){
@@ -191,8 +192,17 @@ public class AsegSolController implements Serializable{
         try{
             OfertaPrecioVO optima = opService.findOfertaOptima(idSol);
             opList = new ArrayList();
-            opList.add(optima);
+            //GUARDO LA COTIZACION OPTIMA
+            if(optima != null)
+                opList.add(optima);
+            //GUARDO EL RESTO DE COTIZACIONES
             opList.addAll(opService.findOfertaTotalBySol(idSol));
+            //CREO EL LABEL DE TOTAL DE REPUESTOS POR SOLICITUD
+            Long totalRepuestos = repSolService.findCantidadTotalRepuestosBySol(idSol);
+            if(totalRepuestos > 0)
+                totalRepuestosLabel = "Total de repuestos solicitados: ".concat(String.valueOf(totalRepuestos));
+            else
+                totalRepuestosLabel = "";
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las ofertas de la solicitud");

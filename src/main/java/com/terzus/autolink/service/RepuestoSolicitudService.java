@@ -48,6 +48,16 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         return dao;
     }
     
+    public Long findCantidadTotalRepuestosBySolAndRep(int idSol, int idRep) throws Exception{
+        if(idSol == 0 || idRep == 0) return Long.valueOf(0);
+        return dao.findCantidadTotalRepuestosBySolAndRep(idSol, idRep);
+    }
+    
+    public Long findCantidadTotalRepuestosBySol(int idSol) throws Exception{
+        if(idSol == 0) return Long.valueOf(0);
+        return dao.findCantidadTotalRepuestosBySol(idSol);
+    }
+    
     /**
      * Recupero los repuestos que posee una solicitud
      * @param idSol int - codigo de la solicitud
@@ -105,7 +115,7 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         if(codprv > 0){
             Ofertaproveedor op = opService.findBySolicitudAndProveedorAndRepuesto(model.getIdsolicitud(), codprv, vo.getIdrepuesto());
             if(op == null) return vo;
-            vo.setCantidad(op.getCantidad());
+            vo.setCantidadOfertaProv(op.getCantidad());
             vo.setGanador(op.getGanador());
             vo.setPrecio(op.getPrecio());
             vo.setTiempo(op.getTiempo());

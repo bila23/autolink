@@ -50,6 +50,11 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         return dao;
     }
     
+    public Long findTotalRepuestosBySolAndProv(int idSol, int idProv) throws Exception{
+        if(idSol == 0 || idProv == 0) return Long.valueOf(0);
+        return dao.findTotalRepuestosBySolAndProv(idSol, idProv);
+    }
+    
     public List<OfertaPrecioVO> findOfertaTotalBySol(int idSol) throws Exception{
         if(idSol == 0) return null;
         List<Object[]> list = dao.findProvTotalBySolicitud(idSol);
@@ -65,7 +70,8 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
             vo.setIdSol(idSol);
             vo.setNumero(i + 1);
             vo.setPrecioTotal((double) obj[1]);
-            vo.setList(findBySolicitud(idSol));
+            vo.setTotalRepuestosAplica(this.findTotalRepuestosBySolAndProv(idSol, vo.getIdProveedor()));
+            vo.setList(findBySolAndProv(idSol, vo.getIdProveedor()));
             lst.add(vo);
         }
         return lst;
@@ -92,7 +98,6 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         List<OfertaProveedorVO> ofertaList = new ArrayList();
         OfertaProveedorVO opv = null;
         Ofertaproveedor ofertaLess = null;
-        Repuesto rep = null;
         for(Respuestoxsolicitud model : repList){
             if(model.getAplica() != null && model.getAplica().equals("S")){
                 ofertaLess = dao.findBySolAndRepOrderMinPrice(idSol, model.getIdrepuesto());
@@ -121,6 +126,11 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         return dao.findBySolicitudAndProveedorAndRepuesto(idSol, idProv, idRep);
     }
     
+    public List<OfertaProveedorVO> findBySolAndProv(int idSol, int idProv) throws Exception{
+        if(idSol == 0 || idProv == 0) return null;
+        return listModelToVO(dao.findBySolAndProv(idSol, idProv));
+    }
+    
     public List<OfertaProveedorVO> findBySolicitud(int idSol) throws Exception{
         if(idSol == 0) return null;
         return listModelToVO(dao.findBySolicitud(idSol));
@@ -140,6 +150,23 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
             if(rep != null)
                 vo.setRepuesto(rep.getNombrerepuesto());
         }
+        if(vo.getEstado() != null && !vo.getEstado().equals("")){
+            switch (vo.getEstado()) {
+                case "NO":
+                    vo.setEstadoLeyenda("Nuevo Original");
+                    break;
+                case "NE":
+                    vo.setEstadoLeyenda("Nuevo Equivalente");
+                    break;
+                case "US":
+                    vo.setEstadoLeyenda("Usado");
+                    break;
+                default:
+                    break;
+            }
+        }
+        //RECUPERO EL TOTAL DE REPUESTOS ORIGINALES DESDE LA SOLICITUD
+        vo.setCantidadSolOriginal(repSolService.findCantidadTotalRepuestosBySolAndRep(vo.getIdsolicitud(), vo.getIdrepuesto()));
         return vo;
     }
     

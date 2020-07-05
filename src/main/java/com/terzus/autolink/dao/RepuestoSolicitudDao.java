@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * @author CEL
@@ -61,5 +62,32 @@ public class RepuestoSolicitudDao extends Dao<Respuestoxsolicitud, Integer>{
         param.put("aplica", aplica);
         param.put("id", id);
         executeUpdateOrDelete("Respuestoxsolicitud.updateAplica", param);
+    }
+    
+    public Long findCantidadTotalRepuestosBySol(int idSol) throws Exception{
+        Query q = em.createNamedQuery("Respuestoxsolicitud.findCantidadTotalRepuestosBySol");
+        q.setParameter("idsolicitud", idSol);
+        try{
+            Long total = (Long) q.getSingleResult();
+            if(total == null) return Long.valueOf(0);
+            return total;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return Long.valueOf(0);
+        }
+    }
+    
+    public Long findCantidadTotalRepuestosBySolAndRep(int idSol, int idRep) throws Exception{
+        Query q = em.createNamedQuery("Respuestoxsolicitud.findCantidadTotalRepuestosBySolAndRep");
+        q.setParameter("idsolicitud", idSol);
+        q.setParameter("idrepuesto", idRep);
+        try{
+            Long total = (Long) q.getSingleResult();
+            if(total == null) return Long.valueOf(0);
+            return total;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return Long.valueOf(0);
+        }
     }
 }

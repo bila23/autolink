@@ -38,4 +38,6 @@ public class OfertaProveedorVO implements Serializable{
     private String proveedor;
     private String repuesto;
     private Integer numero;
+    private String estadoLeyenda;
+    private Long cantidadSolOriginal;
 }

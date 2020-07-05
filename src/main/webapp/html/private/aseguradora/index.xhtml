@@ -91,7 +91,7 @@
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Ver ofertas" style="width:8%;text-align: center">
-                                    <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
+                                    <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:totalRepOf mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                 </p:column>
@@ -228,6 +228,7 @@
                 </div>
             </p:dialog>
             <p:dialog widgetVar="dlgOfertas" id="dlgOfertas" modal="true" closeOnEscape="true" header="Ofertas de Proveedores" dynamic="true" closable="true" position="top">
+                <h:panelGroup id="totalRepOf"><h6>#{asegSolController.totalRepuestosLabel}</h6></h:panelGroup>
                 <p:dataTable emptyMessage="No hay ofertas" id="ofertaTable" var="r1" value="#{asegSolController.opList}">
                     <p:column style="width:16px">
                         <p:rowToggler />
@@ -235,6 +236,9 @@
                     <p:column headerText="Ofertas" style="text-align: center">
                         <h:outputText value="Cotizacion #{r1.numero}" rendered="#{r1.numero != -17}"/>
                         <h:outputText value="Cotizacion optima" rendered="#{r1.numero == -17}"/>
+                    </p:column>
+                    <p:column headerText="Repuestos en oferta" style="text-align: center">
+                        <h:outputText value="#{r1.totalRepuestosAplica}"/>
                     </p:column>
                     <p:column headerText="Total($)" style="text-align: center">
                         <h:outputText value="#{r1.precioTotal}">
@@ -249,7 +253,16 @@
                     <p:rowExpansion>
                         <p:dataTable var="o" value="#{r1.list}">
                             <p:column headerText="Repuesto">
-                                <h:outputText value="#{o.repuesto}"/>
+                                <h:outputText value="#{o.repuesto} "/><br/>
+                                <h:panelGroup rendered="#{o.cantidadSolOriginal == 1}">
+                                    <span style="font-size:11px;font-weight:bold">Item requerido: #{o.cantidadSolOriginal}</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{o.cantidadSolOriginal > 1}">
+                                    <span style="font-size:11px;font-weight:bold">Items requeridos: #{o.cantidadSolOriginal}</span>
+                                </h:panelGroup>
+                            </p:column>
+                            <p:column headerText="Cantidad" style="text-align: center">
+                                <h:outputText value="#{o.cantidad}"/>
                             </p:column>
                             <p:column headerText="Precio" style="text-align: center">
                                 <h:outputText value="#{o.precio}">
@@ -257,7 +270,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Estado" style="text-align: center">
-                                <h:outputText value="#{o.estado}"/>
+                                <h:outputText value="#{o.estadoLeyenda}"/>
                             </p:column>
                             <p:column headerText="Tiempo (horas)" style="text-align: center">
                                 <h:outputText value="#{o.tiempo}"/>

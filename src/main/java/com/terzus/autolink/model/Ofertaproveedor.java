@@ -38,6 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Ofertaproveedor.findAll", query = "SELECT o FROM Ofertaproveedor o"),
+    @NamedQuery(name = "Ofertaproveedor.findTotalRepuestosBySolAndProv", query = "SELECT SUM(o.cantidad) FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor"),
+    @NamedQuery(name = "Ofertaproveedor.findBySolAndProv", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor ORDER BY o.idrepuesto"),
     @NamedQuery(name = "Ofertaproveedor.findBySolAndRepOrderMinPrice", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idrepuesto = :idrepuesto ORDER BY o.precio"),
     @NamedQuery(name = "Ofertaproveedor.findBySolAndRep", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idrepuesto = :idrepuesto ORDER BY o.idproveedor, o.idrepuesto"),
     @NamedQuery(name = "Ofertaproveedor.updateGanador", query = "UPDATE Ofertaproveedor o SET o.ganador = 'S' WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor"),

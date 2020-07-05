@@ -39,4 +39,5 @@ public class RepuestoSolicitudVO implements Serializable{
     private Double precio;
     private String ganador;
     private String estadoOferta;
+    private Integer cantidadOfertaProv;
 }
