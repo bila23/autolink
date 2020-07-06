@@ -84,9 +84,9 @@ public class ProvSolController implements Serializable{
                 if(id.equals("coa"))
                     findCotAbierta();
                 else if(id.equals("goc"))
-                    solList = solService.findGenOrdCompra(this.codPrv);
+                    solList = solService.findGenOrdCompraByProveedor(this.codPrv);
                 else if(id.equals("dpp"))
-                    solList = solService.findDespProveedor();
+                    solList = solService.findDespProvByProveedorWinner(this.codPrv);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");

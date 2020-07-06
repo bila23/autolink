@@ -43,6 +43,18 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
     public EntityManager getEntityManager() {
         return em;
     }
+
+    public List<Solicitud> findDespProvByProveedorWinner(int idProv) throws Exception{
+        Map<String, Object> parameters = new HashMap();
+        parameters.put("idproveedor", idProv);
+        return findWithNamedQuery("Solicitud.findDespProvByProveedorWinner", parameters);
+    }
+    
+    public List<Solicitud> findByProveedorWinner(int idProv) throws Exception{
+        Map<String, Object> parameters = new HashMap();
+        parameters.put("idproveedor", idProv);
+        return findWithNamedQuery("Solicitud.findByProveedorWinner", parameters);
+    }
     
     public List<Solicitud> findByEstado(String estado) throws Exception{
         Map<String, Object> parameters = new HashMap();

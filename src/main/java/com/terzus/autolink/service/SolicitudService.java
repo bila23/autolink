@@ -265,6 +265,20 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<SolicitudVO> findGenOrdCompra() throws Exception{
         return findByEstado("GOC");
     }
+
+    public List<SolicitudVO> findDespProvByProveedorWinner(int codprv) throws Exception{
+        if(codprv == 0) return null;
+        List<Solicitud> list = dao.findDespProvByProveedorWinner(codprv);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVO(list, codprv);
+    }
+    
+    public List<SolicitudVO> findGenOrdCompraByProveedor(int codprv) throws Exception{
+        if(codprv == 0) return null;
+        List<Solicitud> list = dao.findByProveedorWinner(codprv);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVO(list, codprv);
+    }
     
     public List<SolicitudVO> findGenOrdCompra(int codprv) throws Exception{
         return findByEstado("GOC", codprv);

@@ -46,6 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Solicitud.findAll", query = "SELECT s FROM Solicitud s"),
+    @NamedQuery(name = "Solicitud.findByProveedorWinner", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = 'GOC' AND s.id IN (SELECT DISTINCT o.idsolicitud FROM Ofertaproveedor o WHERE o.idproveedor = :idproveedor AND o.ganador = 'S') ORDER BY s.id DESC"),
+    @NamedQuery(name = "Solicitud.findDespProvByProveedorWinner", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = 'DEP' AND s.id IN (SELECT DISTINCT o.idsolicitud FROM Ofertaproveedor o WHERE o.idproveedor = :idproveedor AND o.ganador = 'S') ORDER BY s.id DESC"),
     @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado ORDER BY s.id DESC"),
     @NamedQuery(name = "Solicitud.updateEstado", query = "UPDATE Solicitud s SET s.estado = :estado WHERE s.id = :id")
 })
