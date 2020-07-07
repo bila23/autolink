@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -193,9 +194,16 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             vo.setIdProvWinner(prov.getId());
             vo.setProveedorWinner(prov.getNombreproveedor());
         }
+        
+        //HORA PENDIENTES
+        if(vo.getFechafin() != null){
+            long diffInMillies = new Date().getTime() - vo.getFechafin().getTime();
+            long diffHours = diffInMillies / (60*60*1000);
+            long diffMinutes = diffInMillies / (60*1000) % 60;
+            vo.setPendingHours(diffHours + " : " + diffMinutes);
+        }
         return vo;
     }
-    
     
     private List<SolicitudVO> listModelToVO(List<Solicitud> list, int codprv) throws Exception{
         if(list == null || list.isEmpty()) return null;

@@ -5,6 +5,7 @@
             .ui-selectonemenu{
                 width: 100% !important
             }
+            .hf{font-weight: bold;font-size: 11px}
         </style>
         <h:form id="mf">
             <div class="row">
@@ -20,11 +21,8 @@
                                 <p:column style="width:16px">
                                     <p:rowToggler />
                                 </p:column>
-                                <p:column headerText="Inicio" sortBy="#{r1.fechainicio}" style="text-align:center">
-                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm:ss')}
-                                </p:column>
-                                <p:column headerText="Fin" sortBy="#{r1.fechafin}" style="text-align:center">
-                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
+                                <p:column headerText="Horas restantes" sortBy="#{r1.fechafin}" style="text-align:center">
+                                    #{r1.pendingHours}<br/> <span class="hf">Hora fin: #{of:formatDate(r1.fechafin, 'HH:mm:ss')}</span>
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -78,12 +76,6 @@
                         </p:tab>
                         <p:tab title="GENERADOR ORDEN DE COMPRA" id="goc">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtgoc" var="r1" value="#{provSolController.solList}" rows="6" paginator="true">
-                                <p:column headerText="Inicio" sortBy="#{r1.fechainicio}" style="text-align:center">
-                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm:ss')}
-                                </p:column>
-                                <p:column headerText="Fin" sortBy="#{r1.fechafin}" style="text-align:center">
-                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
-                                </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
@@ -111,12 +103,6 @@
                         </p:tab>
                         <p:tab title="DESPACHADA POR PROVEEDOR" id="dpp">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtdpp" var="r1" value="#{provSolController.solList}" rows="6" paginator="true">
-                                <p:column headerText="Inicio" sortBy="#{r1.fechainicio}" style="text-align:center">
-                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm:ss')}
-                                </p:column>
-                                <p:column headerText="Fin" sortBy="#{r1.fechafin}" style="text-align:center">
-                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
-                                </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
