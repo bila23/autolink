@@ -93,6 +93,14 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         q.executeUpdate();
     }
     
+    public void updateGanadorBySolAndProvAndRep(int idSol, int idProv, int idRep) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.updateGanadorBySolAndProvAndRep");
+        q.setParameter("idsolicitud", idSol);
+        q.setParameter("idproveedor", idProv);
+        q.setParameter("idrepuesto", idRep);
+        q.executeUpdate();        
+    }
+    
     public Proveedor findWinnerBySolicitud(int idSol) throws Exception{
         Query q = em.createNamedQuery("Ofertaproveedor.findWinnerBySolicitud");
         q.setParameter("idsolicitud", idSol);

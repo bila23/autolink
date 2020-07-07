@@ -153,6 +153,26 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         if(id == 0) return null;
         return modelListToVOList(dao.findBySolicitud(id), 0);
     }
+
+    public List<RepuestoSolicitudVO> findRepuestosWithWinner(int idSol, int idProv) throws Exception{
+        if(idSol == 0) return null;
+        List<OfertaProveedorVO> ofList = opService.findBySolicitud(idSol);
+        if(ofList == null || ofList.isEmpty()) return null;
+        List<RepuestoSolicitudVO> list = new ArrayList();
+        RepuestoSolicitudVO rsv = null;
+        for(OfertaProveedorVO vo : ofList){
+            if(vo.getGanador() != null && vo.getGanador().equals("S") && vo.getIdproveedor() == idProv){
+                rsv = new RepuestoSolicitudVO();
+                rsv.setRepuesto(vo.getRepuesto());
+                rsv.setCantidad(vo.getCantidad());
+                rsv.setPrecio(vo.getPrecio());
+                rsv.setEstadoOferta(vo.getEstadoLeyenda());
+                rsv.setTiempo(vo.getTiempo());
+                list.add(rsv);
+            }
+        }
+        return list;
+    }
     
     public List<RepuestoSolicitudVO> findAplicaBySolicitud(int id, int codprv) throws Exception{
         if(id == 0) return null;

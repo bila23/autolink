@@ -48,6 +48,7 @@ public class ProvSolController implements Serializable{
     @Inject private SolicitudService solService;
     @Inject private ProveedorService provService;
     @Inject private OfertaProvService opService;
+    @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private int codSol;
@@ -76,6 +77,16 @@ public class ProvSolController implements Serializable{
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");            
         }
     }
+    
+    public void generateOrdenCompraByProv(int idSol){
+        try{
+            this.voOrdenCompra = solService.genOrdCompraByProv(idSol, codPrv);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar la orden de compra");
+        }
+    }
+
     
     public void onTabChange(TabChangeEvent event) {
         try{

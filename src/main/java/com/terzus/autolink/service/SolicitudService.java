@@ -289,6 +289,31 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         if(model == null) return null;
         return modelToVO(model, codprv);
     }
+    
+    public SolicitudVO genOrdCompraByProv(int idSol, int codprv) throws Exception{
+        Solicitud model = dao.findByKey(idSol);
+        if(model == null) return null;
+        return getOneOrMultipleGanadores(model, codprv);
+    }
+    
+    private SolicitudVO getOneOrMultipleGanadores(Solicitud model, int idProv) throws Exception{
+        if(model == null) return null;
+        SolicitudVO vo = new SolicitudVO();
+        PropertyUtils.copyProperties(vo, model);
+        
+        if(model.getIdmarca() != null && model.getIdmarca() > 0){
+            Marca marca = marcaDao.findByKey(model.getIdmarca());
+            if(marca != null)
+                vo.setMarca(marca.getNombremarca());
+        }
+        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+            Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
+            vo.setModelo(modelo.getNombremodelo());
+        }
+        List<RepuestoSolicitudVO> repList = rsService.findRepuestosWithWinner(vo.getId(), idProv);
+        vo.setRepAplicaList(repList);
+        return vo;
+    }
 
     public List<SolicitudVO> findDespProveedor() throws Exception{
         return findByEstado("DEP");

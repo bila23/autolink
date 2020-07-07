@@ -103,7 +103,7 @@
                                     <h:outputText value="#{r1.comentariosaseguradora}" />
                                 </p:column>
                                 <p:column style="width:8%;text-align: center">
-                                    <p:commandLink title="Ver orden de compra" actionListener="#{asegSolController.generateOrdenCompra(r1.id, r1.idProvWinner)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgOrden').show()">
+                                    <p:commandLink title="Ver orden de compra" actionListener="#{provSolController.generateOrdenCompraByProv(r1.id)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgOrden').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                 </p:column>
@@ -192,29 +192,27 @@
                 <h:panelGroup id="pgDlgOrden">
                     <div class="row">
                         <div class="col s12" style="text-align: right">
-                            <span style="font-weight: bold">Fecha de creacion: </span> #{of:formatDate(asegSolController.voOrdenCompra.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                            <span style="font-weight: bold">Fecha de creacion: </span> #{of:formatDate(provSolController.voOrdenCompra.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <span style="font-weight: bold">Codigo: </span> #{asegSolController.voOrdenCompra.codigosolicitud}
+                            <span style="font-weight: bold">Codigo: </span> #{provSolController.voOrdenCompra.codigosolicitud}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <span style="font-weight: bold">Proveedor ganador: </span> #{asegSolController.voOrdenCompra.proveedorWinner}
+                            <span style="font-weight: bold">Carro: </span> #{provSolController.voOrdenCompra.marca} / #{provSolController.voOrdenCompra.modelo} / #{provSolController.voOrdenCompra.aniocarro}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <span style="font-weight: bold">Carro: </span> #{asegSolController.voOrdenCompra.marca} / #{asegSolController.voOrdenCompra.modelo} / #{asegSolController.voOrdenCompra.aniocarro}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="winnerTable" var="r1" value="#{asegSolController.voOrdenCompra.repAplicaList}">
+                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="winnerTable" var="r1" value="#{provSolController.voOrdenCompra.repAplicaList}">
                                 <p:column headerText="Repuesto">
                                     <h:outputText value="#{r1.repuesto}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{r1.cantidad}"/>
                                 </p:column>
                                 <p:column headerText="Precio">
                                     <h:outputText value="#{r1.precio}"/>
@@ -226,11 +224,19 @@
                                     <h:outputText value="#{r1.tiempo}"/>
                                 </p:column>
                                 <p:summaryRow>
-                                    <p:column colspan="3" style="text-align:right">
+                                    <p:column colspan="2" style="text-align:right">
+                                        <h:outputText value="IVA (13%):" />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{asegSolController.iva(provSolController.voOrdenCompra.repAplicaList)}">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column style="text-align:right">
                                         <h:outputText value="Total:" />
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{asegSolController.totalOrden(asegSolController.voOrdenCompra.repAplicaList)}">
+                                        <h:outputText value="#{asegSolController.totalOrden(provSolController.voOrdenCompra.repAplicaList)}">
                                             <f:convertNumber type="currency" currencySymbol="$" />
                                         </h:outputText>
                                     </p:column>
@@ -240,7 +246,7 @@
                     </div>
                     <div class="row">
                         <div class="col s12 input-field">
-                            <p:commandButton value="Despachada por proveedor" onsuccess="PF('dlgOrden').hide()" class="waves-effect waves-light btn" actionListener="#{provSolController.updateDespProv(asegSolController.voOrdenCompra.id)}" update="mf:msg mf:tab:dtgoc"/>
+                            <p:commandButton value="Despachada por proveedor" onsuccess="PF('dlgOrden').hide()" class="waves-effect waves-light btn" actionListener="#{provSolController.updateDespProv(provSolController.voOrdenCompra.id)}" update="mf:msg mf:tab:dtgoc"/>
                         </div>
                     </div>
                 </h:panelGroup>

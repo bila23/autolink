@@ -178,6 +178,15 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         return lst;
     }
     
+    public void updateGanadorCotOptima(int idSol) throws Exception{
+        if(idSol == 0) return;
+        //RECUPERO LA OFERTA OPTIMA
+        OfertaPrecioVO optima = this.findOfertaOptima(idSol);
+        //RECUPERO LOS DIFERENTES PROVEEDORES Y LOS REPUESTOS QUE ESTOS GANAN
+        for(OfertaProveedorVO vo : optima.getList())
+            dao.updateGanadorBySolAndProvAndRep(idSol, vo.getIdproveedor(), vo.getIdrepuesto());
+    }
+    
     public void updateGanador(int idSol, int idProv) throws Exception{
         if(idSol == 0 || idProv == 0) return;
         dao.updateGanador(idSol, idProv);

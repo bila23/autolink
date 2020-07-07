@@ -211,7 +211,10 @@ public class AsegSolController implements Serializable{
     
     public void defineWinner(){
         try{
-            opService.updateGanador(idSol, idProv);
+            if(idProv != -17)
+                opService.updateGanador(idSol, idProv);
+            else
+                opService.updateGanadorCotOptima(idSol);
             solService.updateEstado(idSol, "GOC");
             solList = solService.findPendAprobar();
             FacesHelper.successMessage(Constants.EXITO, "Se ha definido el ganador correctamente");
@@ -225,7 +228,7 @@ public class AsegSolController implements Serializable{
         this.idSol = idSol;
         this.idProv = idProv;
     }
-    
+
     public void generateOrdenCompra(int idSol, int idProv){
         try{
             this.voOrdenCompra = solService.genOrdCompra(idSol, idProv);
@@ -235,13 +238,27 @@ public class AsegSolController implements Serializable{
         }
     }
     
+    public double iva(List<RepuestoSolicitudVO> list){
+        try{
+            double total = 0.0;
+            for(RepuestoSolicitudVO vo : list){
+                total += vo.getPrecio();
+            }
+            return total * 0.13;
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar el total de la orden de compra");
+        }
+        return 0.0;
+    }
+    
     public double totalOrden(List<RepuestoSolicitudVO> list){
         try{
             double total = 0.0;
             for(RepuestoSolicitudVO vo : list){
                 total += vo.getPrecio();
             }
-            return total;
+            return total + (total * 0.13);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar el total de la orden de compra");
