@@ -12,7 +12,9 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Aseguradora;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,5 +46,14 @@ public class AseguradoraDao extends Dao<Aseguradora, Integer>{
     
     public List<Aseguradora> findActive() throws Exception{
         return findWithNamedQuery("Aseguradora.findActive");
+    }
+    
+    public Aseguradora findByUser(String user) throws Exception{
+        Map<String, Object> param = new HashMap();
+        param.put("user", user.toUpperCase());
+        try{
+            return findNamedQuerySingleResult("Aseguradora.findByUser", param);
+        }catch(Exception e){}
+        return null;
     }
 }

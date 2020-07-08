@@ -14,6 +14,7 @@ import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.service.AseguradoraService;
 import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
@@ -50,6 +51,7 @@ public class AsegSolController implements Serializable{
     @Inject private SolicitudService solService;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private OfertaProvService opService;
+    @Inject private AseguradoraService asegService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<OfertaPrecioVO> opList;
@@ -58,6 +60,7 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private int idProv;
     @Getter @Setter private int idSol;
     @Getter @Setter private int horas;
+    @Getter @Setter private int idAseguradora;
     @Getter @Setter private String com;
     @Getter @Setter private String totalRepuestosLabel;
     
@@ -65,27 +68,38 @@ public class AsegSolController implements Serializable{
     public void init(){
         try{
             solList = solService.findIngresadas();
+            idAseguradora = asegService.findIdByUser(FacesHelper.getUserLogin());
+            if(idAseguradora == 0)
+                messageIdAsegZero();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
         }
     }
     
+    private void messageIdAsegZero() throws Exception{
+        FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un error al tratar de recupera el ID de la aseguradora. Favor reportarlo al administrador");
+    }
+    
     public void onTabChange(TabChangeEvent event) {
         try{
+            if(idAseguradora == 0){
+                messageIdAsegZero();
+                return;
+            }
             String id = event.getTab().getId();
             if(id != null)
                 if(id.equals("ing"))
-                    solList = solService.findIngresadas();
+                    solList = solService.findIngresadasByAseg(idAseguradora);
                 else if(id.equals("coa"))
-                    solList = solService.findCotAbierta();
+                    solList = solService.findCotAbiertaByAseg(idAseguradora);
                 else if(id.equals("ppa")){
                     //AQUI SE AGREGA LA COTIZACION OPTIMA
-                    solList = solService.findPendAprobar();
+                    solList = solService.findPendAprobarByAseg(idAseguradora);
                 }else if(id.equals("cpa"))
-                    solList = solService.findCerradaAseg();
+                    solList = solService.findCerradaAsegByAseg(idAseguradora);
                 else if(id.equals("goc"))
-                    solList = solService.findGenOrdCompra();
+                    solList = solService.findGenOrdCompraByAseg(idAseguradora);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
@@ -134,7 +148,7 @@ public class AsegSolController implements Serializable{
             else if(codSol > 0){
                 solService.updateHorasVigencia(codSol, horas);
                 solService.updateEstado(codSol, "COA");
-                solList = solService.findIngresadas();
+                solList = solService.findIngresadasByAseg(idAseguradora);
                 FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
             }
         }catch(Exception e){
@@ -180,7 +194,7 @@ public class AsegSolController implements Serializable{
     public void changeStateSol(String state){
         try{
             solService.updateEstado(codSol, state);
-            solList = solService.findIngresadas();
+            solList = solService.findIngresadasByAseg(idAseguradora);
             FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado el estado de la solicitud correctamente");  
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -216,7 +230,7 @@ public class AsegSolController implements Serializable{
             else
                 opService.updateGanadorCotOptima(idSol);
             solService.updateEstado(idSol, "GOC");
-            solList = solService.findPendAprobar();
+            solList = solService.findPendAprobarByAseg(idAseguradora);
             FacesHelper.successMessage(Constants.EXITO, "Se ha definido el ganador correctamente");
         }catch(Exception e){
             log.error(e.getMessage(), e);

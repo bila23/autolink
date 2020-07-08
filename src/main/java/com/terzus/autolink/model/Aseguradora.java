@@ -19,8 +19,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a"),
+    @NamedQuery(name = "Aseguradora.findByUser", query = "SELECT a FROM Aseguradora a WHERE a.idusuario = (SELECT u.id FROM Usuario u WHERE UPPER(u.user) = :user)"),
     @NamedQuery(name = "Aseguradora.findActive", query = "SELECT a FROM Aseguradora a WHERE a.estado = 'A' ORDER BY a.nombreaseguradora")
 })
 public class Aseguradora implements Serializable {
@@ -79,11 +78,9 @@ public class Aseguradora implements Serializable {
     @Column(name = "fechacreacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
-    @OneToMany(mappedBy = "idusuario")
-    private List<Aseguradora> aseguradoraList;
-    @JoinColumn(name = "idusuario", referencedColumnName = "id")
-    @ManyToOne
-    private Aseguradora idusuario;
+    @Column(name = "idusuario")
+    private Integer idusuario;
+
 
     public Aseguradora() {
     }
@@ -164,23 +161,6 @@ public class Aseguradora implements Serializable {
         this.fechacreacion = fechacreacion;
     }
 
-    @XmlTransient
-    public List<Aseguradora> getAseguradoraList() {
-        return aseguradoraList;
-    }
-
-    public void setAseguradoraList(List<Aseguradora> aseguradoraList) {
-        this.aseguradoraList = aseguradoraList;
-    }
-
-    public Aseguradora getIdusuario() {
-        return idusuario;
-    }
-
-    public void setIdusuario(Aseguradora idusuario) {
-        this.idusuario = idusuario;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -204,6 +184,14 @@ public class Aseguradora implements Serializable {
     @Override
     public String toString() {
         return "com.terzus.autolink.model.Aseguradora[ id=" + id + " ]";
+    }
+
+    public Integer getIdusuario() {
+        return idusuario;
+    }
+
+    public void setIdusuario(Integer idusuario) {
+        this.idusuario = idusuario;
     }
 
 }

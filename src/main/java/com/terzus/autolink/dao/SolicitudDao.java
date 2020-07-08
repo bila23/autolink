@@ -56,6 +56,13 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
         return findWithNamedQuery("Solicitud.findByProveedorWinner", parameters);
     }
 
+    public List<Solicitud> findByEstadoAndAseg(String estado, int idAseg) throws Exception{
+        Map<String, Object> parameters = new HashMap();
+        parameters.put("estado", estado.toUpperCase());
+        parameters.put("idaseguradora", idAseg);
+        return findWithNamedQuery("Solicitud.findByEstadoAndAseg", parameters);
+    }
+    
     public List<Solicitud> findByEstadoAndTaller(String estado, int idTaller) throws Exception{
         Map<String, Object> parameters = new HashMap();
         parameters.put("estado", estado.toUpperCase());

@@ -362,4 +362,32 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     }
     //***** CONSULTA DE SOLICITUDES POR TALLER *****//
 
+    //***** CONSULTA DE SOLICITUDES POR ASEGURADORA *****//
+    public List<SolicitudVO> findByEstadoAndAseg(String estado, int idAseg) throws Exception{
+        if(estado == null || estado.equals("") || idAseg == 0) return null;
+        List<Solicitud> list = dao.findByEstadoAndAseg(estado, idAseg);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVO(list, 0);
+    }
+    
+    public List<SolicitudVO> findIngresadasByAseg(int idAseg) throws Exception{
+        return findByEstadoAndAseg("ING", idAseg);
+    }
+    
+    public List<SolicitudVO> findCotAbiertaByAseg(int idAseg) throws Exception{
+        return findByEstadoAndAseg("COA", idAseg);
+    }
+    
+    public List<SolicitudVO> findPendAprobarByAseg(int idAseg) throws Exception{
+        return findByEstadoAndAseg("PEA", idAseg);
+    }
+    
+    public List<SolicitudVO> findCerradaAsegByAseg(int idAseg) throws Exception{
+        return findByEstadoAndAseg("CEA", idAseg);
+    }
+
+    public List<SolicitudVO> findGenOrdCompraByAseg(int idAseg) throws Exception{
+        return findByEstadoAndAseg("GOC", idAseg);
+    }
+    //***** CONSULTA DE SOLICITUDES POR ASEGURADORA *****//
 }
