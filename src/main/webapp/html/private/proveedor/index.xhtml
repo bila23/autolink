@@ -5,9 +5,25 @@
             .ui-selectonemenu{
                 width: 100% !important
             }
-            .hf{font-weight: bold;font-size: 11px}
+            .hf{font-weight: bold;font-size: 13px}
+            .title-of{font-weight:bold; font-size: 13px;color:darkslateblue}
         </style>
         <h:form id="mf">
+            <p:poll listener="#{provSolController.findCotAbierta()}" interval="180" update="totalSolCoa dateSolCoa mf:tab:dtcoa"/>
+            <div class="row" style="margin-bottom:5px">
+                <div class="col s12 m12 l6">
+                    <h:panelGroup id="totalSolCoa" class="title-of">
+                        <i class="material-icons" style="display: inline-flex;vertical-align: top;">grade</i> 
+                        No. de solicitude(s) para ofertar: #{provSolController.totalSolCOA}
+                    </h:panelGroup>
+                </div>
+                <div class="col s12 m12 l6" style="text-align:right">
+                    <h:panelGroup id="dateSolCoa" class="title-of">
+                        Ultima actualizacion:
+                        #{of:formatDate(now, 'dd/MM/yyyy HH:mm:ss')}
+                    </h:panelGroup>
+                </div>
+            </div>
             <div class="row">
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
