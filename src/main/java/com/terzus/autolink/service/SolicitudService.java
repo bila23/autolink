@@ -137,12 +137,10 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return repDao.findActive();
     }
     
-    public int save(Solicitud model, String user) throws Exception{
+    public int save(Solicitud model, String user, int idTaller) throws Exception{
         model.setEstado("ING");
         model.setFechacreacion(new Date());
-        Taller taller = tallerDao.findByUser(user);
-        if(taller != null)
-            model.setIdtaller(taller.getId());
+        model.setIdtaller(idTaller);
         model.setUsuariocrea(user);
         dao.save(model);
         model.setCodigosolicitud("SOL-" + GeneralFunction.getYear() + "-" + model.getId());
@@ -330,5 +328,38 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<SolicitudVO> findEntSatCliente() throws Exception{
         return findByEstado("ESC");
     }
+    
+    //***** CONSULTA DE SOLICITUDES POR TALLER *****//
+    public List<SolicitudVO> findByEstadoAndTaller(String estado, int idTaller) throws Exception{
+        if(estado == null || estado.equals("") || idTaller == 0) return null;
+        List<Solicitud> list = dao.findByEstadoAndTaller(estado, idTaller);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVO(list, 0);
+    }
+    
+    public List<SolicitudVO> findIngresadasByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("ING", idTaller);
+    }
+    
+    public List<SolicitudVO> findAnuladasByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("ANU", idTaller);
+    }
+    
+    public List<SolicitudVO> findDespProveedorByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("DEP", idTaller);
+    }
+    
+    public List<SolicitudVO> findEntSatClienteByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("ESC", idTaller);
+    }
+    
+    public List<SolicitudVO> findCerradaDesiertaByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("CPD", idTaller);
+    }
+    
+    public List<SolicitudVO> findCerradaAsegByTaller(int idTaller) throws Exception{
+        return findByEstadoAndTaller("CEA", idTaller);
+    }
+    //***** CONSULTA DE SOLICITUDES POR TALLER *****//
 
 }

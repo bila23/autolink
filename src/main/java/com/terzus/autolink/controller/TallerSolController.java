@@ -19,6 +19,7 @@ import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.service.TallerService;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -49,6 +50,7 @@ public class TallerSolController implements Serializable{
 
     @Inject private SolicitudService solService;
     @Inject private RepuestoSolicitudService repSolService;
+    @Inject private TallerService tallerService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
     @Getter @Setter private List<Aseguradora> asegList;
@@ -58,6 +60,8 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private boolean showSaveBtn;
     @Getter @Setter private List<Repuesto> repList;
     @Getter @Setter private int repuesto;
+    @Getter @Setter private int idTaller;
+    @Getter @Setter private String user;
     @Getter @Setter private Integer cantidad;
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
@@ -68,36 +72,47 @@ public class TallerSolController implements Serializable{
         try{
             showSaveBtn = true;
             model = new Solicitud();
+            user = FacesHelper.getUserLogin();
             asegList = solService.findAsegActive();
             marcaList = solService.findMarcaActive();
             solList = solService.findIngresadas();
             repList = solService.findRepuestoActive();
+            idTaller = tallerService.findCodeByUser(user);
+            if(idTaller == 0)
+                showMessageIdTallerZero();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar las solicitudes. Favor intente nuevamente");
         }
     }
     
+    private void showMessageIdTallerZero() throws Exception{
+        FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un error al tratar de recuperar el codigo del taller. Favor reportarlo al administrador");
+    }
+    
     public void onTabChange(TabChangeEvent event) {
         try{
-            String id = event.getTab().getId();
-            if(id != null)
-                if(id.equals("ing"))
-                    solList = solService.findIngresadas();
-                else if(id.equals("anu"))
-                    solList = solService.findAnuladas();
-                else if(id.equals("dpp"))
-                    solList = solService.findDespProveedor();
-                else if(id.equals("eas"))
-                    solList = solService.findEntSatCliente();
-                else if(id.equals("cpd"))
-                    solList = solService.findCerradaDesierta();
-                else if(id.equals("cpa"))
-                    solList = solService.findCerradaAseg();
-                else if(id.equals("for")){
-                    showSaveBtn = true;
-                    model = new Solicitud();
-                }
+            if(idTaller > 0){
+                String id = event.getTab().getId();
+                if(id != null)
+                    if(id.equals("ing"))
+                        solList = solService.findIngresadasByTaller(idTaller);
+                    else if(id.equals("anu"))
+                        solList = solService.findAnuladasByTaller(idTaller);
+                    else if(id.equals("dpp"))
+                        solList = solService.findDespProveedorByTaller(idTaller);
+                    else if(id.equals("eas"))
+                        solList = solService.findEntSatClienteByTaller(idTaller);
+                    else if(id.equals("cpd"))
+                        solList = solService.findCerradaDesiertaByTaller(idTaller);
+                    else if(id.equals("cpa"))
+                        solList = solService.findCerradaAsegByTaller(idTaller);
+                    else if(id.equals("for")){
+                        showSaveBtn = true;
+                        model = new Solicitud();
+                    }
+            }else
+                showMessageIdTallerZero();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
@@ -108,7 +123,7 @@ public class TallerSolController implements Serializable{
         try{
             if(codeChange > 0){
                 solService.updateEstado(codeChange, "ESC");
-                solList = solService.findDespProveedor();
+                solList = solService.findDespProveedorByTaller(idTaller);
                 FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
             }
         }catch(Exception e){
@@ -130,6 +145,10 @@ public class TallerSolController implements Serializable{
     
     public void saveSolicitud(){
         try{
+            if(idTaller == 0){
+                showMessageIdTallerZero();
+                return;
+            }
             if(model.getNombreasegurado() == null || model.getNombreasegurado().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el nombre del asegurado");
             else if(model.getTipovehiculo()== null || model.getTipovehiculo().equals(""))
@@ -153,7 +172,7 @@ public class TallerSolController implements Serializable{
             else if(model.getSiniestro()== null || model.getSiniestro().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el siniestro");
             else{
-                idSol = solService.save(model, FacesHelper.getUserLogin());
+                idSol = solService.save(model, user, idTaller);
                 showSaveBtn = false;
                 FacesHelper.successMessage(Constants.EXITO, "Se ha guardado la solicitud correctamente");
             }
