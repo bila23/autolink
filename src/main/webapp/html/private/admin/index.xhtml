@@ -52,7 +52,12 @@
                             <p:column headerText="Modelo" sortBy="#{r1.modelo}">
                                 <h:outputText value="#{r1.modelo}" />
                             </p:column>
-                            <p:column style="width:8%;text-align: center">
+                            <p:column headerText="Cambio de estado" class="center-align">
+                                <p:commandLink title="Cambio de estado" actionListener="#{adminSolController.prepareChangeState(r1.id, r1.codigosolicitud, r1.estado)}" update="mf:msg mf:pgChangeState" onsuccess="PF('dlgChangeState').show()">
+                                    <i class="material-icons">settings</i>
+                                </p:commandLink>
+                            </p:column>
+                            <p:column style="width:8%;text-align: center" headerText="Detalle">
                                 <p:commandLink title="Info. sol" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgInfo').show()">
                                     <i class="material-icons">content_paste</i>
                                 </p:commandLink>
@@ -61,6 +66,38 @@
                     </h:panelGroup>
                 </div>
             </div>
+            <p:dialog widgetVar="dlgChangeState" id="dlgChangeState" modal="true" closeOnEscape="true" header="Cambio de estado" closable="true" dynamic="true">
+                <h:panelGroup id="pgChangeState">
+                    <div class="row">
+                        <div class="col s12 text-bold">
+                            Solicitud: #{adminSolController.code}  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <label>Seleccione el nuevo estado de la solicitud:</label>
+                            <p:selectOneMenu value="#{adminSolController.newState}" id="state2">
+                                <f:selectItem itemLabel="Ingresadas" itemValue="ING"/>
+                                <f:selectItem itemLabel="Cotizacion abierta" itemValue="COA"/>
+                                <f:selectItem itemLabel="Pendiente por aprobar" itemValue="PEA"/>
+                                <f:selectItem itemLabel="Despachada por proveedor" itemValue="DEP"/>
+                                <f:selectItem itemLabel="Entregada a satisfaccion del cliente" itemValue="ESC"/>
+                                <f:selectItem itemLabel="Cerrada por desierta" itemValue="CPD"/>
+                                <f:selectItem itemLabel="Cerrada por aseguradora" itemValue="CEA"/>
+                                <f:selectItem itemLabel="Cerrada parcialmente" itemValue="CPA"/>
+                                <f:selectItem itemLabel="Generada por orden de compra" itemValue="GOC"/>
+                                <f:selectItem itemLabel="Anuladas" itemValue="ANU"/>
+                                <f:selectItem itemLabel="Anuladas por administrador" itemValue="ANA"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:commandButton class="waves-effect waves-light btn" value="Guardar" action="#{adminSolController.changeSolState()}" update="mf:msg mf:pgMt"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
             <p:dialog widgetVar="dlgInfo" id="dlgInfo" modal="true" closeOnEscape="true" header="Informacion de solicitud" closable="true" position="top" dynamic="true" width="990">
                 <h:panelGroup id="pgDlgOrden">
                     <div class="row">

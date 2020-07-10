@@ -42,6 +42,10 @@ public class AdminSolController implements Serializable {
     @Inject private SolicitudService solService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private String state;
+    @Getter @Setter private int idSol;
+    @Getter @Setter private String newState;
+    @Getter @Setter private String actualState;
+    @Getter @Setter private String code;
     @Getter @Setter private SolicitudVO vo;
     @Getter @Setter private List<OfertaProveedorVO> ofertaList;
     
@@ -62,6 +66,25 @@ public class AdminSolController implements Serializable {
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar la solicitudes");
+        }
+    }
+    
+    public void prepareChangeState(int idSol, String code, String actualState){
+        this.idSol = idSol;
+        this.code = code;
+        this.actualState = actualState;
+        this.newState = actualState;
+    }
+    
+    public void changeSolState(){
+        try{
+            if(idSol == 0 || newState == null || newState.equals("")) return;
+            solService.updateEstado(idSol, newState);
+            FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado el estado de la solicitud correctamente");
+            solList = solService.findByEstado(state);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de actualizar el estado de la solicitud");            
         }
     }
 
