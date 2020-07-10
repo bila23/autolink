@@ -13,6 +13,7 @@ package com.terzus.autolink.controller;
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.vo.OfertaProveedorVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
 import java.util.List;
@@ -42,6 +43,7 @@ public class AdminSolController implements Serializable {
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private String state;
     @Getter @Setter private SolicitudVO vo;
+    @Getter @Setter private List<OfertaProveedorVO> ofertaList;
     
     public void findByState(){
         try{
@@ -59,7 +61,9 @@ public class AdminSolController implements Serializable {
                 vo = solService.seeInfoSol(idSol);
         }catch(Exception e){
             log.error(e.getMessage(), e);
-            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar la solicitude");
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar la solicitudes");
         }
     }
+
+    
 }//class

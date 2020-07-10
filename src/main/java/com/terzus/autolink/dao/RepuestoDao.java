@@ -45,4 +45,11 @@ public class RepuestoDao extends Dao<Repuesto, Integer>{
     public List<Repuesto> findActive() throws Exception{
         return findWithNamedQuery("Repuesto.findActive");
     }
+    
+    public String findNameOfRepuesto(int idRep) throws Exception{
+        if(idRep == 0) return null;
+        Repuesto model = super.findByKey(idRep);
+        if(model == null) return null;
+        return model.getNombrerepuesto();
+    }
 }

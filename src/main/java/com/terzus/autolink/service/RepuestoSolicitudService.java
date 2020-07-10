@@ -68,7 +68,7 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         if(idSol == 0) return null;
         return dao.findBySolicitud(idSol);
     }
-    
+   
     public List<RepuestosAllSolVO> findAllRepAndOfertas(int idSol) throws Exception{
         if(idSol == 0) return null;
         List<Respuestoxsolicitud> list = dao.findBySolicitud(idSol);
@@ -82,10 +82,14 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
             model = list.get(i);
             vo = new RepuestosAllSolVO();
             PropertyUtils.copyProperties(vo, model);
+            
+            if(vo.getIdrepuesto() != null && vo.getIdrepuesto() > 0)
+                vo.setRepuesto(repDao.findNameOfRepuesto(vo.getIdrepuesto()));
             if(vo.getAplica() == null || vo.getAplica().equals("N"))
                 vo.setAplica("No");
             else
                 vo.setAplica("Si");
+            
             opList = opService.findBySolAndRep(vo.getIdsolicitud(), vo.getIdrepuesto());
             vo.setOpList(opList);
             lst.add(vo);

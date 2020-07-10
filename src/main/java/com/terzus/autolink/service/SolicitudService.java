@@ -98,9 +98,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         if(idSol == 0) return null;
         Solicitud model = dao.findByKey(idSol);
         if(model == null) return null;
-        SolicitudVO vo = new SolicitudVO();
-        PropertyUtils.copyProperties(vo, model);
-        vo = injectFK(model, vo);
+        SolicitudVO vo = modelToVO(model, 0);
         //RECUPERO TODOS LOS REPUESTOS
         List<RepuestosAllSolVO> list = rsService.findAllRepAndOfertas(idSol);
         if(list != null && !list.isEmpty())

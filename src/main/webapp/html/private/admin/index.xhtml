@@ -26,14 +26,14 @@
                         <f:selectItem itemLabel="Generada por orden de compra" itemValue="GOC"/>
                         <f:selectItem itemLabel="Anuladas" itemValue="ANU"/>
                         <f:selectItem itemLabel="Anuladas por administrador" itemValue="ANA"/>
-                        <p:ajax listener="#{adminSolController.findByState()}" update="mf:msg mf:pgMt"/>
+                        <p:ajax listener="#{adminSolController.findByState()}" update="mf:msg mf:pgMt" event="change"/>
                     </p:selectOneMenu>
                 </div>
             </div>
             <div class="row">
                 <div class="col s12">
-                    <h:panelGroup id="pgMt" >
-                        <p:dataTable rendered="#{adminSolController.solList != null}" emptyMessage="No hay solicitudes" id="mt" var="r1" value="#{adminSolController.solList}" rows="6" paginator="true">
+                    <h:panelGroup id="pgMt">
+                        <p:dataTable rendered="#{not empty adminSolController.solList}" emptyMessage="No hay solicitudes" id="mt" var="r1" value="#{adminSolController.solList}" rows="6" paginator="true">
                             <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}" style="text-align:center">
                                 #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                             </p:column>
@@ -53,7 +53,7 @@
                                 <h:outputText value="#{r1.modelo}" />
                             </p:column>
                             <p:column style="width:8%;text-align: center">
-                                <p:commandLink title="Info. sol" actionListener="#{asegSolController.generateOrdenCompra(r1.id, r1.idProvWinner)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgOrden').show()">
+                                <p:commandLink title="Info. sol" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgInfo').show()">
                                     <i class="material-icons">content_paste</i>
                                 </p:commandLink>
                             </p:column>
@@ -61,58 +61,78 @@
                     </h:panelGroup>
                 </div>
             </div>
-            <p:dialog widgetVar="dlgInfo" id="dlgInfo" modal="true" closeOnEscape="true" header="Informacion de solicitud" closable="true" position="top">
+            <p:dialog widgetVar="dlgInfo" id="dlgInfo" modal="true" closeOnEscape="true" header="Informacion de solicitud" closable="true" position="top" dynamic="true" width="990">
                 <h:panelGroup id="pgDlgOrden">
                     <div class="row">
                         <div class="col s6">
-                            <span style="font-weight: bold">Codigo: </span> #{adminSolController.vo.codigosolicitud}
+                            <span class="text-bold">Codigo: </span> #{adminSolController.vo.codigosolicitud}
                         </div>
                         <div class="col s6">
-                            <span style="font-weight: bold">Fecha de creacion: </span> #{of:formatDate(adminSolController.vo.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                            <span class="text-bold">Fecha de creacion: </span> #{of:formatDate(adminSolController.vo.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12 m12 l6">
-                            <span style="font-weight: bold">Aseguradora: </span> #{adminSolController.vo.aseguradora}
+                        <div class="col s6">
+                            <span class="text-bold">Aseguradora: </span> #{adminSolController.vo.aseguradora}
                         </div>
-                        <div class="col s12 m12 l6">
-                            <span style="font-weight: bold">Proveedor ganador: </span> #{adminSolController.vo.proveedorWinner}
+                        <div class="col s6">
+                            <span class="text-bold">Taller: </span> #{adminSolController.vo.taller}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <span class="text-bold">Carro: </span> #{adminSolController.vo.marca} / #{adminSolController.vo.modelo} / #{adminSolController.vo.aniocarro} / #{adminSolController.vo.chasis}
+                        </div>
+                        <div class="col s6">
+                            <span class="text-bold">Siniestro: </span> #{adminSolController.vo.siniestro}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <span style="font-weight: bold">Carro: </span> #{adminSolController.vo.marca} / #{adminSolController.vo.modelo} / #{adminSolController.vo.aniocarro}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="solTable" var="r1" value="#{adminSolController.vo.repAllList}">
-                                <p:column headerText="Repuesto">
+                            <p:dataTable emptyMessage="No hay repuestos" id="solTable" var="r1" value="#{adminSolController.vo.repAllList}">
+                                <p:column class="center-align" headerText="Repuesto">
                                     <h:outputText value="#{r1.repuesto}"/>
                                 </p:column>
-                                <p:column headerText="Precio">
-                                    <h:outputText value="#{r1.precio}"/>
+                                <p:column class="center-align" headerText="Cantidad">
+                                    <h:outputText value="#{r1.cantidad}"/>
                                 </p:column>
-                                <p:column headerText="Estado">
-                                    <h:outputText value="#{r1.estadoOferta}"/>
+                                <p:column headerText="Aplica" class="center-align">
+                                    <h:outputText value="#{r1.aplica}"/>
                                 </p:column>
-                                <p:column headerText="Tiempo (horas)">
-                                    <h:outputText value="#{r1.tiempo}"/>
+                                <p:column style="width:8%;text-align: center">
+                                    <p:commandLink title="Ofertas" rendered="#{r1.aplica == 'Si'}" actionListener="#{adminSolController.setOfertaList(r1.opList)}" update="mf:msg mf:ofertaTable" onsuccess="PF('dlgOferta').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                    <h:panelGroup rendered="#{r1.aplica == 'No'}">
+                                        No entro en la oferta    
+                                    </h:panelGroup>
                                 </p:column>
-                                <p:summaryRow>
-                                    <p:column colspan="3" style="text-align:right">
-                                        <h:outputText value="Total:" />
-                                    </p:column>
-                                    <p:column>
-                                        <h:outputText value="#{asegSolController.totalOrden(adminSolController.vo.repAplicaList)}">
-                                            <f:convertNumber type="currency" currencySymbol="$" />
-                                        </h:outputText>
-                                    </p:column>
-                                </p:summaryRow>
                             </p:dataTable>
                         </div>
                     </div>
                 </h:panelGroup>
+            </p:dialog>
+            <p:dialog widgetVar="dlgOferta" id="dlgOferta" modal="true" closeOnEscape="true" header="Ofertas" closable="true" position="top" dynamic="true" width="700">
+                <p:dataTable emptyMessage="No hay repuestos" id="ofertaTable" var="r2" value="#{adminSolController.ofertaList}">
+                    <p:column class="center-align" headerText="Proveedor">
+                        <h:outputText value="#{r2.proveedor}"/>
+                    </p:column>
+                    <p:column class="center-align" headerText="Cantidad">
+                        <h:outputText value="#{r2.cantidad}"/>
+                    </p:column>
+                    <p:column class="center-align" headerText="Estado">
+                        <h:outputText value="#{r2.estadoLeyenda}"/>
+                    </p:column>
+                    <p:column class="center-align" headerText="Ganador">
+                        <h:outputText value="#{r2.ganador}"/>
+                    </p:column>
+                    <p:column class="center-align" headerText="Precio">
+                        <h:outputText value="#{r2.precio}"/>
+                    </p:column>
+                    <p:column class="center-align" headerText="Tiempo">
+                        <h:outputText value="#{r2.tiempo}"/>
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>

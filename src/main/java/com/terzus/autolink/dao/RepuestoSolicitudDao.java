@@ -90,4 +90,5 @@ public class RepuestoSolicitudDao extends Dao<Respuestoxsolicitud, Integer>{
             return Long.valueOf(0);
         }
     }
+
 }
