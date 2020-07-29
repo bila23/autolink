@@ -8,9 +8,12 @@
         </style>
         <h:form id="mf">
             <div class="row" style="margin-top: 8px">
-                <div class="col s12 m12 l6" style="font-weight:bold; color: #08263a;font-size:22px">
+                <div class="col s12 m12 l6">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
-                    Administrador - Consulta de solicitudes
+                    <span style="font-weight:bold; color: #08263a;font-size:22px">Administrador - Consulta de solicitudes</span>
+                    <div>
+                        <h:link outcome="/html/private/admin/crud/usuarioCrud.xhtml">[Ingresar a administracion de catalogos]</h:link>
+                    </div>
                 </div>
                 <div class="col s12 m12 l6">
                     <p:selectOneMenu value="#{adminSolController.state}" id="state">

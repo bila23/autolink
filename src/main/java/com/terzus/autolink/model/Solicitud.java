@@ -124,7 +124,7 @@ public class Solicitud implements Serializable {
     @Column(name = "fechafin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechafin;
-    @OneToMany(mappedBy = "idsolicitud")
+    @OneToMany(mappedBy = "idSolicitud")
     private List<Fotoxsolicitud> fotoxsolicitudList;
     @Size(max = 50)
     @Column(name = "usrcrea")

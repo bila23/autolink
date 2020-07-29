@@ -13,7 +13,7 @@
         <title>Autolink</title>
         <c:set var="ctx" value="#{request.contextPath}"/>
         <style>
-            .text-bold{font-weight:bold}
+            .text-bold{font-weight:bold !important}
             .ui-spinner-button {
                 cursor: default;
                 display: block;
@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <ui:insert name="content"></ui:insert>  
+        <ui:insert name="content"></ui:insert>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>
             $(document).ready(function(){

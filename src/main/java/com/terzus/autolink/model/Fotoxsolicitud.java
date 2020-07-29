@@ -18,11 +18,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -36,26 +36,32 @@ import javax.xml.bind.annotation.XmlRootElement;
  * </p>
  */
 @Entity
-@Table(name = "fotoxsolicitud")
+@Table(name = "FotoSolicitud")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Fotoxsolicitud.findAll", query = "SELECT f FROM Fotoxsolicitud f"),
-    @NamedQuery(name = "Fotoxsolicitud.findBySolicitud", query = "SELECT f FROM Fotoxsolicitud f WHERE f.idsolicitud.id = :idSol ORDER BY f.id")
+    @NamedQuery(name = "Fotoxsolicitud.findBySolicitud", query = "SELECT f FROM Fotoxsolicitud f WHERE f.idSolicitud.id = :idSol ORDER BY f.id")
 })
 public class Fotoxsolicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name = "fotoSolCounter",
+            table = "contadores",
+            pkColumnName = "tabla",
+            pkColumnValue = "FotoSolicitud",
+            valueColumnName = "valor",
+            initialValue = 1,
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "fotoSolCounter")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Lob
     @Column(name = "foto")
-    private byte[] foto;
-    @JoinColumn(name = "idsolicitud", referencedColumnName = "id")
+    private String foto;
+    @JoinColumn(name = "idSolicitud", referencedColumnName = "id")
     @ManyToOne
-    private Solicitud idsolicitud;
+    private Solicitud idSolicitud;
 
     public Fotoxsolicitud() {
     }
@@ -72,20 +78,20 @@ public class Fotoxsolicitud implements Serializable {
         this.id = id;
     }
 
-    public byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 
-    public Solicitud getIdsolicitud() {
-        return idsolicitud;
+    public Solicitud getIdSolicitud() {
+        return idSolicitud;
     }
 
-    public void setIdsolicitud(Solicitud idsolicitud) {
-        this.idsolicitud = idsolicitud;
+    public void setIdSolicitud(Solicitud idSolicitud) {
+        this.idSolicitud = idSolicitud;
     }
 
     @Override

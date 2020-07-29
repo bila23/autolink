@@ -25,5 +25,6 @@ public class Constants {
     public static String EXITO = "Exito";
     public static String ERROR = "Error";
     public static String WARNING = "Advertencia";
+    public static String PATH_IMAGE = "/Users/will/Developer/images_system/";
 
 }

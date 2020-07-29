@@ -68,4 +68,10 @@ public class UsuarioDao extends Dao<Usuario, Integer>{
          if(list == null || list.isEmpty()) return null;
          return list.get(0);
      }
+     
+     public List<Usuario> findByTipoAndActive(int idTipo) throws Exception{
+         Query q = em.createNamedQuery("Usuario.findByTipoActive");
+         q.setParameter("idtipo", idTipo);
+         return q.getResultList();
+     }
 }

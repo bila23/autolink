@@ -14,8 +14,12 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.TallerDao;
 import com.terzus.autolink.model.Taller;
+import com.terzus.autolink.model.Usuario;
+import com.terzus.autolink.vo.TallerVO;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * @author Terzus
@@ -31,6 +35,7 @@ import javax.inject.Inject;
 public class TallerService extends Service<Taller, Integer>{
 
     @Inject private TallerDao dao;
+    @Inject private UsuarioService userService;
 
     @Override
     public Dao<Taller, Integer> getDao() {
@@ -48,5 +53,21 @@ public class TallerService extends Service<Taller, Integer>{
         Taller model = dao.findByUser(user);
         if(model == null) return 0;
         return model.getId();
+    }
+    
+    /**
+     * Guarda un nuevo taller
+     * @param vo objeto de tipo TallerVO
+     * @throws Exception 
+     */
+    public void save(TallerVO vo) throws Exception{
+        if(vo == null) return;
+        Taller model = new Taller();
+        PropertyUtils.copyProperties(model, vo);
+        model.setEstado("A");
+        model.setFechacreacion(new Date());
+        Usuario user = userService.findByKey(vo.getIdUsuario());
+        model.setIdusuario(user);
+        dao.save(model);
     }
 }

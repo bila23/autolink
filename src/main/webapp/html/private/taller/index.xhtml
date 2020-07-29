@@ -6,7 +6,7 @@
                 width: 100% !important
             }
         </style>
-        <h:form id="mf">
+        <h:form id="mf" enctype="multipart/form-data">
             <div class="row">
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
@@ -27,28 +27,25 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.nombreasegurado}" class="validate" id="nombreasegurado" a:autofocus="true"/>
-                                            <h:outputLabel value="Nombre de asegurado:" for="nombreasegurado"/>
+                                            <h:inputText value="#{tallerSolController.model.nombreasegurado}" class="validate" id="nombreasegurado" a:autofocus="true" a:placeholder="Nombre de asegurado:"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.tipovehiculo}" class="validate" id="tipovehiculo"/>
-                                            <h:outputLabel value="Tipo de vehiculo:" for="tipovehiculo"/>
+                                            <h:inputText value="#{tallerSolController.model.tipovehiculo}" class="validate" id="tipovehiculo" a:placeholder="Tipo de vehiculo:"/>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:selectOneMenu value="#{tallerSolController.model.idaseguradora}" class="validate" id="idaseguradora">
+                                            <p:selectOneMenu value="#{tallerSolController.model.idaseguradora}" id="idaseguradora">
+                                                <f:selectItem itemLabel="Seleccione una aseguradora" itemValue="0"/>
                                                 <f:selectItems value="#{tallerSolController.asegList}" var="a" itemLabel="#{a.nombreaseguradora}" itemValue="#{a.id}"/>
-                                            </h:selectOneMenu>
-                                            <h:outputLabel value="Aseguradora:" for="idaseguradora"/>
+                                            </p:selectOneMenu>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:selectOneMenu value="#{tallerSolController.model.idmarca}" class="validate" id="idmarca">
+                                            <p:selectOneMenu value="#{tallerSolController.model.idmarca}" class="validate" id="idmarca">
                                                 <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
                                                 <f:selectItems value="#{tallerSolController.marcaList}" var="m" itemLabel="#{m.nombremarca}" itemValue="#{m.id}"/>
                                                 <p:ajax listener="#{tallerSolController.chargeModelos()}" update="modelo" process="@this" onsuccess="showSelect()"/>
-                                            </h:selectOneMenu>
-                                            <h:outputLabel value="Marca:" for="idmarca"/>
+                                            </p:selectOneMenu>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -59,38 +56,31 @@
                                             </p:selectOneMenu>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro"/>
-                                            <h:outputLabel value="Anio de carro:" for="aniocarro"/>
+                                            <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro" a:placeholder="Anio de carro:"/>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa"/>
-                                            <h:outputLabel value="Placa:" for="placa"/>
+                                            <h:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa" a:placeholder="Placa:"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis"/>
-                                            <h:outputLabel value="Chasis:" for="chasis"/>
+                                            <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis" a:placeholder="Chasis:"/>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor"/>
-                                            <h:outputLabel value="Motor:" for="motor"/>
+                                            <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor" a:placeholder="Motor:"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza"/>
-                                            <h:outputLabel value="Poliza:" for="poliza"/>
+                                            <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza" a:placeholder="Poliza:"/>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro"/>
-                                            <h:outputLabel value="Siniestro:" for="siniestro"/>
+                                            <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro" a:placeholder="Siniestro:"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.comentariostaller}" id="comentariostaller"/>
-                                            <h:outputLabel value="Comentarios:" for="comentariostaller"/>
+                                            <h:inputText value="#{tallerSolController.model.comentariostaller}" id="comentariostaller" a:placeholder="Comentarios:"/>
                                         </div>
                                     </div>
                                 </h:panelGroup>
@@ -124,7 +114,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
-                                            <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{tallerSolController.repVOList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="5">
+                                            <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{tallerSolController.repVOList}" rows="5">
                                                 <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
                                                     <h:outputText value="#{rep.repuesto}" />
                                                 </p:column>
@@ -142,6 +132,23 @@
                                     <div class="row">
                                         <div class="col s12">
                                             <h6>3) Ingrese las imagenes asociadas a la solicitud:</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l9 input-field">
+                                            <p:fileUpload value="#{tallerSolController.imageFile}" mode="simple" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                                        </div>
+                                        <div class="col s12 m12 l3 input-field right-align">
+                                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" ajax="false" action="#{tallerSolController.saveImage()}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <p:dataTable emptyMessage="No hay imagenes agregadas" id="dtimg" var="img" value="#{tallerSolController.imageList}" rows="1" paginator="true">
+                                                <p:column>
+                                                    <p:graphicImage value="#{img}" library="images"/>
+                                                </p:column>
+                                            </p:dataTable>
                                         </div>
                                     </div>
                                     <div class="row">

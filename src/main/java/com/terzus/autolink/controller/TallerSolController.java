@@ -17,6 +17,7 @@ import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.service.FotoSolService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.TallerService;
@@ -32,6 +33,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  * @author CEL
@@ -49,6 +52,7 @@ import org.primefaces.event.TabChangeEvent;
 public class TallerSolController implements Serializable{
 
     @Inject private SolicitudService solService;
+    @Inject private FotoSolService fotoSolService;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private TallerService tallerService;
     @Getter @Setter private List<SolicitudVO> solList;
@@ -65,7 +69,25 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private Integer cantidad;
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
+    @Getter @Setter private UploadedFile imageFile;
+    @Getter @Setter private List<StreamedContent> imageList;
     private int idSol;
+    
+    public void saveImage(){
+        try{
+            if(idSol >0){
+                if(imageFile != null){
+                    fotoSolService.save(idSol, imageFile.getInputstream(), imageFile.getFileName());
+                    FacesHelper.successMessage(Constants.EXITO, "Se ha guardado correctamente la imagen");
+                    imageList = fotoSolService.findImageBySol(idSol);
+                }
+            }else
+                FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un problema al tratar de asociar la imagen a la solicitud");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de guardar la imagen");
+        }
+    }
     
     @PostConstruct
     public void init(){

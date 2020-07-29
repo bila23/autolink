@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../../template/crudAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Talleres</ui:define>
+    <ui:define name="body">
+        <h:form id="viewForm">
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div class="row">
+                <div class="col s12">
+                    <p:commandButton class="waves-effect waves-light btn" value="Nuevo taller" type="button" onclick="PF('saveTallerModal').show()"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <p:dataTable emptyMessage="No hay talleres" widgetVar="tb" id="tb" var="r1" value="#{tallerCrudController.list}" stickyHeader="true" stickyTopAt=".layout-topbar" rows="6" paginator="true" filteredValue="#{tallerCrudController.filteredList}">
+                        <p:column headerText="Nombre" sortBy="#{r1.nombreTaller}" filterBy="#{r1.nombreTaller}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.nombreTaller}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{r1.estado}" filterBy="#{r1.estado}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Activos" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivos" itemValue="I"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Activo" rendered="#{r1.estado == 'A'}"/>
+                            <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
+                        </p:column>
+                        <p:column headerText="Telefono" sortBy="#{r1.telefono}" filterBy="#{r1.telefono}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.telefono}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{r1.idusuario.nombre}" filterBy="#{r1.idusuario.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.idusuario.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Acciones" class="center-align">
+                            <p:commandLink title="Ver taller" actionListener="#{tallerCrudController.setTallerView(r1)}" update="viewForm:pgViewTaller" onsuccess="PF('viewTallerModal').show()" immediate="true">
+                                <i class="material-icons">visibility</i>
+                            </p:commandLink>
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar taller" oncomplete="PF('updateTallerModal').show()" immediate="true" actionListener="#{tallerCrudController.setTallerUpdate(r1)}">
+                                <i class="material-icons">edit</i>
+                            </p:commandLink>
+                            <p:commandLink title="Eliminar taller" oncomplete="PF('deleteTallerModal').show()" actionListener="#{tallerCrudController.setTallerDelete(r1)}" immediate="true">
+                                <i class="material-icons">delete</i>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+
+            <p:dialog id="deleteTallerModal" modal="true" closable="true" closeOnEscape="true" widgetVar="deleteTallerModal">
+                <div class="row">
+                    <div class="col s12">
+                        Esta seguro que desea eliminar el taller?
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton update="viewForm:msg viewForm:tb" value="Si" onsuccess="PF('deleteTallerModal').hide()" class="waves-effect waves-light btn" actionListener="#{tallerCrudController.delete()}" immediate="true"/>
+                        <p:commandButton value="No" type="button" onclick="PF('deleteTallerModal').hide()" class="waves-effect waves-light btn"/>
+                    </div>
+                </div>
+            </p:dialog>
+            
+            <p:dialog header="Ver Taller" id="viewTallerModal" modal="true" closable="true" closeOnEscape="true" widgetVar="viewTallerModal" width="760">
+                <h:panelGroup id="pgViewTaller">
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Nombre de taller:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.nombreTaller}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Telefono:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.telefono}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Cargo:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.cargo}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Razon social:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.razonsocial}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Direccion:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.direccion}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Usuario:</div>  
+                            <h:outputText value="#{tallerCrudController.tallerView.idusuario.nombre}"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="updateForm">
+            <p:dialog header="Actualize el taller" id="updateTallerModal" modal="true" closable="true" closeOnEscape="true" widgetVar="updateTallerModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{tallerCrudController.find()}" />
+                <h:panelGroup id="updatePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Nombre de taller:" id="nombreTaller2" value="#{tallerCrudController.tallerUpdate.nombreTaller}" class="validate" required="true" requiredMessage="Debe ingresar el nombre del taller"/>
+                            <p:message for="nombreTaller2"/>
+                        </div>
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Telefono:" id="telefono2" value="#{tallerCrudController.tallerUpdate.telefono}" class="validate" required="true" requiredMessage="Debe ingresar el telefono del taller"/>
+                            <p:message for="telefono2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Cargo del contacto:" id="cargo2" value="#{tallerCrudController.tallerUpdate.cargo}" class="validate"/>
+                        </div>
+                        <div class="input-field col s6">
+                            <p:inputText id="razonsocial2" value="#{tallerCrudController.tallerUpdate.razonsocial}" class="validate" placeholder="Razon social:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText id="direccion2" value="#{tallerCrudController.tallerUpdate.direccion}" class="validate" required="true" requiredMessage="Debe ingresar la direccion del taller" placeholder="Direccion:"/>
+                            <p:message for="direccion2"/>
+                        </div>
+                        <div class="input-field col s6">
+
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Actualizar" actionListener="#{tallerCrudController.update()}" update="updatePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="saveForm">
+            <p:dialog header="Ingrese el nuevo taller" id="saveTallerModal" modal="true" closable="true" closeOnEscape="true" widgetVar="saveTallerModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{tallerCrudController.find()}" />
+                <h:panelGroup id="savePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Nombre de taller:" id="nombreTaller" value="#{tallerCrudController.taller.nombreTaller}" class="validate" required="true" requiredMessage="Debe ingresar el nombre del taller"/>
+                            <p:message for="nombreTaller"/>
+                        </div>
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Telefono:" id="telefono" value="#{tallerCrudController.taller.telefono}" class="validate" required="true" requiredMessage="Debe ingresar el telefono del taller"/>
+                            <p:message for="telefono"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText placeholder="Cargo del contacto:" id="cargo" value="#{tallerCrudController.taller.cargo}" class="validate"/>
+                        </div>
+                        <div class="input-field col s6">
+                            <p:inputText id="razonsocial" value="#{tallerCrudController.taller.razonsocial}" class="validate" placeholder="Razon social:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <p:inputText id="direccion" value="#{tallerCrudController.taller.direccion}" class="validate" required="true" requiredMessage="Debe ingresar la direccion del taller" placeholder="Direccion:"/>
+                            <p:message for="direccion"/>
+                        </div>
+                        <div class="input-field col s6">
+                            <p:selectOneMenu value="#{tallerCrudController.taller.idUsuario}" class="validate" id="usuario">
+                                <f:selectItems var="u" value="#{tallerCrudController.usuarioList}" itemValue="#{u.id}" itemLabel="#{u.nombre}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Guardar" actionListener="#{tallerCrudController.save()}" update="saveForm:savePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

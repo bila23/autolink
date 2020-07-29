@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./noAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <span style="font-weight:bold; color: #08263a;font-size:22px">
+                    <ui:insert name="title">Administracion del Sistema</ui:insert>
+                </span>
+            </div>
+            <div class="col s12 m12 l6 right-align">
+                <p:menubar>
+                    <p:menuitem value="Usuarios" url="usuarioCrud.xhtml" class="text-bold"/>
+                    <p:menuitem value="Taller" url="tallerCrud.xhtml" class="text-bold"/>
+                    <p:menuitem value="Regresar" url="../index.xhtml" class="text-bold"/>
+                    <!--<p:menuitem value="Aseguradora" url=""/>
+                    <p:menuitem value="Proveedor" url=""/>
+                    <p:menuitem value="Marca" url=""/>
+                    <p:menuitem value="Modelo" url=""/>-->
+                </p:menubar>                
+            </div>
+        </div>
+        <ui:insert name="body"></ui:insert>
+    </ui:define>
+</ui:composition>
