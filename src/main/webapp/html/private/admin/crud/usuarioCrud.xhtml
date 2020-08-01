@@ -1,10 +1,183 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../../template/crudAdminTemplate.xhtml">
-
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../../template/crudAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Usuarios</ui:define>
     <ui:define name="body">
-        body
+        <h:form id="viewForm">
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div class="row">
+                <div class="col s12">
+                    <p:commandButton class="waves-effect waves-light btn" value="Nuevo usuario" type="button" onclick="PF('saveUsuarioModal').show()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p:dataTable emptyMessage="No hay usuarios" widgetVar="tb" id="tb" var="r1" value="#{usuarioCrudController.list}" stickyHeader="true" stickyTopAt=".layout-topbar" rows="6" paginator="true" filteredValue="#{usuarioCrudController.filteredList}">
+                        <p:column headerText="Usuario" sortBy="#{r1.user}" filterBy="#{r1.user}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.user}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{r1.nombre}" filterBy="#{r1.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{r1.estado}" filterBy="#{r1.estado}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Activos" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivos" itemValue="I"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Activo" rendered="#{r1.estado == 'A'}"/>
+                            <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
+                        </p:column>
+                        <p:column headerText="Tipo" sortBy="#{r1.idtipo}" filterBy="#{r1.idtipo}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Administrador" itemValue="1"/>
+                                    <f:selectItem itemLabel="Aseguradora" itemValue="2"/>
+                                    <f:selectItem itemLabel="Taller" itemValue="3"/>
+                                    <f:selectItem itemLabel="Proveedor" itemValue="4"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Administrador" rendered="#{r1.idtipo == 1}"/>
+                            <h:outputText value="Aseguradora" rendered="#{r1.idtipo == 2}"/>
+                            <h:outputText value="Taller" rendered="#{r1.idtipo == 3}"/>
+                            <h:outputText value="Proveedor" rendered="#{r1.idtipo == 4}"/>
+                        </p:column>
+                        <p:column headerText="Acciones" class="center-align">
+                            <p:commandLink title="Ver usuario" actionListener="#{usuarioCrudController.setUserView(r1)}" update="viewForm:pgViewUsuario" onsuccess="PF('viewUsuarioModal').show()" immediate="true">
+                                <i class="material-icons">visibility</i>
+                            </p:commandLink>
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar usuario" oncomplete="PF('updateUsuarioModal').show()" immediate="true" actionListener="#{usuarioCrudController.setUserUpdate(r1)}">
+                                <i class="material-icons">edit</i>
+                            </p:commandLink>
+                            <p:commandLink title="Inactivar usuario" oncomplete="PF('deleteUsuarioModal').show()" actionListener="#{usuarioCrudController.setUserDelete(r1)}" immediate="true">
+                                <i class="material-icons">delete</i>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:dialog id="deleteUsuarioModal" modal="true" closable="true" closeOnEscape="true" widgetVar="deleteUsuarioModal">
+                <div class="row">
+                    <div class="col s12">
+                        Esta seguro que desea inactivar el usuario?
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton update="viewForm:msg viewForm:tb" value="Si" onsuccess="PF('deleteUsuarioModal').hide()" class="waves-effect waves-light btn" actionListener="#{usuarioCrudController.delete()}" immediate="true"/>
+                        <p:commandButton value="No" type="button" onclick="PF('deleteUsuarioModal').hide()" class="waves-effect waves-light btn"/>
+                    </div>
+                </div>
+            </p:dialog>
+            <p:dialog header="Ver Usuario" id="viewUsuarioModal" modal="true" closable="true" closeOnEscape="true" widgetVar="viewUsuarioModal" width="760">
+                <h:panelGroup id="pgViewUsuario">
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Usuario:</div>  
+                            <h:outputText value="#{usuarioCrudController.userView.user}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Nombre de usuario:</div>  
+                            <h:outputText value="#{usuarioCrudController.userView.nombre}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Tipo:</div>  
+                            <h:outputText value="Administrador" rendered="#{usuarioCrudController.userView.idtipo == 1}"/>
+                            <h:outputText value="Aseguradora" rendered="#{usuarioCrudController.userView.idtipo == 2}"/>
+                            <h:outputText value="Taller" rendered="#{usuarioCrudController.userView.idtipo == 3}"/>
+                            <h:outputText value="Proveedor" rendered="#{usuarioCrudController.userView.idtipo == 4}"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="saveForm">
+            <p:dialog header="Ingrese el nuevo usuario" id="saveUsuarioModal" modal="true" closable="true" closeOnEscape="true" widgetVar="saveUsuarioModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{usuarioCrudController.find()}" />
+                <h:panelGroup id="savePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="user" value="#{usuarioCrudController.vo.user}" placeholder="Correo/usuario:" class="validate" required="true" requiredMessage="Debe ingresar el correo del usuario"/>
+                            <p:message for="user"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="nombre" value="#{usuarioCrudController.vo.nombre}" placeholder="Nombre de usuario:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del usuario"/>
+                            <p:message for="nombre"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="pass" value="#{usuarioCrudController.vo.pass}" placeholder="Contrasena:" class="validate" required="true" requiredMessage="Debe ingresar la contrasena del usuario"/>
+                            <p:message for="pass"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:selectOneMenu id="tipo" value="#{usuarioCrudController.vo.idtipo}" class="validate">
+                                <f:selectItem itemValue="1" itemLabel="Administrador"/>
+                                <f:selectItem itemValue="2" itemLabel="Aseguradora"/>
+                                <f:selectItem itemValue="3" itemLabel="Taller"/>
+                                <f:selectItem itemValue="4" itemLabel="Proveedor"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Guardar" actionListener="#{usuarioCrudController.save()}" update="saveForm:savePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="updateForm">
+            <p:dialog header="Actualize el usuario" id="updateUsuarioModal" modal="true" closable="true" closeOnEscape="true" widgetVar="updateUsuarioModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{usuarioCrudController.find()}" />
+                <h:panelGroup id="updatePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="user2" value="#{usuarioCrudController.userUpdate.user}" placeholder="Correo/usuario:" class="validate" required="true" requiredMessage="Debe ingresar el correo del usuario"/>
+                            <p:message for="user2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="nombre2" value="#{usuarioCrudController.userUpdate.nombre}" placeholder="Nombre de usuario:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del usuario"/>
+                            <p:message for="nombre2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="pass2" value="#{usuarioCrudController.userUpdate.pass}" placeholder="Contrasena:" class="validate" required="true" requiredMessage="Debe ingresar la contrasena del usuario"/>
+                            <p:message for="pass2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:selectOneMenu id="tipo2" value="#{usuarioCrudController.userUpdate.idtipo}" class="validate">
+                                <f:selectItem itemValue="1" itemLabel="Administrador"/>
+                                <f:selectItem itemValue="2" itemLabel="Aseguradora"/>
+                                <f:selectItem itemValue="3" itemLabel="Taller"/>
+                                <f:selectItem itemValue="4" itemLabel="Proveedor"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Actualizar" actionListener="#{usuarioCrudController.update()}" update="updatePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
     </ui:define>
-
 </ui:composition>

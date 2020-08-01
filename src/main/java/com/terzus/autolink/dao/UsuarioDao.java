@@ -54,6 +54,12 @@ public class UsuarioDao extends Dao<Usuario, Integer>{
         em.persist(model);
     }
     
+    @Override
+    public void update(Usuario model) throws Exception{
+        model.setPass(encodeSHA256(model.getPass()));
+        em.merge(model);
+    }
+    
      private String encodeSHA256(String password) throws Exception {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(password.getBytes("UTF-8"));

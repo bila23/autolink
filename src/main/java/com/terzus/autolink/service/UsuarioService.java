@@ -14,9 +14,12 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.UsuarioDao;
 import com.terzus.autolink.model.Usuario;
+import com.terzus.autolink.vo.UsuarioVO;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * @author CEL
@@ -53,6 +56,22 @@ public class UsuarioService extends Service<Usuario, Integer>{
     
     public List<Usuario> findUserProveedor() throws Exception{
         return dao.findByTipoAndActive(4);
+    }
+    
+    public void saveVO(UsuarioVO vo) throws Exception{
+        if(vo == null) return;
+        Usuario model = new Usuario();
+        PropertyUtils.copyProperties(model, vo);
+        model.setFechacreacion(new Date());
+        model.setEstado("A");
+        dao.save(model);
+    }
+    
+    public boolean existUser(String user) throws Exception{
+        if(user == null) return false;
+        Usuario userExist = dao.findByUser(user);
+        if(userExist == null) return false;
+        return true;
     }
 
 }
