@@ -14,8 +14,11 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.AseguradoraDao;
 import com.terzus.autolink.model.Aseguradora;
+import com.terzus.autolink.vo.AseguradoraVO;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * @author Terzus
@@ -44,4 +47,13 @@ public class AseguradoraService extends Service<Aseguradora, Integer>{
         return model.getId();
     }
     
+    public void saveVO(AseguradoraVO vo) throws Exception{
+        if(vo == null) return;
+        Aseguradora model = new Aseguradora();
+        PropertyUtils.copyProperties(model, vo);
+        model.setEstado("A");
+        model.setFechacreacion(new Date());
+        dao.save(model);
+    }
+
 }

@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../../template/crudAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Aseguradora</ui:define>
+    <ui:define name="body">
+        <h:form id="viewForm">
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div class="row">
+                <div class="col s12">
+                    <p:commandButton class="waves-effect waves-light btn" value="Nueva aseguradora" type="button" onclick="PF('saveModal').show()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p:dataTable emptyMessage="No hay aseguradoras" widgetVar="tb" id="tb" var="r1" value="#{asegCrudController.list}" stickyHeader="true" stickyTopAt=".layout-topbar" rows="6" paginator="true" filteredValue="#{asegCrudController.filteredList}">
+                        <p:column headerText="Nombre" sortBy="#{r1.nombreaseguradora}" filterBy="#{r1.nombreaseguradora}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.nombreaseguradora}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{r1.estado}" filterBy="#{r1.estado}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Activo" rendered="#{r1.estado == 'A'}"/>
+                            <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{asegCrudController.getUser(r1.idusuario)}" filterBy="#{asegCrudController.getUser(r1.idusuario)}" filterMatchMode="contains">
+                            <h:outputText value="#{asegCrudController.getUser(r1.idusuario)}"/>
+                        </p:column>
+                        <p:column headerText="Acciones" class="center-align">
+                            <p:commandLink title="Ver aseguradora" actionListener="#{asegCrudController.setModelView(r1)}" update="viewForm:pgView" onsuccess="PF('viewModal').show()">
+                                <i class="material-icons">visibility</i>
+                            </p:commandLink>
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar aseguradora" oncomplete="PF('updateModal').show()" actionListener="#{asegCrudController.setModelUpdate(r1)}">
+                                <i class="material-icons">edit</i>
+                            </p:commandLink>
+                            <p:commandLink title="Inactivar aseguradora" oncomplete="PF('deleteModal').show()" actionListener="#{asegCrudController.setModelDelete(r1)}">
+                                <i class="material-icons">delete</i>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:dialog id="deleteModal" modal="true" closable="true" closeOnEscape="true" widgetVar="deleteModal">
+                <div class="row">
+                    <div class="col s12">
+                        Esta seguro que desea inactivar la aseguradora?
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton update="viewForm:msg viewForm:tb" value="Si" onsuccess="PF('deleteModal').hide()" class="waves-effect waves-light btn" actionListener="#{asegCrudController.delete()}"/>
+                        <p:commandButton value="No" type="button" onclick="PF('deleteModal').hide()" class="waves-effect waves-light btn"/>
+                    </div>
+                </div>
+            </p:dialog>
+            <p:dialog header="Ver Aseguradora" id="viewModal" modal="true" closable="true" closeOnEscape="true" widgetVar="viewModal" width="760">
+                <h:panelGroup id="pgView">
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Nombre de aseguradora:</div>  
+                            <h:outputText value="#{asegCrudController.modelView.nombreaseguradora}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Cargo:</div>  
+                            <h:outputText value="#{asegCrudController.modelView.cargo}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Estado:</div>  
+                            <h:outputText rendered="#{asegCrudController.modelView.estado == 'A'}" value="Activo"/>
+                            <h:outputText rendered="#{asegCrudController.modelView.estado == 'I'}" value="Inactivo"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Usuario:</div>
+                            <h:outputText value="#{asegCrudController.getUser(asegCrudController.modelView.idusuario)}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Razon social:</div>  
+                            <h:outputText value="#{asegCrudController.modelView.razonsocial}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">IVA</div>
+                            <h:outputText value="#{asegCrudController.modelView.iva}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">NIT:</div>  
+                            <h:outputText value="#{asegCrudController.modelView.nit}"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+        </h:form>
+        <h:form id="saveForm">
+            <p:dialog header="Ingrese la nueva aseguradora" id="saveModal" modal="true" closable="true" closeOnEscape="true" widgetVar="saveModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{asegCrudController.find()}" />
+                <h:panelGroup id="savePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="nombre" value="#{asegCrudController.vo.nombreaseguradora}" placeholder="Nombre:" class="validate" required="true" requiredMessage="Debe ingresar el nombre de la aseguradora"/>
+                            <p:message for="nombre"/>
+                        </div>
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="cargo" value="#{asegCrudController.vo.cargo}" placeholder="Cargo del contacto:" class="validate"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="iva" value="#{asegCrudController.vo.iva}" placeholder="IVA:" class="validate"/>
+                        </div>
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="nit" value="#{asegCrudController.vo.nit}" placeholder="NIT:" class="validate"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="razonsocial" value="#{asegCrudController.vo.razonsocial}" placeholder="Razon Social:" class="validate"/>
+                        </div>
+                        <div class="input-field col s12 m12 l6">
+                            <p:selectOneMenu id="usuario" class="validate" value="#{asegCrudController.vo.idusuario}">
+                                <f:selectItems value="#{asegCrudController.userList}" itemValue="#{user.id}" itemLabel="#{user.nombre}" var="user"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Guardar" actionListener="#{asegCrudController.save()}" update="saveForm:savePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+        <h:form id="updateForm">
+            <p:dialog header="Actualize la aseguradora" id="updateModal" modal="true" closable="true" closeOnEscape="true" widgetVar="updateModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{asegCrudController.find()}" />
+                <h:panelGroup id="updatePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="nombre" value="#{asegCrudController.modelUpdate.nombreaseguradora}" placeholder="Nombre:" class="validate" required="true" requiredMessage="Debe ingresar el nombre de la aseguradora"/>
+                            <p:message for="nombre"/>
+                        </div>
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="cargo" value="#{asegCrudController.modelUpdate.cargo}" placeholder="Cargo del contacto:" class="validate"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="iva" value="#{asegCrudController.modelUpdate.iva}" placeholder="IVA:" class="validate"/>
+                        </div>
+                        <div class="input-field col s12 m12 l6">
+                            <p:inputText id="nit" value="#{asegCrudController.modelUpdate.nit}" placeholder="NIT:" class="validate"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m12 l4">
+                            <p:inputText id="razonsocial" value="#{asegCrudController.modelUpdate.razonsocial}" placeholder="Razon Social:" class="validate"/>
+                        </div>
+                        <div class="input-field col s12 m12 l4">
+                            <p:selectOneMenu id="estado" class="validate" value="#{asegCrudController.modelUpdate.estado}" style="width:100%">
+                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="input-field col s12 m12 l4">
+                            <p:selectOneMenu id="usuario2" class="validate" value="#{asegCrudController.modelUpdate.idusuario}">
+                                <f:selectItems value="#{asegCrudController.userList}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Actualizar" actionListener="#{asegCrudController.update()}" update="updatePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

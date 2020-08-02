@@ -41,6 +41,13 @@ public class UsuarioService extends Service<Usuario, Integer>{
         return dao;
     }
     
+    public String findNameUser(int user) throws Exception{
+        if(user == 0) return null;
+        Usuario usr = dao.findByKey(user);
+        if(usr != null) return usr.getNombre();
+        return null;
+    }
+    
     public Usuario findByUser(String user) throws Exception{
         if(user == null || user.equals("")) return null;
         return dao.findByUser(user);
