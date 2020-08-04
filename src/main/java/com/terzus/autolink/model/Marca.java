@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "marca")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m"),
+    @NamedQuery(name = "Marca.findAll", query = "SELECT m FROM Marca m ORDER BY m.nombremarca"),
     @NamedQuery(name = "Marca.findActive", query = "SELECT m FROM Marca m WHERE m.estado = 'A' ORDER BY m.nombremarca")
 })
 public class Marca implements Serializable {
