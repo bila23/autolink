@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../../template/crudAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Proveedor</ui:define>
+    <ui:define name="body">
+        <h:form id="viewForm">
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div class="row">
+                <div class="col s12">
+                    <p:commandButton class="waves-effect waves-light btn" value="Nuevo proveedor" type="button" onclick="PF('saveModal').show()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p:dataTable emptyMessage="No hay proveedores" widgetVar="tb" id="tb" var="r1" value="#{provCrudController.list}" stickyHeader="true" stickyTopAt=".layout-topbar" rows="6" paginator="true" filteredValue="#{provCrudController.filteredList}">
+                        <p:column headerText="Nombre" sortBy="#{r1.nombreproveedor}" filterBy="#{r1.nombreproveedor}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.nombreproveedor}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{r1.estado}" filterBy="#{r1.estado}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Activo" rendered="#{r1.estado == 'A'}"/>
+                            <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{r1.idusuario.nombre}" filterBy="#{r1.idusuario.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.idusuario.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Acciones" class="center-align">
+                            <p:commandLink title="Ver proveedor" actionListener="#{provCrudController.setModelView(r1)}" update="viewForm:pgView" onsuccess="PF('viewModal').show()">
+                                <i class="material-icons">visibility</i>
+                            </p:commandLink>
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar proveedor" oncomplete="PF('updateModal').show()" actionListener="#{provCrudController.setMupdate(r1)}">
+                                <i class="material-icons">edit</i>
+                            </p:commandLink>
+                            <p:commandLink title="Inactivar proveedor" oncomplete="PF('deleteModal').show()" actionListener="#{provCrudController.setModelDelete(r1)}">
+                                <i class="material-icons">delete</i>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:dialog id="deleteModal" modal="true" closable="true" closeOnEscape="true" widgetVar="deleteModal">
+                <div class="row">
+                    <div class="col s12">
+                        Esta seguro que desea inactivar el proveedor?
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton update="viewForm:msg viewForm:tb" value="Si" onsuccess="PF('deleteModal').hide()" class="waves-effect waves-light btn" actionListener="#{provCrudController.delete()}"/>
+                        <p:commandButton value="No" type="button" onclick="PF('deleteModal').hide()" class="waves-effect waves-light btn"/>
+                    </div>
+                </div>
+            </p:dialog>
+            <p:dialog header="Ver Proveedor" id="viewModal" modal="true" closable="true" closeOnEscape="true" widgetVar="viewModal" width="760">
+                <h:panelGroup id="pgView">
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Nombre:</div>  
+                            <h:outputText value="#{provCrudController.modelView.nombreproveedor}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Usuario:</div>  
+                            <h:outputText value="#{provCrudController.modelView.idusuario.nombre}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Cargo:</div>  
+                            <h:outputText value="#{provCrudController.modelView.cargo}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Cuenta bancaria:</div>  
+                            <h:outputText value="#{provCrudController.modelView.cuentabancaria}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Direccion:</div>  
+                            <h:outputText value="#{provCrudController.modelView.direccion}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">NIT:</div>  
+                            <h:outputText value="#{provCrudController.modelView.nit}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Razon social:</div>  
+                            <h:outputText value="#{provCrudController.modelView.razonsocial}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Telefono:</div>  
+                            <h:outputText value="#{provCrudController.modelView.telefono}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="text-bold">Estado:</div>  
+                            <h:outputText rendered="#{provCrudController.modelView.estado == 'A'}" value="Activo"/>
+                            <h:outputText rendered="#{provCrudController.modelView.estado == 'I'}" value="Inactivo"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+        </h:form>
+        <h:form id="saveForm">
+            <p:dialog header="Ingrese el nuevo proveedor" id="saveModal" modal="true" closable="true" closeOnEscape="true" widgetVar="saveModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{provCrudController.find()}" />
+                <h:panelGroup id="savePanelGroup">
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="nombre" value="#{provCrudController.vo.nombreproveedor}" placeholder="Nombre proveedor:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del proveedor"/>
+                            <p:message for="nombre"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:selectOneMenu value="#{provCrudController.vo.idUsuario}" placeholder="Usuario:">
+                                <f:selectItems value="#{provCrudController.userList}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.vo.cargo}" placeholder="Cargo:"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.vo.cuentabancaria}" placeholder="Cuenta bancaria:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="direccion" value="#{provCrudController.vo.direccion}" placeholder="Direccion:"  required="true" requiredMessage="Debe ingresar la direccion"/>
+                            <p:message for="direccion"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.vo.nit}" placeholder="NIT:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.vo.razonsocial}" placeholder="Razon social:"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="telefono" value="#{provCrudController.vo.telefono}" class="validate" required="true" requiredMessage="Debe ingresar el telefono" placeholder="Telefono:"/>
+                            <p:message for="telefono"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Guardar" actionListener="#{provCrudController.save()}" update="saveForm:savePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+        <h:form id="updateForm">
+            <p:dialog header="Actualize el proveedor" id="updateModal" modal="true" closable="true" closeOnEscape="true" widgetVar="updateModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{provCrudController.find()}" />
+                <h:panelGroup id="updatePanelGroup">
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="nombre" value="#{provCrudController.modelUpdate.nombreproveedor}" placeholder="Nombre proveedor:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del proveedor"/>
+                            <p:message for="nombre"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:selectOneMenu id="usuario" value="#{provCrudController.modelUpdate.idUsuario}" placeholder="Usuario:">
+                                <f:selectItems value="#{provCrudController.userList}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.modelUpdate.cargo}" placeholder="Cargo:"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.modelUpdate.cuentabancaria}" placeholder="Cuenta bancaria:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="direccion" value="#{provCrudController.modelUpdate.direccion}" placeholder="Direccion:"  required="true" requiredMessage="Debe ingresar la direccion"/>
+                            <p:message for="direccion"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.modelUpdate.nit}" placeholder="NIT:"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l6">
+                            <p:inputText value="#{provCrudController.modelUpdate.razonsocial}" placeholder="Razon social:"/>
+                        </div>
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="telefono" value="#{provCrudController.modelUpdate.telefono}" placeholder="Telefono:" class="validate" required="true" requiredMessage="Debe ingresar el telefono"/>
+                            <p:message for="telefono"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:selectOneMenu id="estadp" value="#{provCrudController.modelUpdate.estado}" placeholder="Estado:">
+                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Actualizar" actionListener="#{provCrudController.update()}" update="updatePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
