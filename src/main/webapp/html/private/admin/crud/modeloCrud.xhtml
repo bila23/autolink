@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../../template/crudAdminTemplate.xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Modelos</ui:define>
+    <ui:define name="body">
+        <h:form id="viewForm">
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div class="row">
+                <div class="col s12">
+                    <p:commandButton class="waves-effect waves-light btn" value="Nuevo modelo" type="button" onclick="PF('saveModal').show()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p:dataTable emptyMessage="No hay modelos" widgetVar="tb" id="tb" var="r1" value="#{modeloCrudController.list}" stickyHeader="true" stickyTopAt=".layout-topbar" rows="6" paginator="true" filteredValue="#{modeloCrudController.filteredList}">
+                        <p:column headerText="Marca" sortBy="#{modeloCrudController.getMarca(r1.idmarca)}" filterBy="#{modeloCrudController.getMarca(r1.idmarca)}" filterMatchMode="contains">
+                            <h:outputText value="#{modeloCrudController.getMarca(r1.idmarca)}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{r1.nombremodelo}" filterBy="#{r1.nombremodelo}" filterMatchMode="contains">
+                            <h:outputText value="#{r1.nombremodelo}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{r1.estado}" filterBy="#{r1.estado}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tb').filter()">
+                                    <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="Activo" rendered="#{r1.estado == 'A'}"/>
+                            <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
+                        </p:column>
+                        <p:column headerText="Acciones" class="center-align">
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar marca" oncomplete="PF('updateModal').show()" actionListener="#{modeloCrudController.setModelUpdate(r1)}">
+                                <i class="material-icons">edit</i>
+                            </p:commandLink>
+                            <p:commandLink title="Inactivar marca" oncomplete="PF('deleteModal').show()" actionListener="#{modeloCrudController.setModelDelete(r1)}">
+                                <i class="material-icons">delete</i>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:dialog id="deleteModal" modal="true" closable="true" closeOnEscape="true" widgetVar="deleteModal">
+                <div class="row">
+                    <div class="col s12">
+                        Esta seguro que desea inactivar el modelo?
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton update="viewForm:msg viewForm:tb" value="Si" onsuccess="PF('deleteModal').hide()" class="waves-effect waves-light btn" actionListener="#{modeloCrudController.delete()}"/>
+                        <p:commandButton value="No" type="button" onclick="PF('deleteModal').hide()" class="waves-effect waves-light btn"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+        <h:form id="saveForm">
+            <p:dialog header="Ingrese el nuevo modelo" id="saveModal" modal="true" closable="true" closeOnEscape="true" widgetVar="saveModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{modeloCrudController.find()}" />
+                <h:panelGroup id="savePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:selectOneMenu value="#{modeloCrudController.model.idmarca}">
+                                <f:selectItems value="#{modeloCrudController.marcaList}" var="marca" itemValue="#{marca.id}" itemLabel="#{marca.nombremarca}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="nombre" value="#{modeloCrudController.model.nombremodelo}" placeholder="Nombre:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del modelo"/>
+                            <p:message for="nombre"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Guardar" actionListener="#{modeloCrudController.save()}" update="saveForm:savePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+        <h:form id="updateForm">
+            <p:dialog header="Actualize el modelo" id="updateModal" modal="true" closable="true" closeOnEscape="true" widgetVar="updateModal" width="760">
+                <p:ajax event="close" update="viewForm:tb" listener="#{modeloCrudController.find()}" />
+                <h:panelGroup id="updatePanelGroup">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:selectOneMenu value="#{modeloCrudController.modelUpdate.idmarca}">
+                                <f:selectItems value="#{modeloCrudController.marcaList}" var="marca" itemValue="#{marca.id}" itemLabel="#{marca.nombremarca}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:inputText id="nombre" value="#{modeloCrudController.modelUpdate.nombremodelo}" placeholder="Nombre:" class="validate" required="true" requiredMessage="Debe ingresar el nombre del modelo"/>
+                            <p:message for="nombre"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <p:selectOneMenu value="#{modeloCrudController.modelUpdate.estado}">
+                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <div class="row">
+                    <div class="col s12">
+                        <p:commandButton class="waves-effect waves-light btn" value="Actualizar" actionListener="#{modeloCrudController.update()}" update="updatePanelGroup viewForm:msg"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
