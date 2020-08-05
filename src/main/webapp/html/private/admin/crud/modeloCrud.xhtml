@@ -30,10 +30,10 @@
                             <h:outputText value="Inactivo" rendered="#{r1.estado == 'I'}"/>
                         </p:column>
                         <p:column headerText="Acciones" class="center-align">
-                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar marca" oncomplete="PF('updateModal').show()" actionListener="#{modeloCrudController.setModelUpdate(r1)}">
+                            <p:commandLink update="updateForm:updatePanelGroup" title="Actualizar modelo" oncomplete="PF('updateModal').show()" actionListener="#{modeloCrudController.setModelUpdate(r1)}">
                                 <i class="material-icons">edit</i>
                             </p:commandLink>
-                            <p:commandLink title="Inactivar marca" oncomplete="PF('deleteModal').show()" actionListener="#{modeloCrudController.setModelDelete(r1)}">
+                            <p:commandLink title="Inactivar modelo" oncomplete="PF('deleteModal').show()" actionListener="#{modeloCrudController.setModelDelete(r1)}">
                                 <i class="material-icons">delete</i>
                             </p:commandLink>
                         </p:column>
