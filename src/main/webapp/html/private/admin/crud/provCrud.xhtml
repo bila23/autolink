@@ -99,7 +99,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s12 m12 l6">
+                            <div class="text-bold">Porcentaje de ganancia:</div>  
+                            <h:outputText value="#{provCrudController.modelView.porcentaje}"/>
+                        </div>
+                        <div class="col s12 m12 l6">
                             <div class="text-bold">Estado:</div>  
                             <h:outputText rendered="#{provCrudController.modelView.estado == 'A'}" value="Activo"/>
                             <h:outputText rendered="#{provCrudController.modelView.estado == 'I'}" value="Inactivo"/>
@@ -147,6 +151,12 @@
                         <div class="col s12 m12 l6">
                             <p:inputText id="telefono" value="#{provCrudController.vo.telefono}" class="validate" required="true" requiredMessage="Debe ingresar el telefono" placeholder="Telefono:"/>
                             <p:message for="telefono"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:inputText id="porcentaje" value="#{provCrudController.vo.porcentaje}" placeholder="Porcentaje de ganancia:" required="true" requiredMessage="Debe ingresar el porcentaje de ganacia"/>
+                            <p:message for="porcentaje"/>
                         </div>
                     </div>
                 </h:panelGroup>
@@ -199,7 +209,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s12 m12 l6">
+                            <p:inputText id="porcentaje" value="#{provCrudController.modelUpdate.porcentaje}" placeholder="Porcentaje de ganancia:" required="true" requiredMessage="Debe ingresar el porcentaje de ganacia"/>
+                            <p:message for="porcentaje"/>
+                        </div>
+                        <div class="col s12 m12 l6">
                             <p:selectOneMenu id="estadp" value="#{provCrudController.modelUpdate.estado}" placeholder="Estado:">
                                 <f:selectItem itemLabel="Activo" itemValue="A"/>
                                 <f:selectItem itemLabel="Inactivo" itemValue="I"/>

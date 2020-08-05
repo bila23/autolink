@@ -39,5 +39,6 @@ public class ProveedorVO implements Serializable{
     private String usuariocrea;
     private Date fechacreacion;
     private int idUsuario;
+    private float porcentaje;
 
 }

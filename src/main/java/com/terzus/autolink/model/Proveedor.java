@@ -85,6 +85,8 @@ public class Proveedor implements Serializable {
     @JoinColumn(name = "idusuario", referencedColumnName = "id")
     @ManyToOne
     private Usuario idusuario;
+    @Column(name = "porcentaje")
+    private float porcentaje;
 
     public Proveedor() {
     }
@@ -187,6 +189,14 @@ public class Proveedor implements Serializable {
 
     public void setIdusuario(Usuario idusuario) {
         this.idusuario = idusuario;
+    }
+
+    public float getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(float porcentaje) {
+        this.porcentaje = porcentaje;
     }
 
     @Override
