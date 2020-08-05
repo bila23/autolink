@@ -11,6 +11,9 @@
 package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
+import com.terzus.autolink.model.Tipousuario;
+import com.terzus.autolink.model.UserGroups;
+import com.terzus.autolink.model.UserGroupsPK;
 import com.terzus.autolink.model.Usuario;
 import java.security.MessageDigest;
 import java.util.List;
@@ -33,8 +36,9 @@ import javax.xml.bind.DatatypeConverter;
  */
 @Stateless
 public class UsuarioDao extends Dao<Usuario, Integer>{
-
-    @Inject private ProveedorDao provDao;
+    
+    @Inject private UserGroupsDao ugDao;
+    @Inject private TipoUsuarioDao tipoUsuarioDao;
     
     public UsuarioDao(){
         super(Usuario.class);
@@ -51,12 +55,25 @@ public class UsuarioDao extends Dao<Usuario, Integer>{
     @Override
     public void save(Usuario model) throws Exception{
         model.setPass(encodeSHA256(model.getPass()));
+        model.setUser(model.getUser().toLowerCase());
         em.persist(model);
+        saveUserGroups(model.getUser(), model.getIdtipo());
+    }
+    
+    private void saveUserGroups(String user, int idTipo) throws Exception{
+        Tipousuario tipo = tipoUsuarioDao.findByKey(idTipo);
+        UserGroups model = new UserGroups();
+        UserGroupsPK pk = new UserGroupsPK();
+        pk.setUserid(user);
+        pk.setGroupid(tipo.getNombretipo().toUpperCase());
+        model.setUserGroupsPK(pk);
+        ugDao.save(model);
     }
     
     @Override
     public void update(Usuario model) throws Exception{
         model.setPass(encodeSHA256(model.getPass()));
+        model.setUser(model.getUser().toLowerCase());
         em.merge(model);
     }
     
