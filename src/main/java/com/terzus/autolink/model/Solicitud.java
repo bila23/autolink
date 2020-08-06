@@ -51,7 +51,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado ORDER BY s.id DESC"),
     @NamedQuery(name = "Solicitud.findByEstadoAndTaller", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado AND s.idtaller = :idtaller ORDER BY s.id DESC"),
     @NamedQuery(name = "Solicitud.findByEstadoAndAseg", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado AND s.idaseguradora = :idaseguradora ORDER BY s.id DESC"),
-    @NamedQuery(name = "Solicitud.updateEstado", query = "UPDATE Solicitud s SET s.estado = :estado WHERE s.id = :id")
+    @NamedQuery(name = "Solicitud.updateEstado", query = "UPDATE Solicitud s SET s.estado = :estado WHERE s.id = :id"),
+    @NamedQuery(name = "Solicitud.updateCoaTOPea", query = "UPDATE Solicitud s SET s.estado = 'PEA' WHERE s.estado = 'COA' AND s.horaFinal = :horaFinal")
 })
 public class Solicitud implements Serializable {
 
@@ -132,6 +133,8 @@ public class Solicitud implements Serializable {
     @Column(name = "feccrea")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
+    @Column(name = "horaFinal")
+    private int horaFinal;
 
     public Solicitud() {
     }
@@ -146,6 +149,14 @@ public class Solicitud implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getHoraFinal() {
+        return horaFinal;
+    }
+
+    public void setHoraFinal(int horaFinal) {
+        this.horaFinal = horaFinal;
     }
 
     public Integer getIdtaller() {

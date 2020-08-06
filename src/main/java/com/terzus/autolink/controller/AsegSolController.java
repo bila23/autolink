@@ -25,6 +25,7 @@ import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -62,7 +63,7 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private int codSol;
     @Getter @Setter private int idProv;
     @Getter @Setter private int idSol;
-    @Getter @Setter private int horas;
+    @Getter @Setter private Date horas;
     @Getter @Setter private int idAseguradora;
     @Getter @Setter private String com;
     @Getter @Setter private String totalRepuestosLabel;
@@ -142,10 +143,8 @@ public class AsegSolController implements Serializable{
     
     public void changeCotAbierta(){
         try{
-            if(horas == 0)
+            if(horas == null)
                 FacesHelper.warningMessage(Constants.WARNING, "Debe definir el tiempo de vigencia de la solicitud");
-            else if(horas > 36)
-                FacesHelper.warningMessage(Constants.WARNING, "El tiempo de vigencia debe ser menor o igual a 36 horas");
             else if(codSol > 0){
                 solService.updateHorasVigencia(codSol, horas);
                 solService.updateEstado(codSol, "COA");

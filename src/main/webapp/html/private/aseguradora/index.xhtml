@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <ui:composition  xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="./../template/noAdminTemplate.xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:of="http://omnifaces.org/functions">
     <ui:define name="content">
+        <style>
+            .ui-separator, .ui-minute-picker{display: none !important}
+        </style>
         <h:form id="mf">
             <div class="row">
                 <div class="col s12">
@@ -173,22 +176,22 @@
                     </p:column>
                 </p:dataTable>
             </p:dialog>
-            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" closeOnEscape="true" closable="true" focus="minMax">
+            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" closeOnEscape="true" closable="true" position="top" dynamic="true">
                 <div class="row">
                     <div class="col s12">
                         <span style="width: 60%">
-                            Para pasar la solicitud a "Cotizacion Abierta" debe definir el tiempo de vigencia para que los proveedores <br/>generen sus ofertas. El tiempo maximo son 36 horas
+                            Para pasar la solicitud a "Cotizacion Abierta" debe definir la hora maxima que tienen los proveedores <br/>para generar sus ofertas.
                         </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12 input-field" style="text-align: center">
-                        <p:spinner id="minMax" value="#{asegSolController.horas}" min="0" max="100" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
                         <p:commandButton onsuccess="PF('dlgCotAb').hide();" update="mf:msg :mf:tab:dting" value="Guardar" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12" style="text-align: center">
+                        <p:datePicker id="minMax" value="#{asegSolController.horas}" timeOnly="true" pattern="HH" inline="true"/>
                     </div>
                 </div>
             </p:dialog>

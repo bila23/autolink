@@ -60,5 +60,6 @@ public class SolicitudVO implements Serializable{
     private String proveedorWinner;
     private String pendingHours;
     private List<RepuestosAllSolVO> repAllList;
+    private int horaFinal;
     
 }

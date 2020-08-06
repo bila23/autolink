@@ -43,6 +43,12 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
     public EntityManager getEntityManager() {
         return em;
     }
+    
+    public void changeCoaToPea(int hours) throws Exception{
+        Map<String, Object> param = new HashMap();
+        param.put("horaFinal", hours);
+        executeUpdateOrDelete("Solicitud.updateCoaTOPea", param);
+    }
 
     public List<Solicitud> findDespProvByProveedorWinner(int idProv) throws Exception{
         Map<String, Object> parameters = new HashMap();

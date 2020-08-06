@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -63,6 +62,13 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
+    }
+    
+    public void changeCoaToPea() throws Exception{
+        Calendar today = Calendar.getInstance();
+        today.setTime(new Date());
+        int hours  = today.get(Calendar.HOUR_OF_DAY);
+        dao.changeCoaToPea(hours);
     }
     
     private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception{
@@ -110,25 +116,32 @@ public class SolicitudService extends Service<Solicitud, Integer>{
      * Pone la hora de vigencia de la solicitud para que los proveedores
      * puedan ofertar
      * @param idSol codigo de la solicitud - int
-     * @param horas cantidad de horas en la que estara activa la solicitud - int
+     * @param dateWithHour objeto de tipo Date con la hora de finalizacion
      * @throws Exception 
      */
-    public void updateHorasVigencia(int idSol, int horas) throws Exception{
+    public void updateHorasVigencia(int idSol, Date dateWithHour) throws Exception{
         Solicitud model = dao.findByKey(idSol);
         if(model != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateWithHour);
+            int hours  = calendar.get(Calendar.HOUR_OF_DAY);
+            
             Date ini = new Date();
-            Date end = addHoursToDate(ini, horas);
+            Date end = defineEndDate(hours);
+            
             model.setFechainicio(ini);
             model.setFechafin(end);
+            model.setHoraFinal(hours);
             dao.update(model);
         }
     }
     
-    private Date addHoursToDate(Date date, int hours) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.HOUR_OF_DAY, hours);
-        return calendar.getTime();
+    private Date defineEndDate(int hours) {
+        Calendar newDay = Calendar.getInstance();
+        newDay.setTime(new Date());
+        newDay.set(Calendar.HOUR_OF_DAY, hours);
+        newDay.set(Calendar.MINUTE, 0);
+        return newDay.getTime();
     }
     
     public List<Repuesto> findRepuestoActive() throws Exception{
