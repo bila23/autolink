@@ -73,9 +73,10 @@ public class ProvSolController implements Serializable{
     public void findCotAbierta(){
         try{
             solList = solService.findCotAbierta(this.codPrv);
-            if(solList == null || solList.isEmpty()) totalSolCOA = 0;
-            totalSolCOA = solList.size();
-            System.out.println("LLEGO");
+            if(solList == null || solList.isEmpty()) 
+                totalSolCOA = 0;
+            else
+                totalSolCOA = solList.size();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");            

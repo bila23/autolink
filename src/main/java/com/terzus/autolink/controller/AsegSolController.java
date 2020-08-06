@@ -12,8 +12,10 @@ package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
+import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.service.ProveedorService;
 import com.terzus.autolink.service.AseguradoraService;
 import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
@@ -52,6 +54,7 @@ public class AsegSolController implements Serializable{
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private OfertaProvService opService;
     @Inject private AseguradoraService asegService;
+    @Inject private ProveedorService provService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<OfertaPrecioVO> opList;
@@ -69,8 +72,6 @@ public class AsegSolController implements Serializable{
         try{
             solList = solService.findIngresadas();
             idAseguradora = asegService.findIdByUser(FacesHelper.getUserLogin());
-            if(idAseguradora == 0)
-                messageIdAsegZero();
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
@@ -254,10 +255,8 @@ public class AsegSolController implements Serializable{
     
     public double iva(List<RepuestoSolicitudVO> list){
         try{
-            double total = 0.0;
-            for(RepuestoSolicitudVO vo : list){
-                total += vo.getPrecio();
-            }
+            double total = getTotal(list);
+            if(total == 0.0) return total; 
             return total * 0.13;
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -266,13 +265,30 @@ public class AsegSolController implements Serializable{
         return 0.0;
     }
     
-    public double totalOrden(List<RepuestoSolicitudVO> list){
+    public double porcentajeProveedor(int idProv, List<RepuestoSolicitudVO> list){
         try{
-            double total = 0.0;
-            for(RepuestoSolicitudVO vo : list){
-                total += vo.getPrecio();
-            }
-            return total + (total * 0.13);
+            double total = getTotal(list);
+            if(total == 0.0) return total; 
+            Proveedor prov = provService.findByKey(idProv);
+            if(prov == null) return 0.0;
+            if(prov.getPorcentaje() > 0)
+                return total * prov.getPorcentaje();
+            return 0.0;
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return 0.0;
+    }
+    
+    public double totalOrden(int idProv, List<RepuestoSolicitudVO> list){
+        try{
+            double total = getTotal(list);
+            if(total == 0.0) return total;
+            double ganancia = porcentajeProveedor(idProv, list);
+            if(ganancia > 0)
+                return total + (total * 0.13) + ganancia;
+            else
+                return total + (total * 0.13);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar el total de la orden de compra");
@@ -280,5 +296,23 @@ public class AsegSolController implements Serializable{
         return 0.0;
     }
     
+    public double subTotal(List<RepuestoSolicitudVO> list){
+        try{
+            return getTotal(list);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return 0.0;
+    }
+    
+    private double getTotal(List<RepuestoSolicitudVO> list){
+            double total = 0.0;
+            if(list == null || list.isEmpty()) return 0.0;
+            for(RepuestoSolicitudVO vo : list){
+                if(vo.getPrecio() != null && vo.getCantidad() != null && vo.getCantidad() > 0)
+                    total += (vo.getPrecio() * vo.getCantidad());
+            }
+            return total;
+    }
 
 }

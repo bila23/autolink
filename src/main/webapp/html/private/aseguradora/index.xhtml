@@ -144,9 +144,6 @@
                                 <p:column headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
-                                <p:column headerText="Proveedor ganador" sortBy="#{r1.proveedorWinner}">
-                                    <h:outputText value="#{r1.proveedorWinner}" />
-                                </p:column>
                                 <p:column style="width:8%;text-align: center">
                                     <p:commandLink title="Ver orden de compra" actionListener="#{asegSolController.generateOrdenCompra(r1.id, r1.idProvWinner)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgOrden').show()">
                                         <i class="material-icons">content_paste</i>
@@ -289,7 +286,7 @@
                     <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgWinner').hide();" type="button"/>
                 </div>
             </p:dialog>
-            <p:dialog widgetVar="dlgOrden" id="dlgOrden" modal="true" closeOnEscape="true" header="Orden de compra" closable="true" width="450px" position="top">
+            <p:dialog widgetVar="dlgOrden" id="dlgOrden" modal="true" closeOnEscape="true" header="Orden de compra" closable="true" width="650px" position="top">
                 <h:panelGroup id="pgDlgOrden">
                     <div class="row">
                         <div class="col s12" style="text-align: right">
@@ -312,6 +309,9 @@
                                 <p:column headerText="Repuesto">
                                     <h:outputText value="#{r1.repuesto}"/>
                                 </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{r1.cantidad}"/>
+                                </p:column>
                                 <p:column headerText="Precio">
                                     <h:outputText value="#{r1.precio}"/>
                                 </p:column>
@@ -322,11 +322,27 @@
                                     <h:outputText value="#{r1.tiempo}"/>
                                 </p:column>
                                 <p:summaryRow>
-                                    <p:column colspan="3" style="text-align:right">
-                                        <h:outputText value="Total:" />
+                                    <p:column style="text-align:right">
+                                        <h:outputText value="%Autolink:" /><br/>
+                                        <h:outputText value="#{asegSolController.porcentajeProveedor(asegSolController.voOrdenCompra.idProvWinner, asegSolController.voOrdenCompra.repAplicaList)}">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputText>                                        
                                     </p:column>
-                                    <p:column>
-                                        <h:outputText value="#{asegSolController.totalOrden(asegSolController.voOrdenCompra.repAplicaList)}">
+                                    <p:column style="text-align:right">
+                                        <h:outputText value="IVA (13%):" /><br/>
+                                        <h:outputText value="#{asegSolController.iva(asegSolController.voOrdenCompra.repAplicaList)}">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column style="text-align:right">
+                                        <h:outputText value="Subtotal:" /><br/>
+                                        <h:outputText value="#{asegSolController.subTotal(asegSolController.voOrdenCompra.repAplicaList)}">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column style="text-align:right" colspan="2">
+                                        <h:outputText value="Total:" /><br/>
+                                        <h:outputText value="#{asegSolController.totalOrden(asegSolController.voOrdenCompra.idProvWinner, asegSolController.voOrdenCompra.repAplicaList)}">
                                             <f:convertNumber type="currency" currencySymbol="$" />
                                         </h:outputText>
                                     </p:column>
