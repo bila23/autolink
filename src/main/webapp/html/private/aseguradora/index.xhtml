@@ -13,7 +13,7 @@
                         <p:tab title="INGRESADAS" id="ing">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dting" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}" style="text-align:center">
-                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
                                 <p:column headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
@@ -46,10 +46,10 @@
                         <p:tab title="COTIZACION ABIERTA" id="coa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcoa" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Inicio" sortBy="#{r1.fechainicio}">
-                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm:ss')}
+                                    #{of:formatDate(r1.fechainicio, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
                                 <p:column headerText="Fin" sortBy="#{r1.fechafin}">
-                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm:ss')}
+                                    #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
                                 <p:column headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
@@ -76,7 +76,7 @@
                         <p:tab title="PENDIENTE POR APROBAR" id="ppa">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtppa" var="r1" value="#{asegSolController.solList}" rows="6" paginator="true">
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
-                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                                    #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
                                 <p:column headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />

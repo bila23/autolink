@@ -12,6 +12,7 @@ package com.terzus.autolink.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author CEL
@@ -46,6 +49,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Proveedor.findByUser", query = "SELECT p FROM Proveedor p WHERE UPPER(p.idusuario.user) = :idusuario")
 })
 public class Proveedor implements Serializable {
+
+    @Column(name = "porcentaje")
+    private float porcentaje;
+    @OneToMany(mappedBy = "proveedor")
+    private List<SolicitudDespachada> solicitudDespachada;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -85,8 +93,6 @@ public class Proveedor implements Serializable {
     @JoinColumn(name = "idusuario", referencedColumnName = "id")
     @ManyToOne
     private Usuario idusuario;
-    @Column(name = "porcentaje")
-    private float porcentaje;
 
     public Proveedor() {
     }
@@ -191,13 +197,6 @@ public class Proveedor implements Serializable {
         this.idusuario = idusuario;
     }
 
-    public float getPorcentaje() {
-        return porcentaje;
-    }
-
-    public void setPorcentaje(float porcentaje) {
-        this.porcentaje = porcentaje;
-    }
 
     @Override
     public int hashCode() {
@@ -222,6 +221,23 @@ public class Proveedor implements Serializable {
     @Override
     public String toString() {
         return "com.terzus.autolink.model.Proveedor[ id=" + id + " ]";
+    }
+
+    public float getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(float porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    @XmlTransient
+    public List<SolicitudDespachada> getSolicitudDespachada() {
+        return solicitudDespachada;
+    }
+
+    public void setSolicitudDespachada(List<SolicitudDespachada> solicitudDespachada) {
+        this.solicitudDespachada = solicitudDespachada;
     }
 
 }

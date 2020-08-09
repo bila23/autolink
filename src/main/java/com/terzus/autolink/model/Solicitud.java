@@ -56,6 +56,11 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Solicitud implements Serializable {
 
+    @Column(name = "horaFinal")
+    private int horaFinal;
+    @OneToMany(mappedBy = "solicitud")
+    private List<SolicitudDespachada> solicitudDespachada;
+
     private static final long serialVersionUID = 1L;
     @Id
     @TableGenerator(name = "solCounter",
@@ -133,8 +138,6 @@ public class Solicitud implements Serializable {
     @Column(name = "feccrea")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
-    @Column(name = "horaFinal")
-    private int horaFinal;
 
     public Solicitud() {
     }
@@ -151,13 +154,6 @@ public class Solicitud implements Serializable {
         this.id = id;
     }
 
-    public int getHoraFinal() {
-        return horaFinal;
-    }
-
-    public void setHoraFinal(int horaFinal) {
-        this.horaFinal = horaFinal;
-    }
 
     public Integer getIdtaller() {
         return idtaller;
@@ -367,6 +363,23 @@ public class Solicitud implements Serializable {
     @Override
     public String toString() {
         return "com.terzus.autolink.model.Solicitud[ id=" + id + " ]";
+    }
+
+    public int getHoraFinal() {
+        return horaFinal;
+    }
+
+    public void setHoraFinal(int horaFinal) {
+        this.horaFinal = horaFinal;
+    }
+
+    @XmlTransient
+    public List<SolicitudDespachada> getSolicitudDespachada() {
+        return solicitudDespachada;
+    }
+
+    public void setSolicitudDespachada(List<SolicitudDespachada> solicitudDespachada) {
+        this.solicitudDespachada = solicitudDespachada;
     }
 
 }

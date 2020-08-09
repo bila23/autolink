@@ -19,6 +19,7 @@ import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.service.FotoSolService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
+import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.TallerService;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
@@ -52,11 +53,13 @@ import org.primefaces.model.UploadedFile;
 public class TallerSolController implements Serializable{
 
     @Inject private SolicitudService solService;
+    @Inject private SolicitudDespService solDespService;
     @Inject private FotoSolService fotoSolService;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private TallerService tallerService;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
+    @Getter @Setter private boolean flagEsc;
     @Getter @Setter private List<Aseguradora> asegList;
     @Getter @Setter private List<Marca> marcaList;
     @Getter @Setter private List<Modelo> modeloList;
@@ -255,4 +258,14 @@ public class TallerSolController implements Serializable{
         }
     }
 
+    public void verifySatCliente(int idSol){
+        try{
+            flagEsc = solDespService.existBySolWithStateN(idSol);
+            if(!flagEsc)
+                this.codeChange = idSol;
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.error("Ha ocurrido un error inesperado al tratar de verificar la solicitud");
+        }
+    }
 }

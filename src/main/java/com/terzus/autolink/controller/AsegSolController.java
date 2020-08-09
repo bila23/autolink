@@ -226,9 +226,9 @@ public class AsegSolController implements Serializable{
     public void defineWinner(){
         try{
             if(idProv != -17)
-                opService.updateGanador(idSol, idProv);
+                opService.updateGanador(idSol, idProv, FacesHelper.getUserLogin());
             else
-                opService.updateGanadorCotOptima(idSol);
+                opService.updateGanadorCotOptima(idSol, FacesHelper.getUserLogin());
             solService.updateEstado(idSol, "GOC");
             solList = solService.findPendAprobarByAseg(idAseguradora);
             FacesHelper.successMessage(Constants.EXITO, "Se ha definido el ganador correctamente");

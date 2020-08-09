@@ -38,7 +38,7 @@
                                     <p:rowToggler />
                                 </p:column>
                                 <p:column headerText="Horas restantes" sortBy="#{r1.fechafin}" style="text-align:center">
-                                    #{r1.pendingHours}<br/> <span class="hf">Hora fin: #{of:formatDate(r1.fechafin, 'HH:mm:ss')}</span>
+                                    #{r1.pendingHours}<br/> <span class="hf">Hora fin: #{of:formatDate(r1.fechafin, 'HH:mm')}</span>
                                 </p:column>
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -256,7 +256,10 @@
                     </div>
                     <div class="row">
                         <div class="col s12 input-field">
-                            <p:commandButton value="Despachada por proveedor" onsuccess="PF('dlgOrden').hide()" class="waves-effect waves-light btn" actionListener="#{provSolController.updateDespProv(provSolController.voOrdenCompra.id)}" update="mf:msg mf:tab:dtgoc"/>
+                            <p:commandButton rendered="#{provSolController.despFlag}" value="Despachada por proveedor" onsuccess="PF('dlgOrden').hide()" class="waves-effect waves-light btn" actionListener="#{provSolController.updateDespProv(provSolController.voOrdenCompra.id)}" update="mf:msg mf:tab:dtgoc"/>
+                            <h:panelGroup rendered="#{!provSolController.despFlag}">
+                                Hace falta que los otros proveedores que ganaron la oferta cambien de estado a la solicitud para que se cambie de estado "Despachada por proveedor"
+                            </h:panelGroup>
                         </div>
                     </div>
                 </h:panelGroup>

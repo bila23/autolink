@@ -206,7 +206,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         
         //HORA PENDIENTES
         if(vo.getFechafin() != null){
-            long diffInMillies = new Date().getTime() - vo.getFechafin().getTime();
+            long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();
             long diffHours = diffInMillies / (60*60*1000);
             long diffMinutes = diffInMillies / (60*1000) % 60;
             vo.setPendingHours(diffHours + " : " + diffMinutes);

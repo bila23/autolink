@@ -13,9 +13,10 @@ package com.terzus.autolink.controller;
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Ofertaproveedor;
+import com.terzus.autolink.model.SolicitudDespachada;
 import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.ProveedorService;
-import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.vo.OfertaVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -45,9 +46,9 @@ import org.primefaces.event.TabChangeEvent;
 @Slf4j
 public class ProvSolController implements Serializable{
     
-    @Inject private SolicitudService solService;
     @Inject private ProveedorService provService;
     @Inject private OfertaProvService opService;
+    @Inject private SolicitudDespService solDespService;
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
@@ -57,6 +58,7 @@ public class ProvSolController implements Serializable{
     @Getter @Setter private int codPrv;
     @Getter @Setter private int totalSolCOA;
     @Getter @Setter private OfertaVO vo;
+    @Getter @Setter private boolean despFlag;
     
     @PostConstruct
     public void init(){
@@ -72,7 +74,7 @@ public class ProvSolController implements Serializable{
     
     public void findCotAbierta(){
         try{
-            solList = solService.findCotAbierta(this.codPrv);
+            solList = provService.findCotAbierta(this.codPrv);
             if(solList == null || solList.isEmpty()) 
                 totalSolCOA = 0;
             else
@@ -85,7 +87,15 @@ public class ProvSolController implements Serializable{
     
     public void generateOrdenCompraByProv(int idSol){
         try{
-            this.voOrdenCompra = solService.genOrdCompraByProv(idSol, codPrv);
+            this.voOrdenCompra = provService.genOrdCompraByProv(idSol, codPrv);
+            //VERIFICO SI YA DESPACHO LA ORDEN
+            SolicitudDespachada solDespModel = solDespService.findBySolAndProv(idSol, codPrv);
+            if(solDespModel == null) 
+                despFlag = false;
+            else if(solDespModel.getEstado().equals("A"))
+                despFlag = false;
+            else if(solDespModel.getEstado().equals("N"))
+                despFlag = true;
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de generar la orden de compra");
@@ -100,9 +110,9 @@ public class ProvSolController implements Serializable{
                 if(id.equals("coa"))
                     findCotAbierta();
                 else if(id.equals("goc"))
-                    solList = solService.findGenOrdCompraByProveedor(this.codPrv);
+                    solList = provService.findGenOrdCompraByProveedor(this.codPrv);
                 else if(id.equals("dpp"))
-                    solList = solService.findDespProvByProveedorWinner(this.codPrv);
+                    solList = provService.findDespProvByProveedorWinner(this.codPrv);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
@@ -175,8 +185,8 @@ public class ProvSolController implements Serializable{
 
     public void updateDespProv(int idSol){
         try{
-            solService.updateEstado(idSol, "DEP");
-            solList = solService.findGenOrdCompra(this.codPrv);
+            provService.updateSolDEP(idSol, this.codPrv);
+            solList = provService.findGenOrdCompraByProveedor(this.codPrv);
             FacesHelper.successMessage(Constants.EXITO, "Se ha cambiado el estado de la solicitud correctamente");
         }catch(Exception e){
             log.error(e.getMessage(), e);

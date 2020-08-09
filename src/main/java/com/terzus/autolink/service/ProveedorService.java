@@ -16,6 +16,7 @@ import com.terzus.autolink.dao.ProveedorDao;
 import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Usuario;
 import com.terzus.autolink.vo.ProveedorVO;
+import com.terzus.autolink.vo.SolicitudVO;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -35,8 +36,10 @@ import org.apache.commons.beanutils.PropertyUtils;
 @Stateless
 public class ProveedorService extends Service<Proveedor, Integer>{
     
-    @Inject ProveedorDao dao;
-    @Inject UsuarioService userService;
+    @Inject private ProveedorDao dao;
+    @Inject private UsuarioService userService;
+    @Inject private SolicitudDespService solDespService;
+    @Inject private SolicitudService solService;
 
     @Override
     public Dao<Proveedor, Integer> getDao() {
@@ -85,6 +88,33 @@ public class ProveedorService extends Service<Proveedor, Integer>{
         PropertyUtils.copyProperties(model, vo);
         model.setIdusuario(userModel);
         dao.update(model);
+    }
+    
+    public void updateSolDEP(int idSol, int idProv) throws Exception{
+        solDespService.updateEstado(idSol, idProv, "A");
+        boolean flag = solDespService.existBySolWithStateN(idSol);
+        if(!flag)
+            solService.updateEstado(idSol, "DEP");        
+    }
+    
+    public List<SolicitudVO> findGenOrdCompra(int idProv) throws Exception{
+        return solService.findGenOrdCompra(idProv);
+    }
+    
+    public SolicitudVO genOrdCompraByProv(int idSol, int codPrv) throws Exception{
+        return solService.genOrdCompraByProv(idSol, codPrv);
+    }
+    
+    public List<SolicitudVO> findCotAbierta(int codPrv) throws Exception{
+        return solService.findCotAbierta(codPrv);
+    }
+    
+    public List<SolicitudVO> findGenOrdCompraByProveedor(int codPrv) throws Exception{
+        return solService.findGenOrdCompraByProveedor(codPrv);
+    }
+    
+    public List<SolicitudVO> findDespProvByProveedorWinner(int codPrv) throws Exception{
+        return solService.findDespProvByProveedorWinner(codPrv);
     }
 
 }

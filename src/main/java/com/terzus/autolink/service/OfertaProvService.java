@@ -44,6 +44,7 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
     @Inject private RepuestoDao repDao;
     @Inject private ProveedorDao provDao;
     @Inject private RepuestoSolicitudService repSolService;
+    @Inject private SolicitudDespService solDespService;
 
     @Override
     public Dao<Ofertaproveedor, Integer> getDao() {
@@ -94,6 +95,7 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         vo.setIdProveedor(-17);
         
         double total = 0.0;
+        int totalRepuestos = 0;
         
         List<OfertaProveedorVO> ofertaList = new ArrayList();
         OfertaProveedorVO opv = null;
@@ -105,11 +107,13 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
                     opv = modelToVO(ofertaLess);
                     total += opv.getPrecio();
                     ofertaList.add(opv);
+                    totalRepuestos += opv.getCantidad();
                 }
             }
         }
         
         vo.setList(ofertaList);
+        vo.setTotalRepuestosAplica(Long.valueOf(totalRepuestos));
         vo.setPrecioTotal(total);
         vo.setNumero(-17);
         vo.setIdSol(idSol);
@@ -178,18 +182,21 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         return lst;
     }
     
-    public void updateGanadorCotOptima(int idSol) throws Exception{
+    public void updateGanadorCotOptima(int idSol, String userCrea) throws Exception{
         if(idSol == 0) return;
         //RECUPERO LA OFERTA OPTIMA
         OfertaPrecioVO optima = this.findOfertaOptima(idSol);
         //RECUPERO LOS DIFERENTES PROVEEDORES Y LOS REPUESTOS QUE ESTOS GANAN
-        for(OfertaProveedorVO vo : optima.getList())
+        for(OfertaProveedorVO vo : optima.getList()){
             dao.updateGanadorBySolAndProvAndRep(idSol, vo.getIdproveedor(), vo.getIdrepuesto());
+            solDespService.save(idSol, vo.getIdproveedor(), userCrea);
+        }
     }
     
-    public void updateGanador(int idSol, int idProv) throws Exception{
+    public void updateGanador(int idSol, int idProv, String usrCrea) throws Exception{
         if(idSol == 0 || idProv == 0) return;
         dao.updateGanador(idSol, idProv);
+        solDespService.save(idSol, idProv, usrCrea);
     }
     
     public Proveedor findWinnerBySolicitud(int idSol) throws Exception{

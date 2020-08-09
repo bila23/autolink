@@ -34,7 +34,7 @@ public class SolicitudPPASchedule {
     
     @Inject private SolicitudService solService;
 
-    @Schedule(minute="*/60", hour="*", persistent = false, info = "Cada Hora")
+    @Schedule(minute="0", hour="*/1", persistent = false, info = "Cada Hora")
     //@Schedule(minute="*/1", hour="*", persistent = false, info = "Cada Minuto")
     public void changeToPPA(){
         try{
