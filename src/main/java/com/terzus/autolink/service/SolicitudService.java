@@ -58,6 +58,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private RepuestoDao repDao;
     @Inject private OfertaProvService opService;
     @Inject private RepuestoSolicitudService rsService;
+    @Inject private OfertaSolicitudVistaService ofvService;
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
@@ -171,8 +172,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return modeloDao.findActiveByMarca(idMarca);
     }
     
-    private SolicitudVO modelToVO(Solicitud model, int codprv) throws Exception{
-        if(model == null) return null;
+    private SolicitudVO prepareModel(Solicitud model) throws Exception{
         SolicitudVO vo = new SolicitudVO();
         PropertyUtils.copyProperties(vo, model);
         if(model.getIdaseguradora() != null && model.getIdaseguradora() > 0){
@@ -194,8 +194,21 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
             vo.setModelo(modelo.getNombremodelo());
         }
+        return vo;
+    }
+    
+    private SolicitudVO modelToVO(Solicitud model, int codprv) throws Exception{
+        if(model == null) return null;
+        SolicitudVO vo = prepareModel(model);
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
+        
+        //VERIFICO SI LA SOLICITUD ES DE REPUESTOS PARCIAL O NO
+        boolean isParcial = rsService.isSolRepParcial(vo.getId());
+        if(isParcial)
+            vo.setParcial("Parcial (Repuestos)");
+        else
+            vo.setParcial("Todos los repuestos");
         
         //VERIFICO SI LA SOLICITUD TIENE UN GANADOR
         Proveedor prov = opService.findWinnerBySolicitud(vo.getId());
@@ -259,9 +272,51 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return findByEstado("COA");
     }
     
+    /* METODOS SOLO PARA PROVEEDOR QUE BUSCA SUS OFERTAS*/
     public List<SolicitudVO> findCotAbierta(int codprv) throws Exception{
-        return findByEstado("COA", codprv);
+        return findByEstadoForProveedor("COA", codprv);
     }
+    
+    public List<SolicitudVO> findByEstadoForProveedor(String estado, int codprv) throws Exception{
+        if(estado == null || estado.equals("")) return null;
+        List<Solicitud> list = dao.findByEstado(estado);
+        if(list == null || list.isEmpty()) return null;
+        return listModelToVOForProveedor(list, codprv);
+    }
+    
+    private List<SolicitudVO> listModelToVOForProveedor(List<Solicitud> list, int codprv) throws Exception{
+        if(list == null || list.isEmpty()) return null;
+        List<SolicitudVO> lst = new ArrayList();
+        int i = 0, size = list.size();
+        for(i = 0; i<size; i++){
+            lst.add(modelToVOForProveedor(list.get(i), codprv));
+        }
+        return lst;
+    }
+    
+    public List<RepuestoSolicitudVO> findRepAplicaBySol(int idSolicitud, int idProveedor) throws Exception{
+        return rsService.findAplicaBySolicitud(idSolicitud, idProveedor);
+    }
+    
+    private SolicitudVO modelToVOForProveedor(Solicitud model, int codprv) throws Exception{
+        if(model == null) return null;
+        SolicitudVO vo = prepareModel(model);
+        List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
+        vo.setRepAplicaList(repList);
+        
+        //VERIFICO SI LA OFERTA YA FUE ABIERTA
+        vo.setViewed(ofvService.isViewed(vo.getId(), codprv));        
+                
+        //HORA PENDIENTES
+        if(vo.getFechafin() != null){
+            long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();
+            long diffHours = diffInMillies / (60*60*1000);
+            long diffMinutes = diffInMillies / (60*1000) % 60;
+            vo.setPendingHours(diffHours + " : " + diffMinutes);
+        }
+        return vo;
+    }
+    /* FIN METODOS SOLO PARA PROVEEDOR QUE BUSCA SUS OFERTAS*/
     
     public List<SolicitudVO> findCerradaDesierta() throws Exception{
         return findByEstado("CPD");

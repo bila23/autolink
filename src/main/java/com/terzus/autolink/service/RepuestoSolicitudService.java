@@ -178,6 +178,13 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         return list;
     }
     
+    public boolean isSolRepParcial(int idSol) throws Exception{
+        if(idSol == 0) return false;
+        List<Respuestoxsolicitud> list = dao.findBySolicitudAndAplica(idSol, "N");
+        if(list == null || list.isEmpty()) return false;
+        return true;
+    }
+    
     public List<RepuestoSolicitudVO> findAplicaBySolicitud(int id, int codprv) throws Exception{
         if(id == 0) return null;
         return modelListToVOList(dao.findAplicaBySolicitud(id), codprv);        

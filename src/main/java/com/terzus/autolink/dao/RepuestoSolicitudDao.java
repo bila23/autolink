@@ -45,6 +45,13 @@ public class RepuestoSolicitudDao extends Dao<Respuestoxsolicitud, Integer>{
         return em;
     }
     
+    public List<Respuestoxsolicitud> findBySolicitudAndAplica(int idSol, String aplica) throws Exception{
+        Map<String, Object> param = new HashMap();
+        param.put("idsolicitud", idSol);
+        param.put("aplica", aplica);
+        return findWithNamedQuery("Respuestoxsolicitud.findBySolicitudAndAplica", param);        
+    }
+    
     public List<Respuestoxsolicitud> findAplicaBySolicitud(int id) throws Exception{
         Map<String, Object> param = new HashMap();
         param.put("idsolicitud", id);

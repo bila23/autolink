@@ -210,7 +210,9 @@ public class AsegSolController implements Serializable{
             if(optima != null)
                 opList.add(optima);
             //GUARDO EL RESTO DE COTIZACIONES
-            opList.addAll(opService.findOfertaTotalBySol(idSol));
+            List<OfertaPrecioVO> restOfertas = opService.findOfertaTotalBySol(idSol);
+            if(restOfertas != null && !restOfertas.isEmpty())
+                opList.addAll(restOfertas);
             //CREO EL LABEL DE TOTAL DE REPUESTOS POR SOLICITUD
             Long totalRepuestos = repSolService.findCantidadTotalRepuestosBySol(idSol);
             if(totalRepuestos > 0)

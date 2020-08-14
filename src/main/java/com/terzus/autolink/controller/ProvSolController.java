@@ -12,15 +12,18 @@ package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
 import com.terzus.autolink.commons.Constants;
+import com.terzus.autolink.model.OfertaSolicitudVista;
 import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.SolicitudDespachada;
 import com.terzus.autolink.service.OfertaProvService;
+import com.terzus.autolink.service.OfertaSolicitudVistaService;
 import com.terzus.autolink.service.ProveedorService;
 import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.vo.OfertaVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -49,6 +52,7 @@ public class ProvSolController implements Serializable{
     @Inject private ProveedorService provService;
     @Inject private OfertaProvService opService;
     @Inject private SolicitudDespService solDespService;
+    @Inject private OfertaSolicitudVistaService osvService;
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
@@ -69,6 +73,25 @@ public class ProvSolController implements Serializable{
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de recuperar las solicitudes");
+        }
+    }
+    
+    public String goToOferta(int idSolicitud){
+        try{
+            boolean flag = osvService.isViewed(idSolicitud, codPrv);
+            if(!flag){
+                OfertaSolicitudVista model = new OfertaSolicitudVista();
+                model.setEstado("S");
+                model.setFeccrea(new Date());
+                model.setIdProveedor(codPrv);
+                model.setIdSolicitud(idSolicitud);
+                model.setUserCrea(FacesHelper.getUserLogin());
+                osvService.save(model);
+            }
+            return "/html/private/proveedor/definirOferta.xhtml?faces-redirect=true&idSolicitud=" + idSolicitud + "&idProveedor=" + this.codPrv;
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            return "";
         }
     }
     
