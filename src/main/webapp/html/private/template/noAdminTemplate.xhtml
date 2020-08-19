@@ -4,7 +4,8 @@
       xmlns:o="http://omnifaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -102,6 +103,9 @@
                 </div>
             </div>
         </div>
+        <h:form>
+            <p:poll interval="#{session.maxInactiveInterval - 15}" listener="#{heartbeat.keepUserSessionAlive()}"/>
+        </h:form>
         <ui:insert name="content"></ui:insert>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>

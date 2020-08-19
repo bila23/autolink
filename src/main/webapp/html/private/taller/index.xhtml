@@ -343,6 +343,10 @@
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
                     </p:column>
+                    <p:column headerText="Aprobado por aseguradora" sortBy="#{r1.aplica}" class="center-align">
+                        <h:outputText value="Si" rendered="#{r1.aplica == 'S'}"/>
+                        <h:outputText value="No" rendered="#{r1.aplica == 'N'}"/>
+                    </p:column>
                 </p:dataTable>
             </p:dialog>
         </h:form>
