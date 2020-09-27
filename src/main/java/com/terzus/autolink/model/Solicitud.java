@@ -19,7 +19,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,6 +29,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -56,8 +59,12 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Solicitud implements Serializable {
 
+
     @Column(name = "horaFinal")
     private int horaFinal;
+    @JoinColumn(name = "idTipoVehiculo", referencedColumnName = "id")
+    @ManyToOne
+    private TipoVehiculo idTipoVehiculo;
     @OneToMany(mappedBy = "solicitud")
     private List<SolicitudDespachada> solicitudDespachada;
 
@@ -365,13 +372,6 @@ public class Solicitud implements Serializable {
         return "com.terzus.autolink.model.Solicitud[ id=" + id + " ]";
     }
 
-    public int getHoraFinal() {
-        return horaFinal;
-    }
-
-    public void setHoraFinal(int horaFinal) {
-        this.horaFinal = horaFinal;
-    }
 
     @XmlTransient
     public List<SolicitudDespachada> getSolicitudDespachada() {
@@ -380,6 +380,22 @@ public class Solicitud implements Serializable {
 
     public void setSolicitudDespachada(List<SolicitudDespachada> solicitudDespachada) {
         this.solicitudDespachada = solicitudDespachada;
+    }
+
+    public int getHoraFinal() {
+        return horaFinal;
+    }
+
+    public void setHoraFinal(int horaFinal) {
+        this.horaFinal = horaFinal;
+    }
+
+    public TipoVehiculo getIdTipoVehiculo() {
+        return idTipoVehiculo;
+    }
+
+    public void setIdTipoVehiculo(TipoVehiculo idTipoVehiculo) {
+        this.idTipoVehiculo = idTipoVehiculo;
     }
 
 }

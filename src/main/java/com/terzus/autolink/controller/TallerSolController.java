@@ -17,11 +17,13 @@ import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
+import com.terzus.autolink.model.TipoVehiculo;
 import com.terzus.autolink.service.FotoSolService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.TallerService;
+import com.terzus.autolink.service.TipoVehiculoService;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -57,8 +59,11 @@ public class TallerSolController implements Serializable{
     @Inject private FotoSolService fotoSolService;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private TallerService tallerService;
+    @Inject private TipoVehiculoService tipoVehService;
+    @Getter @Setter private List<TipoVehiculo> tipoVehList;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
+    @Getter @Setter private int idTipoVehiculo;
     @Getter @Setter private boolean flagEsc;
     @Getter @Setter private List<Aseguradora> asegList;
     @Getter @Setter private List<Marca> marcaList;
@@ -69,6 +74,7 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private int repuesto;
     @Getter @Setter private int idTaller;
     @Getter @Setter private String user;
+    @Getter @Setter private String comentario;
     @Getter @Setter private Integer cantidad;
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
@@ -103,6 +109,7 @@ public class TallerSolController implements Serializable{
             solList = solService.findIngresadas();
             repList = solService.findRepuestoActive();
             idTaller = tallerService.findCodeByUser(user);
+            tipoVehList = tipoVehService.findAllWithNamedQuery();
             if(idTaller == 0)
                 showMessageIdTallerZero();
         }catch(Exception e){
@@ -174,37 +181,49 @@ public class TallerSolController implements Serializable{
                 showMessageIdTallerZero();
                 return;
             }
-            if(model.getNombreasegurado() == null || model.getNombreasegurado().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el nombre del asegurado");
-            else if(model.getTipovehiculo()== null || model.getTipovehiculo().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el tipo de vehiculo");
-            else if(model.getIdmarca() == null || model.getIdmarca() == 0)
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la marca del vehiculo");
-            else if(model.getIdmodelo() == null || model.getIdmodelo() == 0)
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
-            else if(model.getAniocarro()== null || model.getAniocarro() == 0)
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
-            else if(model.getPlaca() == null || model.getPlaca().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
-            else if(model.getChasis()== null || model.getChasis().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el chasis del vehiculo");
-            else if(model.getMotor()== null || model.getMotor().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el motor del vehiculo");
-            else if(model.getPoliza()== null || model.getPoliza().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la poliza del vehiculo");
-            else if(model.getChasis()== null || model.getChasis().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el chasis del vehiculo");
-            else if(model.getSiniestro()== null || model.getSiniestro().equals(""))
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el siniestro");
-            else{
-                idSol = solService.save(model, user, idTaller);
+            if(validateForm()){
+                TipoVehiculo tipoVehiculo = tipoVehService.findByKey(idTipoVehiculo);
+                model.setIdTipoVehiculo(tipoVehiculo);
+                Solicitud newSolicitud = solService.save(model, user, idTaller);
+                idSol = newSolicitud.getId();
                 showSaveBtn = false;
-                FacesHelper.successMessage(Constants.EXITO, "Se ha guardado la solicitud correctamente");
+                FacesHelper.successMessage(Constants.EXITO, "Se ha guardado la solicitud correctamente, el código es ".concat(model.getCodigosolicitud()));
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al ingresar la solicitud");
         }
+    }
+    
+    private boolean validateForm(){
+        boolean flag = false;
+        if(model.getNombreasegurado() == null || model.getNombreasegurado().equals(""))
+            FacesHelper.warningMessage("Debe ingresar el nombre del asegurado");
+        else if(idTipoVehiculo == 0)
+            FacesHelper.warningMessage("Debe ingresar el tipo de vehiculo");
+        else if(model.getIdmarca() == null || model.getIdmarca() == 0)
+            FacesHelper.warningMessage("Debe ingresar la marca del vehiculo");
+        else if(model.getIdmodelo() == null || model.getIdmodelo() == 0)
+            FacesHelper.warningMessage("Debe ingresar el modelo del vehiculo");
+        else if(model.getAniocarro()== null || model.getAniocarro() == 0)
+            FacesHelper.warningMessage("Debe ingresar el anio del vehiculo");
+        else if(model.getPlaca() == null || model.getPlaca().equals(""))
+            FacesHelper.warningMessage("Debe ingresar la placa del vehiculo");
+        else if(model.getChasis()== null || model.getChasis().equals(""))
+            FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
+        else if(model.getMotor()== null || model.getMotor().equals(""))
+            FacesHelper.warningMessage("Debe ingresar el motor del vehiculo");
+        else if(model.getPoliza()== null || model.getPoliza().equals(""))
+            FacesHelper.warningMessage("Debe ingresar la poliza del vehiculo");
+        else if(model.getChasis()== null || model.getChasis().equals(""))
+            FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
+        else if(model.getSiniestro()== null || model.getSiniestro().equals(""))
+            FacesHelper.warningMessage("Debe ingresar el siniestro");
+        else if(model.getChasis().length() != 17)
+            FacesHelper.warningMessage("El chasis debe tener 17 caracteres");
+        else
+            flag = true;
+        return flag;
     }
     
     public void saveRepSol(){
@@ -234,6 +253,21 @@ public class TallerSolController implements Serializable{
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al eliminar un repuesto");
+        }
+    }
+    
+    public void saveComentario(){
+        try{
+            if(model != null){
+                if(model.getId() != null && model.getId() > 0){
+                    model.setComentariostaller(comentario);
+                    solService.update(model);
+                    FacesHelper.success("Se ha guardado el comentario correctamente");
+                }
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage("Ha ocurrido un error al guardar el comentario");
         }
     }
     

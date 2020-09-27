@@ -149,7 +149,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return repDao.findActive();
     }
     
-    public int save(Solicitud model, String user, int idTaller) throws Exception{
+    public Solicitud save(Solicitud model, String user, int idTaller) throws Exception{
         model.setEstado("ING");
         model.setFechacreacion(new Date());
         model.setIdtaller(idTaller);
@@ -157,7 +157,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         dao.save(model);
         model.setCodigosolicitud("SOL-" + GeneralFunction.getYear() + "-" + model.getId());
         dao.update(model);
-        return model.getId();
+        return model;
     }
     
     public List<Aseguradora> findAsegActive() throws Exception{
@@ -202,6 +202,12 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         SolicitudVO vo = prepareModel(model);
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
+        
+        //TIPO VEHICULO
+        if(model.getIdTipoVehiculo() != null){
+            vo.setIdTipoVeh(model.getIdTipoVehiculo().getId());
+            vo.setTipovehiculo(model.getIdTipoVehiculo().getNombre());
+        }
         
         //VERIFICO SI LA SOLICITUD ES DE REPUESTOS PARCIAL O NO
         boolean isParcial = rsService.isSolRepParcial(vo.getId());
