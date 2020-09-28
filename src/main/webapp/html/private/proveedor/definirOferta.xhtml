@@ -13,7 +13,7 @@
                     <h6>Ingrese las ofertas en los diferentes repuestos</h6>  
                 </div>
                 <div class="col s12 m12 l6" style="text-align: right">
-                    <p:commandButton value="Regresar" ajax="false" action="#{ofertaController.goBack()}"/>
+                    <p:commandButton value="Regresar y Participar" ajax="false" action="#{ofertaController.goBack()}"/>
                 </div>
             </div>
             <div class="row">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="row">
                         <div class="col s12 input-field">
-                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" actionListener="#{provSolController.saveOferta()}" update="mf:msg"/>
+                            <p:commandButton value="Guardar" class="waves-effect waves-light btn" actionListener="#{provSolController.saveOferta()}" update="mf:msg" onsuccess="PF('dlgOferta').hide()"/>
                         </div>
                     </div>
                 </h:panelGroup>

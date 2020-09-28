@@ -60,13 +60,24 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<OfertaPrecioVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
-    @Getter @Setter private int codSol;
+    @Getter @Setter private List<Integer> hourList;
+    @Getter private int codSol;
     @Getter @Setter private int idProv;
     @Getter @Setter private int idSol;
-    @Getter @Setter private Date horas;
+    @Getter @Setter private int horas;
     @Getter @Setter private int idAseguradora;
     @Getter @Setter private String com;
     @Getter @Setter private String totalRepuestosLabel;
+
+    public void setCodSol(int codSol) {
+        this.codSol = codSol;
+        try{
+            hourList = solService.prepareHourList();
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage("Ha ocurrido un error al definir la lista de horas disponibles");
+        }
+    }
     
     @PostConstruct
     public void init(){
@@ -143,7 +154,7 @@ public class AsegSolController implements Serializable{
     
     public void changeCotAbierta(){
         try{
-            if(horas == null)
+            if(horas == 0)
                 FacesHelper.warningMessage(Constants.WARNING, "Debe definir el tiempo de vigencia de la solicitud");
             else if(codSol > 0){
                 solService.updateHorasVigencia(codSol, horas);

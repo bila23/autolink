@@ -65,6 +65,16 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return dao;
     }
     
+    public List<Integer> prepareHourList(){
+        Calendar today = Calendar.getInstance();
+        int hours = today.get(Calendar.HOUR_OF_DAY);
+        List<Integer> list = new ArrayList();
+        for(int i = hours; i<24; i++){
+            list.add(i);
+        }
+        return list;
+    }
+    
     public void changeCoaToPea() throws Exception{
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
@@ -117,22 +127,22 @@ public class SolicitudService extends Service<Solicitud, Integer>{
      * Pone la hora de vigencia de la solicitud para que los proveedores
      * puedan ofertar
      * @param idSol codigo de la solicitud - int
-     * @param dateWithHour objeto de tipo Date con la hora de finalizacion
+     * @param hour objeto de tipo Date con la hora de finalizacion
      * @throws Exception 
      */
-    public void updateHorasVigencia(int idSol, Date dateWithHour) throws Exception{
+    public void updateHorasVigencia(int idSol, int hour) throws Exception{
         Solicitud model = dao.findByKey(idSol);
         if(model != null){
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(dateWithHour);
-            int hours  = calendar.get(Calendar.HOUR_OF_DAY);
+            calendar.setTime(new Date());
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
             
             Date ini = new Date();
-            Date end = defineEndDate(hours);
+            Date end = defineEndDate(hour);
             
             model.setFechainicio(ini);
             model.setFechafin(end);
-            model.setHoraFinal(hours);
+            model.setHoraFinal(hour);
             dao.update(model);
         }
     }
