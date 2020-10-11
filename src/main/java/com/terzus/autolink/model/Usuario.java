@@ -14,14 +14,17 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,6 +51,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByUser", query = "SELECT u FROM Usuario u WHERE UPPER(u.user) = :user")
 })
 public class Usuario implements Serializable {
+
+    @OneToOne(cascade = CascadeType.ALL ,mappedBy = "idusuario", fetch = FetchType.LAZY)
+    private Registro registro;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -193,5 +199,13 @@ public class Usuario implements Serializable {
         return "com.terzus.autolink.model.Usuario[ id=" + id + " ]";
     }
 
-    
+    public Registro getRegistro() {
+        return registro;
+    }
+
+    public void setRegistro(Registro registro) {
+        this.registro = registro;
+    }
+
+       
 }

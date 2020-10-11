@@ -1,0 +1,470 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/clienteTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="content">
+
+        <style>
+            .padding-left-right{
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .card.horizontal .card-image img {
+                padding: 10px 0px 10px 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 80px;
+            }
+            body .ui-selectonemenu input.ui-selectonemenu-label {
+                padding: 0;
+                height: 1.5em;
+            }
+            body .ui-selectonemenu{
+                border-radius: 4px !important;
+            }
+            .label-color-white{
+                color: rgba(255,255,255,0.8);
+                padding: 0px 10px;
+            }
+
+            .ui-datagrid tr{
+                border: none ;
+            }
+            .ui-datagrid td,ui-datagrid th{
+                text-align:  center ;
+            }
+
+            .ui-datagrid td a{
+                color: #39c1cd;
+                border: solid 1px #39c1cd;
+                padding: 5px;
+                border-radius: 5px;
+                text-decoration: none;              
+            }
+            .ui-datagrid td a:link:hover{
+                text-decoration: none;
+            }
+            body .ui-panel .ui-panel-titlebar {   
+                background-color: #004273;
+                color: #eaeaea;
+            }
+            body .ui-datagrid .ui-datagrid-header, body .ui-datagrid .ui-datagrid-footer {
+                background-color: transparent;
+                border: 1px solid transparent;
+                color: #005b9f;
+            }
+            body .ui-datagrid .ui-datagrid-content {
+                border: 1px solid #eaeaea;
+                background-color: #eaeaea;
+            }
+            body .ui-paginator {
+                background-color: #eaeaea;
+                border: 1px solid #eaeaea;
+            }
+            body{
+                background-color: #eaeaea; 
+            }
+
+            body .ui-panelgrid .ui-panelgrid-cell {
+                border: 1px solid rgb(255 255 255 / 0%);
+            }
+            body .ui-panelgrid .ui-panelgrid-cell.ui-widget-header {
+                border: none;
+                background-color: transparent;
+
+            }
+            body .ui-dialog .ui-dialog-titlebar {
+                background-color: #ffffff;
+                font-size: 1.7em;
+            }
+            body .ui-dialog .ui-dialog-content {
+                border:none
+            }
+
+            .value {
+                font-weight: bold;
+            }
+            body .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem:last-child{
+
+                float: right 
+            }
+
+            .ui-spinner input{
+                text-align: center;
+            }
+            .btn-empezar.ui-button.ui-state-hover,.btn-empezar.ui-button{
+                border: none
+            }
+
+            .blue-grey.darken-1 {
+                background-color: rgba(84, 110, 122, .01) !important;
+            }
+
+
+        </style>
+        <h:form id="form" style="max-width: 1500px"> 
+            <nav style="position: relative">
+                <div class="nav-wrapper">
+                    <div class="col s6 l6">
+                        <a href="#!" class="breadcrumb hover-underline-animation">Inicio</a>  
+                    </div>
+
+                </div>
+            </nav>
+
+            <p:tabMenu activeIndex="#{param.i}" id="tm">
+                <p:menuitem value="Sedan" outcome="index" icon="fa fa-car">                  
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Pickup" outcome="index" icon="fa fa-truck-pickup">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Monster Truck" outcome="index" icon="fa fa-truck-monster">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Truck" outcome="index" icon="fa fa-truck">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Bus" outcome="index" icon="fa fa-bus-alt">
+                    <f:param name="i" value="4" />
+                </p:menuitem>
+                <p:menuitem value="Van" outcome="index" icon="fa fa-shuttle-van">
+                    <f:param name="i" value="5" />
+                </p:menuitem>
+                <p:menuitem value="Trailer" outcome="index" icon="fa fa-trailer">
+                    <f:param name="i" value="6" />
+                </p:menuitem>
+                <p:menuitem value="Motorcycle" outcome="index" icon="fa fa-motorcycle">
+                    <f:param name="i" value="7" />
+                </p:menuitem>
+                <div>
+                    <p:menuitem value="" outcome="index" icon="fa fa-shopping-cart">
+                        <f:param name="i" value="9" />
+                    </p:menuitem>
+                </div>
+            </p:tabMenu>
+            <p:sticky target="tm" />
+
+            <p:growl globalOnly="true" id="msg" showDetail="true"/>
+            <div style="#{clienteSolController.tipo eq '0'?'background: url(/autolink/images/background/sedan.jpg);':clienteSolController.tipo eq '1'?' background: url(/autolink/images/background/pickup.jpg);':clienteSolController.tipo eq '4'?' background: url(/autolink/images/background/marcopolo.jpg);':clienteSolController.tipo eq '5'?' background: url(/autolink/images/background/van.jpg);': clienteSolController.tipo eq '7'?' background: url(/autolink/images/background/1.jpg);  background-color: rgba(7 ,40, 80 , .67); background-blend-mode: hard-light;':'background: #0138b1'} ;background-size: cover;background-position: center;padding: 20px;">
+                <div class=" padding-left-right">
+                    <h3 style="text-align: center; color: #fff">Seleccione su Vehículo</h3>
+                </div>
+                <div class=" padding-left-right">
+                    <h5 style="text-align: center; color: rgba(255,255,255,0.7)">Nosotros buscamos tus repuestos por ti</h5>
+                </div>
+
+
+                <div class="row ui-fluid" style="max-width: 950px">               
+                    <div class=" col s12 m3 l3" >   
+                        <p:outputLabel value="Marca" class="label-color-white"/>
+                        <p:selectOneMenu value="#{clienteSolController.model.idmarca}" class="validate" id="idmarca" style="border: none; background: #fff; padding: 10px;">
+                            <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
+                            <f:selectItems value="#{clienteSolController.marcaList}" var="m" itemLabel="#{m.nombremarca}" itemValue="#{m.id}"/>
+                            <p:ajax listener="#{clienteSolController.chargeModelos()}" update="modelo" process="@this" onsuccess="showSelect()"/>
+                        </p:selectOneMenu>
+
+                    </div>
+
+                    <div class="col s12 m3 l3" >
+                        <p:outputLabel value="Modelo" class="label-color-white"/>
+                        <p:selectOneMenu value="#{clienteSolController.model.idmodelo}" id="modelo" style="border: none; background: #fff; padding: 10px">
+                            <f:selectItem itemLabel="Seleccione un modelo" itemValue="0"/>
+                            <f:selectItems value="#{clienteSolController.modeloList}" var="mo" itemLabel="#{mo.nombremodelo}" itemValue="#{mo.id}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col s12 m2 l2" >
+                        <p:outputLabel value="Año" class="label-color-white"/>
+                        <p:selectOneMenu value="#{clienteSolController.model.aniocarro}" id="anio" editable="true" style="border: none; background: #fff; padding: 10px">
+                            <f:selectItem itemLabel="Seleccione el año" itemValue=""/>
+                            <f:selectItems value="#{clienteSolController.anios}" var="year" itemLabel="#{year}" itemValue="#{year}"/>
+                        </p:selectOneMenu>
+                    </div>
+                      <div class="col s12 m2 l2" >
+                        <p:outputLabel value="Version" class="label-color-white"/>
+                        <p:selectOneMenu value="#{clienteSolController.model.tipoversion}" id="version"  style="border: none; background: #fff; padding: 10px">
+                            <f:selectItem itemLabel="Seleccione Versión" itemValue=""/>   
+                            <f:selectItem itemLabel="Americana" itemValue="Americana"/>  
+                            <f:selectItem itemLabel="Agencia" itemValue="Agencia"/>  
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col s12 m2 l2" >
+                        <p:spacer height="20" width="5" />
+                        <p:commandButton value="Empezar" class="amber darken-4 btn-empezar" update="form:btnProcesar form:rep" actionListener="#{clienteSolController.empezar()}" style="height: 53px"/>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="containerss">
+                <div style="padding: 10px;
+                     float: right;
+                     background: #dbdbdb;
+                     border-radius: 4px;
+                     text-align: center;">
+                    <a href="#datos" class="hover-underline-animation" >Datos Solicitud <i class="fas fa-angle-double-down"></i></a>
+                </div>
+
+
+                <p:dataGrid var="trep" value="#{clienteSolController.listTipoRep}" columns="4" layout="grid"
+                            rows="12" paginator="true" id="rep" 
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                            rowsPerPageTemplate="6,12,16">
+
+                    <f:facet name="header">
+                        <h4> <i class="fas fa-oil-can" style="color: #39c1cd; font-size:1.4em">  </i> Tipos Repuestos en venta</h4>
+                        <div class="row">
+                            <div class="col s1 m1 l1" />
+                            <div class="col s8 m9 l9">
+                                <h:panelGroup class="input-field">
+                                    <p:inputText value="#{clienteSolController.textoBuscar}"  class="validate" id="categoria" a:autofocus="true" />
+                                    <p:outputLabel for="categoria" value="Tipo de repuestos a buscar" />
+                                </h:panelGroup>
+                            </div>
+                            <div class="col s2 m1 l1">
+                                <p:commandButton icon="fa fa-search" actionListener="#{clienteSolController.filtrarTiposRepuestos()}" update=":form:rep" class="waves-effect waves-light teal darken-4 btn-large" style="width: 100%" />
+                            </div>
+                            <div class="col s1 m1 l1" />
+                        </div>
+                    </f:facet>
+
+                    <p:panel   style="text-align:center; box-shadow: 0 24px 64px -2px rgba(0, 0, 0, 0.02), 0 6px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.08);">
+
+                        <p:panelGrid columns="1" style="width:100% ">
+                            <f:facet name="header">
+                                <div class="ui-g">
+                                    <div class="ui-g-6" style="color: rgba(96,125,139,1); font-weight: lighter"><i class="fab fa-empire"></i> ##{trep.id}</div>
+
+                                    <div class="ui-g-6"><span class="new badge green lighten-1" data-badge-caption="Repuestos">4</span></div>
+                                </div>
+                                <p:graphicImage  url="/images/store/#{trep.image}" style="max-width: 100px; margin: auto; display: block"/> 
+                            </f:facet>
+
+
+                            <h:outputText value="#{trep.nombre}" />
+
+                            <p:commandLink update=":form:carDetail :form:dialogRep" oncomplete="PF('carDialog').show()"  actionListener="#{clienteSolController.resetListRepuestos()}"  title="Ver Detalle" style="color: #39c1cd">
+                                <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/> Ver Detalle
+                                <f:setPropertyActionListener value="#{trep}" target="#{clienteSolController.tipoRep}" />
+                            </p:commandLink>
+                        </p:panelGrid>
+                    </p:panel>
+
+                </p:dataGrid>
+            </div>
+            <p:dialog id="dialogRep" header="#{clienteSolController.tipoRep.nombre}" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" position="center">
+                <p:outputPanel id="carDetail" style="text-align:center; padding: 20px">
+
+                    <p:graphicImage url="/images/store/#{clienteSolController.tipoRep.image}" style="max-width: 300px; object-fit: contain; object-position: center; max-height: 200px; position: absolute;  left: 50%; transform: translateX(-50%);top: 0px; opacity: .2;"/> 
+                    <p:panelGrid  columns="2" rendered="#{not empty clienteSolController.tipoRep}" columnClasses="label,value">
+
+
+                        <h:outputLabel value="Repuesto" class="label-color-gray"/>
+                        <p:selectOneMenu value="#{clienteSolController.repuestoSelected}" converter="omnifaces.SelectItemsConverter" id="repuesto" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="Seleccione el repuesto" itemValue=""/>
+                            <f:selectItems value="#{clienteSolController.repList}" var="repue" itemLabel="#{repue.nombrerepuesto}" itemValue="#{repue}"/>
+                            <p:ajax update="precio agregar" />
+                        </p:selectOneMenu>                         
+
+                        <h:outputText value="Precio" />
+                        <h:outputText id="precio" value="$#{clienteSolController.repuestoSelected.valor}" />
+
+                        <h:outputLabel value="Cantidad:" for="cantidad"/>
+                        <p:spinner value="#{clienteSolController.cantidad}" id="cantidad" />
+                    </p:panelGrid>
+
+
+                    <div class="row">
+
+                        <p:commandButton id="agregar" value="Agregar" disabled="#{empty clienteSolController.repuestoSelected}" class="waves-effect waves-light btn" actionListener="#{clienteSolController.saveRepSol()}" oncomplete="handleSubmit(args,'carDialog');" update="form:repTable form:msg" style="margin-top: 10px"/>
+
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
+            <div class="container">
+                <div class="row" id="datos">
+                    <div class="col s12">
+                        <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{clienteSolController.repVOList}" rows="5">
+                            <f:facet name="header">
+                                <h6> <i class="fas fa-check-square" style="color: #607D8B; font-size:1.4em">  </i> Lista de Repuestos Seleccionados</h6>
+                            </f:facet>
+                            <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
+                                <h:outputText value="#{rep.repuesto}" />
+                            </p:column>
+                            <p:column headerText="Cantidad" sortBy="#{rep.cantidad}" style="text-align:center; width: 12%">
+                                <h:outputText value="#{rep.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Eliminar" style="text-align:center;width: 10%">
+                                <p:commandLink actionListener="#{clienteSolController.deleteRepSol(rep.id)}" style="color: #f44336" update="form:msg repTable">
+                                    <i class="material-icons">delete</i>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12">
+                        <h6> <i class="far fa-images" style="color: #39c1cd; font-size:1.4em"> </i> Agregue las imagenes asociadas a la solicitud:</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l9 input-field">
+                        <p:fileUpload value="#{clienteSolController.imageFile}" mode="simple" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                    </div>
+                    <div class="col s12 m12 l3 input-field right-align">
+                        <p:commandButton disabled="#{clienteSolController.showSaveBtn}"  icon="fa fa-images" value="Guardar Image" class="waves-effect waves-light btn" ajax="false" action="#{clienteSolController.saveImage()}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p:dataTable emptyMessage="No hay imagenes agregadas" id="dtimg" var="img" value="#{clienteSolController.imageList}" rows="1" paginator="true">
+                            <p:column>
+                                <p:graphicImage value="#{img}" library="images"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding: 20px">
+                    <p:commandButton id="btnProcesar"  value="Procesar Solicitud" class="waves-effect waves-light btn-large  blue darken-1" update=":form:solDetail" oncomplete="PF('solDialog').show()" 
+                                     disabled="#{clienteSolController.showSaveBtn}"
+                                     actionListener="#{clienteSolController.procesarSolicitud()}"
+                                     icon="fa fa-car-side" iconPos="right" >                   
+                    </p:commandButton>
+                </div>
+
+
+
+            </div>
+
+            <p:dialog header="Información Complementaria" widgetVar="solDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" position="top">
+                <p:outputPanel id="solDetail" style="padding: 20px"> 
+                    <p:panelGrid  columns="2" rendered="#{not empty clienteSolController.model}" columnClasses="label,value">
+
+
+                    </p:panelGrid>  
+                    <div class="row">
+                        <div class="col s12 m12 l4">
+                            <h:panelGroup >                               
+                                <p:outputLabel for="placa" value="Placa:" />
+                                <h:inputText value="#{clienteSolController.model.placa}" class="validate" id="placa"/>                                                               
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="col s12 m12 l4">
+                            <h:panelGroup >
+                                <p:outputLabel for="chasis" value="Chasis:" />
+                                <h:inputText value="#{clienteSolController.model.chasis}" class="validate" id="chasis" />
+                            </h:panelGroup>
+                        </div>
+                        <div class="col s12 m12 l4">
+                            <h:panelGroup >                               
+                                <p:outputLabel for="motor" value="Motor:"/>
+                                <h:inputText value="#{clienteSolController.model.motor}" class="validate" id="motor"/>                                
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div class="row">                                      
+                        <div class="col s12 m12 l12 ">
+                            <h:panelGroup >                  
+                                <p:outputLabel for="comentariostaller" value="Comentarios:" />
+                                <h:inputText value="#{clienteSolController.model.comentariostaller}" id="comentariostaller"/>                             
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <p:commandButton value="Finalizar y Enviar" icon="fa fa-paper-plane" class="waves-effect waves-light btn light-blue darken-4" actionListener="#{clienteSolController.enviarSol()}" oncomplete="handleSubmit(args,'solDialog');" update="form" style="margin-top: 10px"/>
+
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
+
+        </h:form>
+
+    </ui:define>
+    <ui:define name="bottom">
+        <style>
+            .card .card-title {
+                font-size: 1.64em;
+            }
+        </style>
+
+        <div><h5 style="text-align: center; margin-top: 1.5em">Opciones Extras de Preferencia</h5></div>
+        <div class="row padding-left-right">
+            <div class="col s12 m12 l4">
+
+                <div class="card horizontal z-depth-1 blue-grey darken-1">
+                    <div class="card-image">
+                        <img src="${ctx}/images/varios/shop.svg" />
+                    </div>
+                    <div class="card-stacked">
+
+                        <div class="card-content">
+                            <span class="card-title">Mis Compra</span>
+                            <p>Consulta las últimas compras realizádas en nuestra plataforma.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">Ver Compras</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m12 l4">
+
+                <div class="card horizontal z-depth-3 blue-grey darken-1">
+                    <div class="card-image">
+                        <img src="${ctx}/images/varios/solicitudes.svg" />
+                    </div>
+                    <div class="card-stacked">
+
+                        <div class="card-content">
+                            <span class="card-title">Mis solicitudes</span>
+                            <p>Verifica las últimas solicitudes de compras realizadas.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="solicitudes.xhtml?i=0">Ver solicitudes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m12 l4">
+
+                <div class="card horizontal z-depth-3 blue-grey darken-1">
+                    <div class="card-image">
+                        <img src="${ctx}/images/varios/reviewed_docs.svg" />
+                    </div>
+                    <div class="card-stacked">
+
+                        <div class="card-content">
+                            <span class="card-title">Cotizaciones</span>
+                            <p>Consulta las ultimas cotizaciones recibidas por nuestros proveedores.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="solicitudes.xhtml?i=0">Ver Cotizaciones</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

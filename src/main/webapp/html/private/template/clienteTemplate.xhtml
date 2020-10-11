@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="sv"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></link> 
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="cssLayout.css"/>
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.12.0/css/v4-shims.min-jsf.css" />
+        <title>Autolink</title>
+        <c:set var="ctx" value="#{request.contextPath}"/>
+        <style>
+            #banner {
+                background: url('${ctx}/images/theme/banner.png');
+                height: 115px;
+                background-position: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+                margin-bottom: 0px
+            }
+            nav {
+
+                background-color: #002338;
+                padding: 0px 20px 0px 20px
+            }
+            .card-panel {
+                max-width: 1000px;
+                margin: auto;
+            }
+            nav{
+                height: 45px !important;
+                line-height: 45px !important;
+                position: absolute;
+            }
+
+
+            nav .brand-logo {
+                padding-left: 20px;
+            }
+            @media only screen and (min-width: 601px){
+                nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i {
+                    height: 45px;
+                    line-height: 45px;
+                    margin-right: 5px;
+                }
+            }
+            .card-panel{
+                margin-top: 20px
+            }
+            .card-panel .card-title{
+                display: block;
+                line-height: 32px;
+                margin-bottom: 8px;
+                font-size: 24px;
+                font-weight: 300;
+                color: #797a7b;
+            }
+        </style>
+
+        <nav class="" style="background-color: #002138bf !important;">
+            <div class="nav-wrapper">
+                <div  class="" style="height:100%;position: absolute;">
+                    <img style="margin-top:2%; position: absolute;height: 64px;" src="${ctx}/images/theme/logo.png"/>
+                </div>
+
+
+                <ul id="nav-mobile" class="right ">
+                    <li><a href="perfil.xhtml">Perfil</a></li>
+                    <li><a href="${ctx}/logoutServlet"><i class="material-icons left">person_pin</i>#{request.userPrincipal.name} <i class="material-icons right">exit_to_app</i> </a></li>
+
+                </ul>
+            </div>
+        </nav>
+
+
+
+    </h:head>
+
+    <h:body>
+
+        <f:metadata>
+            <o:enableRestorableView/>
+        </f:metadata>
+
+        <div id="banner" class="top">
+
+            <ui:insert name="top"></ui:insert>
+        </div>
+
+        <div>
+            <!--div id="left">
+                <ui:insert name="left">Left</ui:insert>
+            </div-->
+            <div id="content" class="left_content2">
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">Autolink</ui:insert>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                showSelect();
+            });
+
+            function showSelect() {
+                $('select').formSelect();
+            }
+
+            function handleSubmit(args, dialog) {
+                var jqDialog = jQuery('#' + dialog);
+                if (args.validationFailed) {
+                    jqDialog.effect('shake', {times: 3}, 100);
+                } else {
+                    PF(dialog).hide();
+                }
+            }
+        </script>
+    </h:body>
+
+</html>

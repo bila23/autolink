@@ -197,5 +197,28 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
         model.setCantidad(cantidad);
         dao.save(model);
     }
+    
+    public void edit(Integer idSol, Integer idRep, Integer cantidad) throws Exception{
+        Respuestoxsolicitud model =null;
+        model = dao.findBySolicitudAndRep(idSol, idRep);
+        if(model==null){
+            model = new Respuestoxsolicitud();
+        }else{
+            cantidad=cantidad + model.getCantidad();
+        }
+        model.setEstado("A");
+        model.setAplica("N");
+        model.setIdrepuesto(idRep);
+        model.setIdsolicitud(idSol);
+        model.setCantidad(cantidad);
+        dao.update(model);
+    }
+    
+    public List<RepuestoSolicitudVO> findBySolicitudCotizadas(int id) throws Exception{
+        int codprv;
+        if(id == 0) return null;
+        codprv=opService.getIdProveedorWinnerBySolicitudCliente(id);
+        return modelListToVOList(dao.findBySolicitud(id), codprv);
+    }
 
 }

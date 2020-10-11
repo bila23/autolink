@@ -113,6 +113,17 @@ public class OfertaProvDao extends Dao<Ofertaproveedor, Integer> {
         return proveedor;
     }
     
+    public Integer getIdProveedorWinnerBySolicitudCliente(int idSol) throws Exception{
+        Query q = em.createNamedQuery("Ofertaproveedor.findWinnerBySolicitudCliente");
+        q.setParameter("idsolicitud", idSol);    
+        List<Object> list = q.getResultList();
+        if(list == null || list.isEmpty() ) return null;
+       
+        Object[] obj = (Object[]) list.get(0);
+        if (obj ==null) return null;
+      return  Integer.valueOf(String.valueOf(obj[0]));
+    }
+    
     public List<Object[]> findProvTotalBySolicitud(int idSol) throws Exception{
         Query q = em.createNamedQuery("Ofertaproveedor.findProvTotalBySolicitud");
         q.setParameter("idsolicitud", idSol);

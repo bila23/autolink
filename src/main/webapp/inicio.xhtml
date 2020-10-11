@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="sv" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></link>
+        <title>Autolink</title>
+        <style>
+            button{
+                border: 1px solid transparent;
+                border-radius:15px;
+                font-weight: bold;
+                background-color: #39c1cd;
+                color: #fff;
+                font-size:19px;
+            }
+            button:active {
+                border: none;
+                box-shadow: 0 2px #666;
+                transform: translateY(1px);
+            }
+            button:hover{
+                box-shadow: 0 5px 10px rgba(0,0,0,.15);
+                border: none;
+            }
+            body{
+                background-image: url("images/login/auto_parts.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position-y: 20%;
+            }
+            .avatar{
+                width: 100px;
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+                position: absolute;
+                z-index: 1;
+                top: 80px;
+
+            }
+            nav{
+                height: 45px !important;
+                line-height: 45px !important;
+            }
+            nav .brand-logo {
+                padding-left: 20px;
+            }
+
+            /* @media only screen and (min-width: 993px) {
+                 .avatar {
+                     margin-top: 20%;
+                 }
+             }*/
+
+            .box-login{
+                background-color: rgba(255,255,255,.89);
+                border-radius: 45px;
+                padding: 25px;
+                top: 45vh;
+                transform: translateY(-50%);
+                position: relative;
+            }
+
+            .slide_bg{
+                width: 100%;
+                height: 100vh;
+                background-position: center center;
+                background-size: cover;
+                background-repeat: no-repeat;
+                backface-visibility: hidden;
+                animation: slideBg 30s linear infinite 0s;
+                animation-timing-function: ease-in-out;
+                background-image: url("images/login/auto_parts.jpg");
+                background-position-y: 30%;
+
+            }
+            @keyframes slideBg{
+                0%, 10%, 100%{
+                    background-image: url("images/login/auto_parts.jpg");
+                }
+                12%, 22%{
+                    background-image: url(/autolink/images/background/car2.jpg);
+                    background-color: rgba(7, 40, 80 , 67%);
+                    background-blend-mode: hard-light;
+                }
+                24%, 34%{
+                    background-image: url(/autolink/images/background/Verso-D-4D.jpg);
+                    background-color: rgba(7 ,40, 80 , 67%);
+                    background-blend-mode: hard-light;
+                }
+                36%,46%{
+                    background-image: url(/autolink/images/background/pickup.jpg);
+                    background-color: rgba(7, 40, 80 , 67%);
+                    background-blend-mode: hard-light;
+                }
+                48%, 58%{
+                    background-image: url(/autolink/images/background/2.jpg);
+                    background-color: rgba(7, 40, 80 , 67%);
+                    background-blend-mode: hard-light;
+                }
+                60%, 70%{
+                    background-image: url(/autolink/images/background/3.jpg);
+                    background-color: rgb(10 110 115 / 80%);
+                    background-blend-mode: hard-light;
+                }
+                72%, 82%{
+                    background-image: url(/autolink/images/background/4.jpg);
+                    background-color: rgba(7, 40, 80 , 67%);
+                    background-blend-mode: hard-light;
+                }
+                84%, 98%{
+                    background-image: url(/autolink/images/background/5.jpg);
+                    background-color: rgb(8 87 93 / 70%);
+                    background-blend-mode: hard-light;
+                }
+
+
+
+            }
+
+            .subtitle-footer{
+                font-size: 1.5em;
+                width: 100%;
+                display: block;
+                position: absolute;
+                top: 85%;
+                text-align: center;
+                color: #ffffff;
+                text-shadow: 0 0 13px black;
+            }
+
+        </style>
+        <nav class="" style="background-color: #002138bf !important;">
+            <div class="nav-wrapper">
+                <a href="#"  class="brand-logo">Autolink </a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="html/public/registro.xhtml">Registrarse</a></li>
+                    <!--li><a href="inicio.xhtml">Login</a></li-->
+
+                </ul>
+            </div>
+        </nav>
+    </h:head>
+    <h:body class="slide_bg">
+
+
+        <h:form id="mf">
+            <div class="row" style="height: 100%;">
+                <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
+                <div class="col s12 m12 l4 xl4" style="height: 100%;vertical-align: middle;">
+                    <img src="images/login/avatar_login.svg" alt="avatar" class="avatar"/>
+                    <div class="z-depth-5 box-login" style="background-color:rgba(255,255,255,.89);border-radius:45px;padding: 25px">
+                        <h4 style="text-align: center; margin-bottom: 22px">Bienvenid@</h4>
+                        <h:panelGroup>
+                            <div class="input-field" style="padding-bottom:25px">
+                                <i class="material-icons prefix">person</i>
+                                <p:inputText value="#{loginController.vo.username}" id="user" class="form-control validate" a:autofocus="true"  />
+                                <h:outputLabel for="user" value="Usuario" />
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <div class="input-field">
+                                <i class="material-icons prefix">vpn_key</i>
+                                <h:inputSecret value="#{loginController.vo.password}" id="pass" class="form-control validate"/>
+                                <h:outputLabel for="pass" value="Contraseña" />
+                            </div>
+                        </h:panelGroup>
+                        <div class="form-group" style="text-align: center;">
+                            <!--p:commandButton class="waves-effect waves-light btn blue-grey lighten-5" style="color: #022238"  value="Registrarse" /-->
+                            <p:commandButton class="waves-effect waves-light btn" value="Ingresar" action="#{loginController.login()}"/>
+                        </div>
+                        <div class="form-group" style="text-align: center;">
+                            <p:messages closable="true" globalOnly="true" showDetail="true"/>
+                        </div>
+                        <div class="input-field center-align">
+                            <a href="#" style="color: #022238;">¿Recuperar tu contrasena?</a>
+                        </div>
+                    </div>
+
+                </div>
+                <label class="subtitle-footer">¿Encuentra lo que busca?, nosotros lo buscamos por ti.</label>
+                <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
+            </div>
+        </h:form>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </h:body>
+</html>
