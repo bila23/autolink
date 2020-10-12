@@ -146,8 +146,13 @@
                                     <div class="row">
                                         <div class="col s12">
                                             <p:dataTable emptyMessage="No hay imagenes agregadas" id="dtimg" var="img" value="#{tallerSolController.imageList}" rows="1" paginator="true">
-                                                <p:column>
-                                                    <p:graphicImage value="#{img}" library="images"/>
+                                                <p:column headerText="Imagen">
+                                                    <p:graphicImage value="#{img.url}" width="330" height="290"/>
+                                                </p:column>
+                                                <p:column headerText="Eliminar" style="text-align:center;width: 10%">
+                                                    <p:commandLink actionListener="#{tallerSolController.deleteImage(img.id)}" update="mf:msg dtimg">
+                                                        <i class="material-icons">delete</i>
+                                                    </p:commandLink>
                                                 </p:column>
                                             </p:dataTable>
                                         </div>
@@ -405,6 +410,13 @@
                                     <h:outputText value="#{r1.cantidad}"/>
                                 </p:column>
                             </p:dataTable>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin:0 auto">
+                            <p:galleria value="#{adminSolController.vo.fotoList}" var="image" panelWidth="500" panelHeight="313" style="margin:0 auto">
+                                <p:graphicImage value="#{image.url}" class="img-al"/>
+                            </p:galleria>  
                         </div>
                     </div>
                 </h:panelGroup>

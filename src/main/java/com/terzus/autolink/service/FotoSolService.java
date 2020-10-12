@@ -18,14 +18,12 @@ import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.dao.FotoSolDao;
 import com.terzus.autolink.model.Fotoxsolicitud;
 import com.terzus.autolink.model.Solicitud;
-import java.io.ByteArrayInputStream;
+import com.terzus.autolink.vo.FotoXSolicitudVO;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 /**
  * @author CEL
@@ -67,12 +65,29 @@ public class FotoSolService extends Service<Fotoxsolicitud, Integer>{
         dao.update(model);
     }
     
-    public List<StreamedContent> findImageBySol(int idSol) throws Exception{
+    public List<FotoXSolicitudVO> findImageBySol(int idSol) throws Exception{
         if(idSol == 0) return null;
         List<Fotoxsolicitud> list = dao.findBySolicitud(idSol);
         if(list == null || list.isEmpty()) return null;
-        List<StreamedContent> scList = new ArrayList();
-        return scList;
+        List<FotoXSolicitudVO> lst = new ArrayList();
+        FotoXSolicitudVO vo = null;
+        for(Fotoxsolicitud model : list){
+            vo = new FotoXSolicitudVO();
+            vo.setId(model.getId());
+            vo.setFoto(model.getFoto());
+            vo.setUrl(Constants.URL_IMAGE.concat(vo.getFoto()));
+            vo.setIdSol(model.getIdSolicitud().getId());
+            lst.add(vo);
+        }
+        return lst;
+    }
+    
+    public void delete(int id) throws Exception{
+        Fotoxsolicitud model = dao.findByKey(id);
+        if(model != null){
+            FileHelper.deleteFile(Constants.PATH_IMAGE, model.getFoto());
+            dao.deleteById(id);   
+        }
     }
 
 }

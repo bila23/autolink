@@ -24,6 +24,7 @@ import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.TallerService;
 import com.terzus.autolink.service.TipoVehiculoService;
+import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -36,7 +37,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -79,8 +79,30 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private List<RepuestoSolicitudVO> repVOList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private UploadedFile imageFile;
-    @Getter @Setter private List<StreamedContent> imageList;
+    @Getter @Setter private List<FotoXSolicitudVO> imageList;
     private int idSol;
+    
+    public void deleteImage(int id){
+        try{
+            if(id > 0){
+                fotoSolService.delete(id);
+                FacesHelper.successMessage(Constants.EXITO, "Se ha eliminado correctamente la imagen");
+                imageList = fotoSolService.findImageBySol(idSol);
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de eliminar la imagen");            
+        }
+    }
+    
+    public void findImage(int idSol){
+        try{
+            imageList = fotoSolService.findImageBySol(idSol);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de mostrar las imagenes");
+        }
+    }
     
     public void saveImage(){
         try{

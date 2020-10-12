@@ -26,6 +26,7 @@ import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
+import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.RepuestosAllSolVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -59,6 +60,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private OfertaProvService opService;
     @Inject private RepuestoSolicitudService rsService;
     @Inject private OfertaSolicitudVistaService ofvService;
+    @Inject private FotoSolService fotoService;
+    
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
@@ -218,6 +221,11 @@ public class SolicitudService extends Service<Solicitud, Integer>{
             vo.setIdTipoVeh(model.getIdTipoVehiculo().getId());
             vo.setTipovehiculo(model.getIdTipoVehiculo().getNombre());
         }
+        
+        //RECUPERO LAS IMAGENES
+        List<FotoXSolicitudVO> fotoList = fotoService.findImageBySol(vo.getId());
+        if(fotoList != null)
+            vo.setFotoList(fotoList);
         
         //VERIFICO SI LA SOLICITUD ES DE REPUESTOS PARCIAL O NO
         boolean isParcial = rsService.isSolRepParcial(vo.getId());

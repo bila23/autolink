@@ -25,6 +25,7 @@ public class Constants {
     public static String EXITO = "Exito";
     public static String ERROR = "Error";
     public static String WARNING = "Advertencia";
-    public static String PATH_IMAGE = "/Users/will/Developer/images_system/";
+    public static String PATH_IMAGE = "/Users/will/Developer/projects/autolink-jee/autolink-images/src/main/webapp/images/";
+    public static String URL_IMAGE = "http://localhost:8080/autolink-images/images/";
 
 }

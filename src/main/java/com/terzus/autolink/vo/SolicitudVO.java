@@ -65,5 +65,6 @@ public class SolicitudVO implements Serializable{
     private boolean viewed;
     private int idTipoVeh;
     private String tipoVehiculo;
+    private List<FotoXSolicitudVO> fotoList;
     
 }
