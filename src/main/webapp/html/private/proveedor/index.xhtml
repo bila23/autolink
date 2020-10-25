@@ -74,6 +74,11 @@
                                         <h:outputText value="#{r1.comentariosaseguradora}" />
                                     </p:commandLink>
                                 </p:column>
+                                <p:column headerText="Imagenes" style="text-align:center;width: 8%">
+                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
+                                        <i class="material-icons">image</i>
+                                    </p:commandLink>
+                                </p:column>
                                <p:rowExpansion>
                                     <p:dataTable emptyMessage="No hay repuestos" var="r11" value="#{r1.repAplicaList}">
                                         <p:column headerText="Repuesto">
@@ -158,6 +163,11 @@
                     </p:tabView>
                 </div>
             </div>
+            <p:dialog id="imgList" widgetVar="imgList" modal="true" closeOnEscape="true" header="Repuestos" position="top">
+                <p:galleria id="galleria" widgetVar="galleria" value="#{tallerSolController.imageList}" var="img">
+                    <p:graphicImage value="#{img.url}" width="330" height="290"/>
+                </p:galleria>
+            </p:dialog>
             <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
                 <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{asegSolController.repSolList}">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">

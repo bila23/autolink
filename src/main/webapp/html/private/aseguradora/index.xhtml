@@ -30,16 +30,19 @@
                                 <p:column headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
-                                <p:column headerText="Acciones" style="width:8%;text-align: center">
+                                <p:column headerText="Acciones" style="width:10%;text-align: center">
                                     <p:commandLink actionListener="#{asegSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable2" onsuccess="PF('dlgRepValidate').show()" title="Ver repuestos">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                     <p:commandLink actionListener="#{asegSolController.recoverSol(r1.id)}" onsuccess="PF('dglInfo').show()" title="Informacion" update="mf:com">
                                         <i class="material-icons">info</i>
                                     </p:commandLink>
+                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
+                                        <i class="material-icons">image</i>
+                                    </p:commandLink>
                                 </p:column>
                                 <p:column style="text-align: center">
-                                    <p:commandButton style="font-size:10px" value="Cot. abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
+                                    <p:commandButton style="font-size:10px" value="Cotizacion abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -70,6 +73,9 @@
                                     <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
+                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
+                                        <i class="material-icons">image</i>
+                                    </p:commandLink>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -93,9 +99,12 @@
                                 <p:column headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
-                                <p:column headerText="Ver ofertas" style="width:8%;text-align: center">
+                                <p:column headerText="" style="width:8%;text-align: center">
                                     <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:totalRepOf mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
                                         <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
+                                        <i class="material-icons">image</i>
                                     </p:commandLink>
                                 </p:column>
                             </p:dataTable>
@@ -157,6 +166,11 @@
                     </p:tabView>
                 </div>
             </div>
+            <p:dialog id="imgList" widgetVar="imgList" modal="true" closeOnEscape="true" header="Repuestos" position="top">
+                <p:galleria id="galleria" widgetVar="galleria" value="#{tallerSolController.imageList}" var="img">
+                    <p:graphicImage value="#{img.url}" width="330" height="290"/>
+                </p:galleria>
+            </p:dialog>
             <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px" closable="true">
                 <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{asegSolController.repSolList}">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
