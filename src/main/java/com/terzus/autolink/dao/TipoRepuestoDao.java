@@ -7,11 +7,12 @@
 * Its unauthorized use, as any code alteration without authorization 
 * is prohibited
 *----------------------------------------------------------
- */
+*/
 package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Repuesto;
+import com.terzus.autolink.model.TipoRepuesto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,16 +24,16 @@ import javax.persistence.Query;
  * <b>Created by: </b>will
  * <b>For: </b>autolink
  * <b>On: </b>May 25, 2020 11:26:24 PM
- * <b>Purpose</b>
+ * <b>Purpose</b> 
  * <p>
- *
+ *      
  * </p>
  */
 @Stateless
-public class RepuestoDao extends Dao<Repuesto, Integer> {
-
-    public RepuestoDao() {
-        super(Repuesto.class);
+public class TipoRepuestoDao extends Dao<TipoRepuesto, Integer>{
+    
+    public TipoRepuestoDao(){
+        super(TipoRepuesto.class);
     }
 
     @PersistenceContext(unitName = "PU")
@@ -42,25 +43,11 @@ public class RepuestoDao extends Dao<Repuesto, Integer> {
     public EntityManager getEntityManager() {
         return em;
     }
-
-    public List<Repuesto> findActive() throws Exception {
-        return findWithNamedQuery("Repuesto.findActive");
+    
+    public List<TipoRepuesto> getTipoRepuestoActivo() throws Exception {
+        Query q = em.createNamedQuery("TipoRepuesto.findAllActive", TipoRepuesto.class);     
+        return q.getResultList();      
     }
 
-    public String findNameOfRepuesto(int idRep) throws Exception {
-        if (idRep == 0) {
-            return null;
-        }
-        Repuesto model = super.findByKey(idRep);
-        if (model == null) {
-            return null;
-        }
-        return model.getNombrerepuesto();
-    }
-
-    public List<Repuesto> findByTipoRep(int codigo) throws Exception {
-        Query q = em.createNamedQuery("Repuesto.findByTipo");
-        q.setParameter("codtipo", codigo);
-        return q.getResultList();
-    }
+    
 }

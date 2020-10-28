@@ -16,9 +16,12 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -42,9 +45,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Repuesto.findAll", query = "SELECT r FROM Repuesto r ORDER BY r.nombrerepuesto"),
-    @NamedQuery(name = "Repuesto.findActive", query = "SELECT r FROM Repuesto r WHERE r.estado = 'A' ORDER BY r.nombrerepuesto")
+    @NamedQuery(name = "Repuesto.findActive", query = "SELECT r FROM Repuesto r WHERE r.estado = 'A' ORDER BY r.nombrerepuesto"),
+    @NamedQuery(name = "Repuesto.findByTipo", query = "SELECT r FROM Repuesto r WHERE r.estado = 'A' and r.idTipoRepuesto.id = :codtipo ORDER BY r.nombrerepuesto")
 })
 public class Repuesto implements Serializable {
+
+    @JoinColumn(name = "idTipoRepuesto", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TipoRepuesto idTipoRepuesto;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -145,6 +153,14 @@ public class Repuesto implements Serializable {
     @Override
     public String toString() {
         return "com.terzus.autolink.model.Repuesto[ id=" + id + " ]";
+    }
+
+    public TipoRepuesto getIdTipoRepuesto() {
+        return idTipoRepuesto;
+    }
+
+    public void setIdTipoRepuesto(TipoRepuesto idTipoRepuesto) {
+        this.idTipoRepuesto = idTipoRepuesto;
     }
 
 }

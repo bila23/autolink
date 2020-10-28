@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * @author CEL
@@ -87,6 +88,13 @@ public class SolicitudDao extends Dao<Solicitud, Integer>{
         parameters.put("id", id);
         parameters.put("estado", state);
         super.executeUpdateOrDelete("Solicitud.updateEstado", parameters);
+    }
+    
+     public List<Solicitud> findByEstadoAndCliente(String estado, String user) throws Exception{
+         Query q = em.createNamedQuery("Solicitud.findByEstadoAndCliente", Solicitud.class);
+         q.setParameter("user", user!=null?user.toLowerCase():"");
+         q.setParameter("estado", estado.toLowerCase());
+        return  q.getResultList();
     }
     
 

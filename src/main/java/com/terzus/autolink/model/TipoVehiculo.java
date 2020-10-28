@@ -1,46 +1,34 @@
-/*---------------------------------------------------------
-* FILE: TipoVehiculo.java
-* PRODUCT: autolink
-*----------------------------------------------------------
-* IMPORTANT NOTICE
-* This program is property of Terzus
-* Its unauthorized use, as any code alteration without
-* authorization is prohibited
-*----------------------------------------------------------
-*/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.terzus.autolink.model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * @author Terzus
- * <b>Created by: </b>will
- * <b>For: </b>autolink
- * <b>On: </b>Sep 27, 2020 10:27:42 AM
- * <b>Purpose</b> 
- * <p>
- *      
- * </p>
+ *
+ * @author josemauricioherrera
  */
 @Entity
 @Table(name = "TipoVehiculo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoVehiculo.findAll", query = "SELECT t FROM TipoVehiculo t WHERE t.estado = 'A' ORDER BY t.nombre")
-})
+    @NamedQuery(name = "TipoVehiculo.findAll", query = "SELECT t FROM TipoVehiculo t"),
+    @NamedQuery(name = "TipoVehiculo.findById", query = "SELECT t FROM TipoVehiculo t WHERE t.id = :id"),
+    @NamedQuery(name = "TipoVehiculo.findByNombre", query = "SELECT t FROM TipoVehiculo t WHERE t.nombre = :nombre"),
+    @NamedQuery(name = "TipoVehiculo.findByEstado", query = "SELECT t FROM TipoVehiculo t WHERE t.estado = :estado")})
 public class TipoVehiculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,8 +42,6 @@ public class TipoVehiculo implements Serializable {
     private String nombre;
     @Column(name = "estado")
     private Character estado;
-    @OneToMany(mappedBy = "idTipoVehiculo")
-    private List<Solicitud> solicitudList;
 
     public TipoVehiculo() {
     }
@@ -88,15 +74,6 @@ public class TipoVehiculo implements Serializable {
         this.estado = estado;
     }
 
-    @XmlTransient
-    public List<Solicitud> getSolicitudList() {
-        return solicitudList;
-    }
-
-    public void setSolicitudList(List<Solicitud> solicitudList) {
-        this.solicitudList = solicitudList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -121,5 +98,5 @@ public class TipoVehiculo implements Serializable {
     public String toString() {
         return "com.terzus.autolink.model.TipoVehiculo[ id=" + id + " ]";
     }
-
+    
 }

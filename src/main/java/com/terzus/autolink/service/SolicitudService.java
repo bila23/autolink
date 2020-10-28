@@ -7,7 +7,7 @@
 * Its unauthorized use, as any code alteration without authorization 
 * is prohibited
 *----------------------------------------------------------
-*/
+ */
 package com.terzus.autolink.service;
 
 import com.bila.framework.commons.GeneralFunction;
@@ -19,6 +19,7 @@ import com.terzus.autolink.dao.ModeloDao;
 import com.terzus.autolink.dao.RepuestoDao;
 import com.terzus.autolink.dao.SolicitudDao;
 import com.terzus.autolink.dao.TallerDao;
+import com.terzus.autolink.dao.TipoRepuestoDao;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
@@ -26,6 +27,7 @@ import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
+import com.terzus.autolink.model.TipoRepuesto;
 import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.RepuestosAllSolVO;
@@ -43,9 +45,9 @@ import org.apache.commons.beanutils.PropertyUtils;
  * <b>Created by: </b>will
  * <b>For: </b>autolink
  * <b>On: </b>May 24, 2020 7:53:20 PM
- * <b>Purpose</b> 
+ * <b>Purpose</b>
  * <p>
- *      
+ *
  * </p>
  */
 @Stateless
@@ -61,6 +63,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     @Inject private RepuestoSolicitudService rsService;
     @Inject private OfertaSolicitudVistaService ofvService;
     @Inject private FotoSolService fotoService;
+    @Inject private TipoRepuestoDao tipoRepDao;
     
 
     @Override
@@ -85,50 +88,64 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         dao.changeCoaToPea(hours);
     }
     
-    private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception{
-        if(model.getIdaseguradora() != null && model.getIdaseguradora() > 0){
+     public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
+        return repDao.findByTipoRep(tipo!=null? tipo.getId():0);
+    }
+
+    private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception {
+        if (model.getIdaseguradora() != null && model.getIdaseguradora() > 0) {
             Aseguradora aseg = asegDao.findByKey(model.getIdaseguradora());
-            if(aseg != null)
+            if (aseg != null) {
                 vo.setAseguradora(aseg.getNombreaseguradora());
+            }
         }
-        if(model.getIdmarca() != null && model.getIdmarca() > 0){
+        if (model.getIdmarca() != null && model.getIdmarca() > 0) {
             Marca marca = marcaDao.findByKey(model.getIdmarca());
-            if(marca != null)
+            if (marca != null) {
                 vo.setMarca(marca.getNombremarca());
+            }
         }
-        if(model.getIdtaller() != null && model.getIdtaller() > 0){
+        if (model.getIdtaller() != null && model.getIdtaller() > 0) {
             Taller taller = tallerDao.findByKey(model.getIdtaller());
-            if(taller != null)
+            if (taller != null) {
                 vo.setTaller(taller.getNombreTaller());
+            }
         }
-        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+        if (model.getIdmodelo() != null && model.getIdmodelo() > 0) {
             Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
             vo.setModelo(modelo.getNombremodelo());
         }
         return vo;
     }
-    
+
     /**
      * Ver la informacion completa de la solicitud
+     *
      * @param idSol codigo de la solicitud - int
      * @return objeto de tipo SolicitudVO
-     * @throws Exception 
+     * @throws Exception
      */
-    public SolicitudVO seeInfoSol(int idSol) throws Exception{
-        if(idSol == 0) return null;
+    public SolicitudVO seeInfoSol(int idSol) throws Exception {
+        if (idSol == 0) {
+            return null;
+        }
         Solicitud model = dao.findByKey(idSol);
-        if(model == null) return null;
+        if (model == null) {
+            return null;
+        }
         SolicitudVO vo = modelToVO(model, 0);
         //RECUPERO TODOS LOS REPUESTOS
         List<RepuestosAllSolVO> list = rsService.findAllRepAndOfertas(idSol);
-        if(list != null && !list.isEmpty())
+        if (list != null && !list.isEmpty()) {
             vo.setRepAllList(list);
+        }
         return vo;
     }
-    
+
     /**
-     * Pone la hora de vigencia de la solicitud para que los proveedores
-     * puedan ofertar
+     * Pone la hora de vigencia de la solicitud para que los proveedores puedan
+     * ofertar
+     *
      * @param idSol codigo de la solicitud - int
      * @param hour objeto de tipo Date con la hora de finalizacion
      * @throws Exception 
@@ -157,8 +174,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         newDay.set(Calendar.MINUTE, 0);
         return newDay.getTime();
     }
-    
-    public List<Repuesto> findRepuestoActive() throws Exception{
+
+    public List<Repuesto> findRepuestoActive() throws Exception {
         return repDao.findActive();
     }
     
@@ -172,38 +189,52 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         dao.update(model);
         return model;
     }
-    
-    public List<Aseguradora> findAsegActive() throws Exception{
+
+    public int saveSol(Solicitud model, String user, String tipo) throws Exception {
+        model.setEstado("INI");
+        model.setFechacreacion(new Date());
+        model.setUsuariocrea(user);
+        model.setTipovehiculo(tipo);
+        dao.save(model);
+        model.setCodigosolicitud("SOL-" + GeneralFunction.getYear() + "-" + model.getId());
+        dao.update(model);
+        return model.getId();
+    }
+
+    public List<Aseguradora> findAsegActive() throws Exception {
         return asegDao.findActive();
     }
-    
-    public List<Marca> findMarcaActive() throws Exception{
+
+    public List<Marca> findMarcaActive() throws Exception {
         return marcaDao.findActive();
     }
-    
-    public List<Modelo> findActiveByMarca(Integer idMarca) throws Exception{
+
+    public List<Modelo> findActiveByMarca(Integer idMarca) throws Exception {
         return modeloDao.findActiveByMarca(idMarca);
     }
     
     private SolicitudVO prepareModel(Solicitud model) throws Exception{
         SolicitudVO vo = new SolicitudVO();
         PropertyUtils.copyProperties(vo, model);
-        if(model.getIdaseguradora() != null && model.getIdaseguradora() > 0){
+        if (model.getIdaseguradora() != null && model.getIdaseguradora() > 0) {
             Aseguradora aseg = asegDao.findByKey(model.getIdaseguradora());
-            if(aseg != null)
+            if (aseg != null) {
                 vo.setAseguradora(aseg.getNombreaseguradora());
+            }
         }
-        if(model.getIdmarca() != null && model.getIdmarca() > 0){
+        if (model.getIdmarca() != null && model.getIdmarca() > 0) {
             Marca marca = marcaDao.findByKey(model.getIdmarca());
-            if(marca != null)
+            if (marca != null) {
                 vo.setMarca(marca.getNombremarca());
+            }
         }
-        if(model.getIdtaller() != null && model.getIdtaller() > 0){
+        if (model.getIdtaller() != null && model.getIdtaller() > 0) {
             Taller taller = tallerDao.findByKey(model.getIdtaller());
-            if(taller != null)
+            if (taller != null) {
                 vo.setTaller(taller.getNombreTaller());
+            }
         }
-        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+        if (model.getIdmodelo() != null && model.getIdmodelo() > 0) {
             Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
             vo.setModelo(modelo.getNombremodelo());
         }
@@ -236,11 +267,11 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         
         //VERIFICO SI LA SOLICITUD TIENE UN GANADOR
         Proveedor prov = opService.findWinnerBySolicitud(vo.getId());
-        if(prov != null){
+        if (prov != null) {
             vo.setIdProvWinner(prov.getId());
             vo.setProveedorWinner(prov.getNombreproveedor());
         }
-        
+
         //HORA PENDIENTES
         if(vo.getFechafin() != null){
             long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();
@@ -250,49 +281,61 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
         return vo;
     }
-    
-    private List<SolicitudVO> listModelToVO(List<Solicitud> list, int codprv) throws Exception{
-        if(list == null || list.isEmpty()) return null;
+
+    private List<SolicitudVO> listModelToVO(List<Solicitud> list, int codprv) throws Exception {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         List<SolicitudVO> lst = new ArrayList();
         int i = 0, size = list.size();
-        for(i = 0; i<size; i++){
+        for (i = 0; i < size; i++) {
             lst.add(modelToVO(list.get(i), codprv));
         }
         return lst;
     }
-    
-    public List<SolicitudVO> findByEstado(String estado, int codprv) throws Exception{
-        if(estado == null || estado.equals("")) return null;
+
+    public List<SolicitudVO> findByEstado(String estado, int codprv) throws Exception {
+        if (estado == null || estado.equals("")) {
+            return null;
+        }
         List<Solicitud> list = dao.findByEstado(estado);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, codprv);
     }
-    
-    public List<SolicitudVO> findByEstado(String estado) throws Exception{
-        if(estado == null || estado.equals("")) return null;
+
+    public List<SolicitudVO> findByEstado(String estado) throws Exception {
+        if (estado == null || estado.equals("")) {
+            return null;
+        }
         List<Solicitud> list = dao.findByEstado(estado);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, 0);
     }
-    
-    public void updateEstado(int id, String state) throws Exception{
-        if(id <= 0 || state == null || state.equals("") || state.length() != 3) return;
+
+    public void updateEstado(int id, String state) throws Exception {
+        if (id <= 0 || state == null || state.equals("") || state.length() != 3) {
+            return;
+        }
         dao.updateEstado(id, state.toUpperCase());
     }
-    
-    public List<SolicitudVO> findIngresadas() throws Exception{
+
+    public List<SolicitudVO> findIngresadas() throws Exception {
         return findByEstado("ING");
     }
-    
-    public List<SolicitudVO> findAnuladas() throws Exception{
+
+    public List<SolicitudVO> findAnuladas() throws Exception {
         return findByEstado("ANU");
     }
-    
-    public List<SolicitudVO> findAnuladasByAdmin() throws Exception{
+
+    public List<SolicitudVO> findAnuladasByAdmin() throws Exception {
         return findByEstado("ANA");
     }
-    
-    public List<SolicitudVO> findCotAbierta() throws Exception{
+
+    public List<SolicitudVO> findCotAbierta() throws Exception {
         return findByEstado("COA");
     }
     
@@ -345,64 +388,79 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<SolicitudVO> findCerradaDesierta() throws Exception{
         return findByEstado("CPD");
     }
-    
-    public List<SolicitudVO> findCerradaAseg() throws Exception{
+
+    public List<SolicitudVO> findCerradaAseg() throws Exception {
         return findByEstado("CEA");
     }
-    
-    public List<SolicitudVO> findCerradaParcialmente() throws Exception{
+
+    public List<SolicitudVO> findCerradaParcialmente() throws Exception {
         return findByEstado("CPA");
     }
-    
-    public List<SolicitudVO> findPendAprobar() throws Exception{
+
+    public List<SolicitudVO> findPendAprobar() throws Exception {
         return findByEstado("PEA");
     }
 
-    public List<SolicitudVO> findGenOrdCompra() throws Exception{
+    public List<SolicitudVO> findGenOrdCompra() throws Exception {
         return findByEstado("GOC");
     }
 
-    public List<SolicitudVO> findDespProvByProveedorWinner(int codprv) throws Exception{
-        if(codprv == 0) return null;
+    public List<SolicitudVO> findDespProvByProveedorWinner(int codprv) throws Exception {
+        if (codprv == 0) {
+            return null;
+        }
         List<Solicitud> list = dao.findDespProvByProveedorWinner(codprv);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, codprv);
     }
-    
-    public List<SolicitudVO> findGenOrdCompraByProveedor(int codprv) throws Exception{
-        if(codprv == 0) return null;
+
+    public List<SolicitudVO> findGenOrdCompraByProveedor(int codprv) throws Exception {
+        if (codprv == 0) {
+            return null;
+        }
         List<Solicitud> list = dao.findByProveedorWinner(codprv);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, codprv);
     }
-    
-    public List<SolicitudVO> findGenOrdCompra(int codprv) throws Exception{
+
+    public List<SolicitudVO> findGenOrdCompra(int codprv) throws Exception {
         return findByEstado("GOC", codprv);
     }
-    
-    public SolicitudVO genOrdCompra(int idSol, int codprv) throws Exception{
+
+    public SolicitudVO genOrdCompra(int idSol, int codprv) throws Exception {
         Solicitud model = dao.findByKey(idSol);
-        if(model == null) return null;
+        if (model == null) {
+            return null;
+        }
         return modelToVO(model, codprv);
     }
-    
-    public SolicitudVO genOrdCompraByProv(int idSol, int codprv) throws Exception{
+
+    public SolicitudVO genOrdCompraByProv(int idSol, int codprv) throws Exception {
         Solicitud model = dao.findByKey(idSol);
-        if(model == null) return null;
+        if (model == null) {
+            return null;
+        }
         return getOneOrMultipleGanadores(model, codprv);
     }
-    
-    private SolicitudVO getOneOrMultipleGanadores(Solicitud model, int idProv) throws Exception{
-        if(model == null) return null;
+
+    private SolicitudVO getOneOrMultipleGanadores(Solicitud model, int idProv) throws Exception {
+        if (model == null) {
+            return null;
+        }
         SolicitudVO vo = new SolicitudVO();
         PropertyUtils.copyProperties(vo, model);
-        
-        if(model.getIdmarca() != null && model.getIdmarca() > 0){
+
+        if (model.getIdmarca() != null && model.getIdmarca() > 0) {
             Marca marca = marcaDao.findByKey(model.getIdmarca());
-            if(marca != null)
+            if (marca != null) {
                 vo.setMarca(marca.getNombremarca());
+            }
         }
-        if(model.getIdmodelo() != null && model.getIdmodelo() > 0){
+        if (model.getIdmodelo() != null && model.getIdmodelo() > 0) {
             Modelo modelo = modeloDao.findByKey(model.getIdmodelo());
             vo.setModelo(modelo.getNombremodelo());
         }
@@ -411,73 +469,124 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return vo;
     }
 
-    public List<SolicitudVO> findDespProveedor() throws Exception{
+    public List<SolicitudVO> findDespProveedor() throws Exception {
         return findByEstado("DEP");
     }
-    
-    public List<SolicitudVO> findEntSatCliente() throws Exception{
+
+    public List<SolicitudVO> findEntSatCliente() throws Exception {
         return findByEstado("ESC");
     }
-    
+
     //***** CONSULTA DE SOLICITUDES POR TALLER *****//
-    public List<SolicitudVO> findByEstadoAndTaller(String estado, int idTaller) throws Exception{
-        if(estado == null || estado.equals("") || idTaller == 0) return null;
+    public List<SolicitudVO> findByEstadoAndTaller(String estado, int idTaller) throws Exception {
+        if (estado == null || estado.equals("") || idTaller == 0) {
+            return null;
+        }
         List<Solicitud> list = dao.findByEstadoAndTaller(estado, idTaller);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, 0);
     }
-    
-    public List<SolicitudVO> findIngresadasByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findIngresadasByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("ING", idTaller);
     }
-    
-    public List<SolicitudVO> findAnuladasByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findAnuladasByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("ANU", idTaller);
     }
-    
-    public List<SolicitudVO> findDespProveedorByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findDespProveedorByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("DEP", idTaller);
     }
-    
-    public List<SolicitudVO> findEntSatClienteByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findEntSatClienteByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("ESC", idTaller);
     }
-    
-    public List<SolicitudVO> findCerradaDesiertaByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findCerradaDesiertaByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("CPD", idTaller);
     }
-    
-    public List<SolicitudVO> findCerradaAsegByTaller(int idTaller) throws Exception{
+
+    public List<SolicitudVO> findCerradaAsegByTaller(int idTaller) throws Exception {
         return findByEstadoAndTaller("CEA", idTaller);
     }
     //***** CONSULTA DE SOLICITUDES POR TALLER *****//
 
     //***** CONSULTA DE SOLICITUDES POR ASEGURADORA *****//
-    public List<SolicitudVO> findByEstadoAndAseg(String estado, int idAseg) throws Exception{
-        if(estado == null || estado.equals("") || idAseg == 0) return null;
+    public List<SolicitudVO> findByEstadoAndAseg(String estado, int idAseg) throws Exception {
+        if (estado == null || estado.equals("") || idAseg == 0) {
+            return null;
+        }
         List<Solicitud> list = dao.findByEstadoAndAseg(estado, idAseg);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVO(list, 0);
     }
-    
-    public List<SolicitudVO> findIngresadasByAseg(int idAseg) throws Exception{
+
+    public List<SolicitudVO> findIngresadasByAseg(int idAseg) throws Exception {
         return findByEstadoAndAseg("ING", idAseg);
     }
-    
-    public List<SolicitudVO> findCotAbiertaByAseg(int idAseg) throws Exception{
+
+    public List<SolicitudVO> findCotAbiertaByAseg(int idAseg) throws Exception {
         return findByEstadoAndAseg("COA", idAseg);
     }
-    
-    public List<SolicitudVO> findPendAprobarByAseg(int idAseg) throws Exception{
+
+    public List<SolicitudVO> findPendAprobarByAseg(int idAseg) throws Exception {
         return findByEstadoAndAseg("PEA", idAseg);
     }
-    
-    public List<SolicitudVO> findCerradaAsegByAseg(int idAseg) throws Exception{
+
+    public List<SolicitudVO> findCerradaAsegByAseg(int idAseg) throws Exception {
         return findByEstadoAndAseg("CEA", idAseg);
     }
 
-    public List<SolicitudVO> findGenOrdCompraByAseg(int idAseg) throws Exception{
+    public List<SolicitudVO> findGenOrdCompraByAseg(int idAseg) throws Exception {
         return findByEstadoAndAseg("GOC", idAseg);
     }
     //***** CONSULTA DE SOLICITUDES POR ASEGURADORA *****//
+
+    //***** INICIO CONSULTA DE SOLICITUDES POR CLIENTE *****//
+    public List<SolicitudVO> findByEstadoAndCliente(String estado, String user) throws Exception {
+        if (estado == null || estado.equals("") || user == null) {
+            return null;
+        }
+        List<Solicitud> list = dao.findByEstadoAndCliente(estado, user);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return listModelToVO(list, 0);
+    }
+    
+    public List<Solicitud> findByEstadoAndClienteSol(String estado, String user) throws Exception {
+        return dao.findByEstadoAndCliente(estado, user);
+    }
+    //***** FIN CONSULTA DE SOLICITUDES POR CLIENTE *****//
+
+    //***** INICIO CONSULTA DE SOLICITUDES POR CLIENTE *****//
+    public Solicitud findLastByEstadoAndCliente(String estado, String user) throws Exception {
+        if (estado == null || estado.equals("") || user == null) {
+            return null;
+        }
+        List<Solicitud> list = dao.findByEstadoAndCliente(estado, user);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.size()>0?list.get(0):null;
+    }
+    //***** FIN CONSULTA DE SOLICITUDES POR CLIENTE *****//
+
+    
+    public List<TipoRepuesto> findAllTipoRepuestos() throws Exception{
+        return tipoRepDao.getTipoRepuestoActivo();
+    }
+    
+    public boolean existeOfertaToCliente(int id) throws Exception{
+         Integer codprv;
+        if(id == 0) return false;      
+        codprv=opService.getIdProveedorWinnerBySolicitudCliente(id);
+       return !GeneralFunction.isNullOrEmptyOrZero(codprv);
+    }
+    
 }

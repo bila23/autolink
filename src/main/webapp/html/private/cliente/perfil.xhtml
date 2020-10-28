@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/clienteTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="content">
+        <h:form id="perfilForm" enctype="multipart/form-data">
+            <nav style="position: relative">
+                <div class="nav-wrapper">
+                    <div class="col s12">
+                        <a href="index.xhtml" class="breadcrumb">Inicio</a>
+                        <a href="#!" class="breadcrumb">Actualizar Usuario</a>
+
+                    </div>
+                </div>
+            </nav>
+            <div class="row">
+                <div class="col s12">
+                    <p:growl globalOnly="true" id="msg" showDetail="true"/>
+                    <div class="card-panel hoverable">
+                        <h4>Actualizar datos de Usuario</h4>   
+                        <span class="card-title">Datos Personales de Contacto</span>
+                        <div class="row">
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputText value="#{registroController.registro.nombre}" class="validate" id="nombre" required="true" a:autofocus="true" />
+                                        <p:outputLabel id="lblnombre" for="nombre" value="Nombre"  />
+                                    </div>
+                                </h:panelGroup>
+                            </div>                     
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup>
+                                    <div class="input-field">
+                                        <p:inputText value="#{registroController.registro.apellido}" class="validate" required="true" id="apellido" />
+                                        <h:outputLabel for="apellido" value="Apellido" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputMask value="#{registroController.registro.dui}" mask="99999999-9" class="validate" id="dui"  />
+                                        <p:outputLabel for="dui" value="DUI" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <h:outputLabel  for="sexo" value="Sexo"  style="display: block"/>
+                                    <p:selectOneRadio id="sexo" value="#{registroController.registro.sexo}" unselectable="true">
+                                        <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                        <f:selectItem itemLabel="Femenino" itemValue="F" />
+
+                                    </p:selectOneRadio>
+                                </h:panelGroup>
+                            </div> 
+                        </div> 
+
+                        <div class="row">
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <p:outputLabel for="departamento" value="Departamento" style="display: block"/>
+                                    <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar Departamento" required="true" value="#{registroController.registro.iddepartamento}" class="validate" id="departamento" converter="omnifaces.SelectItemsConverter" style="border-color: #c7c5c5" >
+                                        <f:selectItem itemLabel="Seleccione un Departamento" itemValue="0"/>
+                                        <f:selectItems value="#{registroController.listDeptos}" var="dep" itemLabel="#{dep.nombre}" itemValue="#{dep}"/>
+                                        <p:ajax update="municipio"  listener="#{registroController.resetMunicipio}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+
+                            </div>
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <h:outputLabel  for="municipio" value="Municipio"  style="display: block"/>
+                                    <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar Municipio" required="true" value="#{registroController.registro.idmunicipio}" class="validate" id="municipio" converter="omnifaces.SelectItemsConverter" style="border-color: #c7c5c5" >
+                                        <f:selectItem itemLabel="Seleccione un Municipio" itemValue="0"/>
+                                        <f:selectItems value="#{registroController.listMunicipio}" var="mun" itemLabel="#{mun.nombre}" itemValue="#{mun}"/>
+                                    </p:selectOneMenu>
+
+                                </h:panelGroup>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputText value="#{registroController.registro.direcciondomicilio}" required="true" class="validate" id="direccion"  />
+                                        <p:outputLabel for="direccion" value="Dirección Domiciliaria" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputMask value="#{registroController.registro.numeromovil}" mask="9999-9999" required="true" class="validate" id="movil"  />
+                                        <p:outputLabel for="movil" value="Teléfono Móvil" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="col s12 m12 l6">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputMask value="#{registroController.registro.numerofijo}" mask="9999-9999" class="validate" id="fijo"  />
+                                        <p:outputLabel for="fijo" value="Teléfono Fijo" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div> 
+
+                        <span class="card-title">Cuenta de usuario</span>
+                        <p:selectBooleanCheckbox value="#{registroController.cambiopass}" itemLabel="Cambiar Clave">
+                            <p:ajax update="pass passreplay"  />
+                        </p:selectBooleanCheckbox>
+                        <div class="row">
+                            <div class="col s12 m12 l4">
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:inputText value="#{registroController.registro.email}" class="validate" required="true" id="email" >                                     
+                                        </p:inputText>
+                                        <p:outputLabel for="email" value="Email" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+
+                            <div class="col s12 m12 l4">
+                                <h:panelGroup>
+                                    <div class="input-field">
+                                        <p:password value="#{registroController.password}" class="validate" id="pass"  disabled="#{!registroController.cambiopass}"
+                                                    feedback="true" inline="true"  promptLabel="Por favor ingrese contraseña" weakLabel="Debil" goodLabel="Buena" strongLabel="Fuerte"/>
+                                        <p:outputLabel for="pass" value="Nueva Contraseña" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="col s12 m12 l4">
+
+                                <h:panelGroup >
+                                    <div class="input-field">
+                                        <p:password value="#{registroController.passreplay}" class="validate" id="passreplay"   disabled="#{!registroController.cambiopass}"
+                                                    />
+
+                                        <p:outputLabel for="passreplay" value="Repita la Contraseña" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div> 
+
+
+                        <div class="card-action">
+                            <p:commandButton value="Guardar Cambios" class="waves-effect waves-light btn" update="perfilForm:msg"  validateClient="true" actionListener="#{registroController.updateRegistro()}" />
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+            </div>
+
+        </h:form>
+        <script>
+            $(document).ready(function () {
+                $('select').formSelect();
+            });
+        </script>
+    </ui:define>
+
+</ui:composition>

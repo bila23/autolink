@@ -47,7 +47,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ofertaproveedor.findBySolicitud", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud ORDER BY o.idproveedor, o.idrepuesto"),
     @NamedQuery(name = "Ofertaproveedor.findProvTotalBySolicitud", query = "SELECT o.idproveedor, SUM(o.precio) AS precio FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud GROUP BY o.idproveedor ORDER BY precio"),
     @NamedQuery(name = "Ofertaproveedor.findWinnerBySolicitud", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.ganador = 'S'"),
-    @NamedQuery(name = "Ofertaproveedor.findBySolicitudAndProveedorAndRepuesto", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor AND o.idrepuesto = :idrepuesto")
+    @NamedQuery(name = "Ofertaproveedor.findBySolicitudAndProveedorAndRepuesto", query = "SELECT o FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud AND o.idproveedor = :idproveedor AND o.idrepuesto = :idrepuesto"),
+    @NamedQuery(name = "Ofertaproveedor.findWinnerBySolicitudCliente", query = "SELECT o.idproveedor, SUM(o.precio) AS precio FROM Ofertaproveedor o WHERE o.idsolicitud = :idsolicitud GROUP BY o.idproveedor ORDER BY precio asc")
 })
 public class Ofertaproveedor implements Serializable {
 

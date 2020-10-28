@@ -60,7 +60,7 @@
         <filter-class>com.terzus.autolink.commons.AuthFilter</filter-class>
         <init-param>
             <param-name>init_page</param-name>
-            <param-value>/autolink/init.xhtml</param-value>
+            <param-value>/autolink/inicio.xhtml</param-value>
         </init-param>
     </filter>
     <filter>
@@ -200,8 +200,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>jdbc-realm-autolink</realm-name>
         <form-login-config>
-            <form-login-page>/init.xhtml</form-login-page>
-            <form-error-page>/init.xhtml</form-error-page>
+            <form-login-page>/inicio.xhtml</form-login-page>
+            <form-error-page>/inicio.xhtml</form-error-page>
         </form-login-config>
     </login-config>
 </web-app>
