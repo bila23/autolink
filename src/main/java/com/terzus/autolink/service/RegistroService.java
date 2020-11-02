@@ -15,6 +15,7 @@ import com.terzus.autolink.model.Usuario;
 import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.apache.commons.validator.routines.EmailValidator;
 
 /**
  *
@@ -52,5 +53,10 @@ public class RegistroService extends Service<Registro, Integer> {
     public void updatePassword(Usuario usu) throws Exception{
         daoUsuario.update(usu);
     }
+    
+     public  boolean isValidEmail(String email) throws Exception{
+       EmailValidator validator = EmailValidator.getInstance();
+       return validator.isValid(email);
+   }
     
 }

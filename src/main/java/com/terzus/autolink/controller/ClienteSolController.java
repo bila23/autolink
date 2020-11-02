@@ -142,13 +142,11 @@ public class ClienteSolController implements Serializable {
     @Getter
     @Setter
     private String textoBuscar;
-    
+
     private List<Solicitud> listSolicitudes;
-     @Getter
+    @Getter
     @Setter
     private int totalCotizado;
-    
-    
 
     public void saveImage() {
         try {
@@ -173,31 +171,31 @@ public class ClienteSolController implements Serializable {
             itemsTipos = new HashMap<>();
             itemsTipos.put("Sedan", "0");
             itemsTipos.put("Pick Up", "1");
-            itemsTipos.put("Monster Truck", "2");
-            itemsTipos.put("Truck", "3");
+            itemsTipos.put("Camión de Carga", "2");
+            itemsTipos.put("Camión", "3");
             itemsTipos.put("Bus", "4");
-            itemsTipos.put("Van", "5");
+            itemsTipos.put("Microbús", "5");
             itemsTipos.put("Trailer", "6");
-            itemsTipos.put("Motorcycle", "7");
+            itemsTipos.put("Motoclicleta", "7");
 
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             tipo = req.getParameter("i");
-          
+
             chargeAnios();
             user = FacesHelper.getUserLogin();
             usuario = regService.getRegistroByUser(user);
             model = solService.findLastByEstadoAndCliente("INI", user);
             if (model == null) {
-                if(tipo==null){
-                    tipo="0";
+                if (tipo == null) {
+                    tipo = "0";
                     FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml?i=0");
                 }
                 model = new Solicitud();
                 showSaveBtn = true;
             } else {
-                if(tipo==null){
-                    tipo=getCodigoTipoCar(model.getTipovehiculo());
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml?i="+tipo);
+                if (tipo == null) {
+                    tipo = getCodigoTipoCar(model.getTipovehiculo());
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml?i=" + tipo);
                 }
                 showSaveBtn = false;
                 idSol = model.getId();
@@ -209,7 +207,7 @@ public class ClienteSolController implements Serializable {
             solList = solService.findByEstadoAndCliente("ini", user);
             listTipoRep = solService.findAllTipoRepuestos();
             listTipoRepTmp = new ArrayList<>();
-            listTipoRepTmp=listTipoRep;
+            listTipoRepTmp = listTipoRep;
             repList = solService.findRepuestoByTipo(tipoRep);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -229,13 +227,14 @@ public class ClienteSolController implements Serializable {
                     switch (id) {
                         case "ini":
                             solList = solService.findByEstadoAndCliente("ini", user);
+                            showSaveBtn = true;
                             break;
                         case "coa":
                             solList = solService.findByEstadoAndCliente("coa", user);
                             break;
                         case "rev":
                             solList = solService.findByEstadoAndCliente("rev", user);
-                            break;                                              
+                            break;
                         case "pea":
                             solList = solService.findByEstadoAndCliente("pea", user);
                             break;
@@ -290,14 +289,15 @@ public class ClienteSolController implements Serializable {
         }
 
     }
-    public void resetListRepuestos(){
-        repList=null;
-        repuestoSelected=null;
-        cantidad=1;
+
+    public void resetListRepuestos() {
+        repList = null;
+        repuestoSelected = null;
+        cantidad = 1;
     }
-    
-    public List<Repuesto> getRepList(){
-        if(repList==null){
+
+    public List<Repuesto> getRepList() {
+        if (repList == null) {
             try {
                 repList = solService.findRepuestoByTipo(tipoRep);
             } catch (Exception ex) {
@@ -342,7 +342,11 @@ public class ClienteSolController implements Serializable {
             else if(model.getChasis()== null || model.getChasis().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el chasis del vehiculo");*/ else {
                 idSol = solService.saveSol(model, user, getNombreTipoCar(tipo));
-                showSaveBtn = false;
+                if (idSol > 0) {
+                    showSaveBtn = true;
+                } else {
+                    showSaveBtn = false;
+                }
                 FacesHelper.successMessage(Constants.EXITO, "Se ha guardado la solicitud correctamente");
             }
         } catch (Exception e) {
@@ -353,17 +357,22 @@ public class ClienteSolController implements Serializable {
 
     public void saveRepSol() {
         try {
-            if(repuestoSelected==null){
-               FacesHelper.warningMessage(Constants.WARNING, "Debe seleccionar un repuesto"); 
-            }
-            else if (cantidad == null || cantidad == 0) {
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la cantidad de repuestos");            
+            if (repuestoSelected == null) {
+                FacesHelper.warningMessage(Constants.WARNING, "Debe seleccionar un repuesto");
+            } else if (cantidad == null || cantidad == 0) {
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la cantidad de repuestos");
             } else if (repuestoSelected.getId() > 0) {
                 if (repVOList == null || repVOList.isEmpty() || repVOList.size() <= 0) {
                     saveSolicitud();
                 }
                 repSolService.edit(idSol, repuestoSelected.getId(), cantidad);
                 repVOList = repSolService.findBySolicitud(idSol);
+                if (repVOList != null) {
+                    if (repVOList.size() > 0) {
+                        showSaveBtn = true;
+                    }
+                }
+
                 FacesHelper.successMessage(Constants.EXITO, "Se ha agregado el repuesto código:".concat(String.valueOf(repuestoSelected.getId())));
             }
         } catch (Exception e) {
@@ -393,7 +402,7 @@ public class ClienteSolController implements Serializable {
                 model.setTipovehiculo(getNombreTipoCar(tipo));
                 model.setFechacreacion(new Date());
                 solService.update(model);
-                showSaveBtn = true;
+                showSaveBtn = false;
                 repVOList = new ArrayList<>();
                 model = new Solicitud();
                 FacesHelper.successMessage(Constants.EXITO, "Se ha enviado la solicitud correctamente, posteriormente recibira una cotización de esta solicitud");
@@ -441,17 +450,16 @@ public class ClienteSolController implements Serializable {
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de ver los repuestos de la solicitud");
         }
     }
-    
+
     public void showRepCotizados(int idSol) {
         try {
             repSolList = repSolService.findBySolicitudCotizadas(idSol);
-            totalCotizado= calcularTotalCotizado(repSolList); 
+            totalCotizado = calcularTotalCotizado(repSolList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de ver los repuestos de la solicitud");
         }
     }
-
 
     //Saca Nombre del tipo de carro
     public String getNombreTipoCar(String valor) {
@@ -506,10 +514,10 @@ public class ClienteSolController implements Serializable {
         return "";
     }
 
-    public void filtrarTiposRepuestos(){
-       listTipoRep = filterRepListByArg(listTipoRepTmp, textoBuscar);
+    public void filtrarTiposRepuestos() {
+        listTipoRep = filterRepListByArg(listTipoRepTmp, textoBuscar);
     }
-    
+
     public List<TipoRepuesto> filterRepListByArg(List<TipoRepuesto> tiprepList, String arg) {
         if (GeneralFunction.isNullOrEmpty(arg)) {
             return tiprepList;
@@ -531,26 +539,24 @@ public class ClienteSolController implements Serializable {
         }
         return null;
     }
-    
-    
-   public List<Solicitud> getListSolicitudes(String estado){
-       if(listSolicitudes==null){
-           try {
-               listSolicitudes= solService.findByEstadoAndClienteSol(estado, user);
-           } catch (Exception ex) {
-               Logger.getLogger(ClienteSolController.class.getName()).log(Level.SEVERE, null, ex);
-           }
-       }
-       return listSolicitudes;
-   }
+
+    public List<Solicitud> getListSolicitudes(String estado) {
+        if (listSolicitudes == null) {
+            try {
+                listSolicitudes = solService.findByEstadoAndClienteSol(estado, user);
+            } catch (Exception ex) {
+                Logger.getLogger(ClienteSolController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listSolicitudes;
+    }
 
     private int calcularTotalCotizado(List<RepuestoSolicitudVO> repSolList) {
         int total = 0;
         for (RepuestoSolicitudVO rsVo : repSolList) {
-           total= total + rsVo.getPrecio().intValue();
+            total = total + rsVo.getPrecio().intValue();
         }
         return total;
     }
-    
 
 }

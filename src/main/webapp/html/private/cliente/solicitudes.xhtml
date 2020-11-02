@@ -86,6 +86,9 @@
                                 <p:column headerText="Codigo" >
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
+                                  <p:column headerText="Tipo" sortBy="#{r1.tipovehiculo}">
+                                    <h:outputText value="#{r1.tipovehiculo}" />
+                                </p:column>
                                 <p:column headerText="Marca" >
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -110,6 +113,9 @@
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
+                                  <p:column headerText="Tipo" sortBy="#{r1.tipovehiculo}">
+                                    <h:outputText value="#{r1.tipovehiculo}" />
+                                </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
@@ -133,6 +139,9 @@
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtofe" var="r1" value="#{clienteSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
+                                <p:column headerText="Tipo" sortBy="#{r1.tipovehiculo}">
+                                    <h:outputText value="#{r1.tipovehiculo}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
@@ -160,6 +169,9 @@
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtoka" var="r1" value="#{clienteSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
+                                <p:column headerText="Tipo" sortBy="#{r1.tipovehiculo}">
+                                    <h:outputText value="#{r1.tipovehiculo}" />
                                 </p:column>
                                 <p:column headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />

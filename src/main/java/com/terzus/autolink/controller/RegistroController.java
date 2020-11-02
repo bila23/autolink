@@ -65,30 +65,30 @@ public class RegistroController implements Serializable {
     @Setter
     private String passreplay;
     private Usuario usu;
- @Getter
+    @Getter
     @Setter
     private boolean cambiopass;
+
     public RegistroController() {
     }
 
     @PostConstruct
     public void init() {
-        try {   
+        try {
             user = FacesHelper.getUserLogin();
-            registro=getRegistroByUser();
-            if(registro==null){
-                registro = new Registro(); 
+            registro = getRegistroByUser();
+            if (registro == null) {
+                registro = new Registro();
             }
             listDeptos = muniService.getListDepartamentos();
-            password= "";
-            passreplay="";
+            password = "";
+            passreplay = "";
             // PrimeFaces.current().executeScript("$('.input-field label').removeClass('active'); ");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar departamentos. Favor intentelo nuevamente");
         }
     }
-
 
     public void resetMunicipio() {
         if (registro != null) {
@@ -106,10 +106,10 @@ public class RegistroController implements Serializable {
         }
         return listMunicipios;
     }
-    
-    public Registro getRegistroByUser(){
+
+    public Registro getRegistroByUser() {
         try {
-            registro=regService.getRegistroByUser(user);
+            registro = regService.getRegistroByUser(user);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             FacesHelper.error("Ha ocurrido un error al tratar de recuperar datos de registro del usuario");
@@ -124,6 +124,8 @@ public class RegistroController implements Serializable {
                     FacesHelper.warningMessage("Debe ingresar su usuario para poder registrarse");
                 } else if (password == null || "".equals(password)) {
                     FacesHelper.warningMessage("Debe crear una contraseña para poder registrarse");
+                } else if (!regService.isValidEmail(registro.getEmail())) {
+                    FacesHelper.warningMessage("El correo electrónico ingresado no es válido");
                 } else {
                     boolean existUser = userService.existUser(registro.getEmail());
                     if (existUser) {
@@ -133,8 +135,8 @@ public class RegistroController implements Serializable {
                     } else {
                         regService.save(registro, password);
                         registro = new Registro();
-                        password=null;
-                        passreplay=null;
+                        password = null;
+                        passreplay = null;
                         FacesHelper.successMessage("Bienvenido", "Se ha registrado correctamente en nustra plataforma");
                     }
                 }
@@ -145,19 +147,21 @@ public class RegistroController implements Serializable {
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al registrar el usuario. Favor intente nuevamente");
         }
     }
-    
-    public void updateRegistro(){
+
+    public void updateRegistro() {
         try {
-            if(registro!=null){
-                regService.update(registro);
-               if(cambiopass && !GeneralFunction.isNullOrEmpty(password) && password.equals(passreplay) ){                  
-                   usu =registro.getIdusuario();
-                   usu.setPass(password);
-                   regService.updatePassword(usu);
-                   FacesHelper.success("La clave de usuario se cambio con exito.");
-               }
+            if (registro != null) {
+                if (regService.isValidEmail(registro.getEmail())) {
+                    regService.update(registro);
+                }
+                if (cambiopass && !GeneralFunction.isNullOrEmpty(password) && password.equals(passreplay)) {
+                    usu = registro.getIdusuario();
+                    usu.setPass(password);
+                    regService.updatePassword(usu);
+                    FacesHelper.success("La clave de usuario se cambio con exito.");
+                }
                 FacesHelper.success("Se ha actualizado la informacion del usuario correctamente.");
-            }           
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             FacesHelper.error("Ha ocurrido un error al tratar de actualizar el registro de usuario");

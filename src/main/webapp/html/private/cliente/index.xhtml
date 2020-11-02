@@ -125,22 +125,22 @@
                 <p:menuitem value="Pickup" outcome="index" icon="fa fa-truck-pickup">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Monster Truck" outcome="index" icon="fa fa-truck-monster">
+                <p:menuitem value="Camión de carga" outcome="index" icon="fa fa-truck-monster">
                     <f:param name="i" value="2" />
                 </p:menuitem>
-                <p:menuitem value="Truck" outcome="index" icon="fa fa-truck">
+                <p:menuitem value="Camión" outcome="index" icon="fa fa-truck">
                     <f:param name="i" value="3" />
                 </p:menuitem>
                 <p:menuitem value="Bus" outcome="index" icon="fa fa-bus-alt">
                     <f:param name="i" value="4" />
                 </p:menuitem>
-                <p:menuitem value="Van" outcome="index" icon="fa fa-shuttle-van">
+                <p:menuitem value="Microbús" outcome="index" icon="fa fa-shuttle-van">
                     <f:param name="i" value="5" />
                 </p:menuitem>
                 <p:menuitem value="Trailer" outcome="index" icon="fa fa-trailer">
                     <f:param name="i" value="6" />
                 </p:menuitem>
-                <p:menuitem value="Motorcycle" outcome="index" icon="fa fa-motorcycle">
+                <p:menuitem value="Motocicleta" outcome="index" icon="fa fa-motorcycle">
                     <f:param name="i" value="7" />
                 </p:menuitem>
                 <div>
@@ -241,9 +241,8 @@
                         <p:panelGrid columns="1" style="width:100% ">
                             <f:facet name="header">
                                 <div class="ui-g">
-                                    <div class="ui-g-6" style="color: rgba(96,125,139,1); font-weight: lighter"><i class="fab fa-empire"></i> ##{trep.id}</div>
-
-                                    <div class="ui-g-6"><span class="new badge green lighten-1" data-badge-caption="Repuestos">4</span></div>
+                                    <div class="ui-g-4" style="color: rgba(96,125,139,1); font-weight: lighter"><i class="fab fa-empire"></i> ##{trep.id}</div>
+                                 
                                 </div>
                                 <p:graphicImage  url="/images/store/#{trep.image}" style="max-width: 100px; margin: auto; display: block"/> 
                             </f:facet>
@@ -261,9 +260,10 @@
                 </p:dataGrid>
             </div>
             <p:dialog id="dialogRep" header="#{clienteSolController.tipoRep.nombre}" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" position="center">
-                <p:outputPanel id="carDetail" style="text-align:center; padding: 20px">
-
+                <p:outputPanel id="carDetail" style="text-align:center; padding: 0px 20px">
+                    <h:outputText value="#{clienteSolController.tipoRep.descripcion}" style="max-width: 400px; display: block" />
                     <p:graphicImage url="/images/store/#{clienteSolController.tipoRep.image}" style="max-width: 300px; object-fit: contain; object-position: center; max-height: 200px; position: absolute;  left: 50%; transform: translateX(-50%);top: 0px; opacity: .2;"/> 
+                  
                     <p:panelGrid  columns="2" rendered="#{not empty clienteSolController.tipoRep}" columnClasses="label,value">
 
 
@@ -272,12 +272,12 @@
                                          filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="Seleccione el repuesto" itemValue=""/>
                             <f:selectItems value="#{clienteSolController.repList}" var="repue" itemLabel="#{repue.nombrerepuesto}" itemValue="#{repue}"/>
-                            <p:ajax update="precio agregar" />
+                            <p:ajax update="agregar" />
                         </p:selectOneMenu>                         
-
+<!--
                         <h:outputText value="Precio" />
                         <h:outputText id="precio" value="$#{clienteSolController.repuestoSelected.valor}" />
-
+-->
                         <h:outputLabel value="Cantidad:" for="cantidad"/>
                         <p:spinner value="#{clienteSolController.cantidad}" id="cantidad" />
                     </p:panelGrid>
