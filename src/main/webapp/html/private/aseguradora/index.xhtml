@@ -35,10 +35,10 @@
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
                                     <p:commandLink actionListener="#{asegSolController.recoverSol(r1.id)}" onsuccess="PF('dglInfo').show()" title="Informacion" update="mf:com">
-                                        <i class="material-icons">info</i>
-                                    </p:commandLink>
-                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
                                         <i class="material-icons">image</i>
+                                    </p:commandLink>
+                                    <p:commandLink title="Ver todo" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden2" onsuccess="PF('dlgInfo').show()">
+                                        <i class="material-icons">info</i>
                                     </p:commandLink>
                                 </p:column>
                                 <p:column style="text-align: center">
@@ -73,8 +73,8 @@
                                     <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
-                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
-                                        <i class="material-icons">image</i>
+                                    <p:commandLink title="Ver todo" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden2" onsuccess="PF('dlgInfo').show()">
+                                        <i class="material-icons">info</i>
                                     </p:commandLink>
                                 </p:column>
                             </p:dataTable>
@@ -103,8 +103,8 @@
                                     <p:commandLink title="Ver ofertas" actionListener="#{asegSolController.showOfertasBySolicitud(r1.id)}" update="mf:totalRepOf mf:msg mf:ofertaTable" onsuccess="PF('dlgOfertas').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
-                                    <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
-                                        <i class="material-icons">image</i>
+                                    <p:commandLink title="Ver todo" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden2" onsuccess="PF('dlgInfo').show()">
+                                        <i class="material-icons">info</i>
                                     </p:commandLink>
                                 </p:column>
                             </p:dataTable>
@@ -166,6 +166,50 @@
                     </p:tabView>
                 </div>
             </div>
+            <p:dialog widgetVar="dlgInfo" id="dlgInfo" modal="true" closeOnEscape="true" header="Informacion de solicitud" closable="true" position="top" dynamic="true" width="990">
+                <h:panelGroup id="pgDlgOrden2">
+                    <div class="row">
+                        <div class="col s6">
+                            <span class="text-bold">Codigo: </span> #{adminSolController.vo.codigosolicitud}
+                        </div>
+                        <div class="col s6">
+                            <span class="text-bold">Fecha de creacion: </span> #{of:formatDate(adminSolController.vo.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <span class="text-bold">Carro: </span>#{adminSolController.vo.tipovehiculo} / #{adminSolController.vo.marca} / #{adminSolController.vo.modelo} / #{adminSolController.vo.aniocarro} / #{adminSolController.vo.chasis}
+                        </div>
+                        <div class="col s6">
+                            <span class="text-bold">Siniestro: </span> #{adminSolController.vo.siniestro}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <span class="text-bold">Comentario: </span> #{adminSolController.vo.comentariostaller}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:dataTable emptyMessage="No hay repuestos" id="solTable" var="r1" value="#{adminSolController.vo.repAllList}">
+                                <p:column class="center-align" headerText="Repuesto">
+                                    <h:outputText value="#{r1.repuesto}"/>
+                                </p:column>
+                                <p:column class="center-align" headerText="Cantidad">
+                                    <h:outputText value="#{r1.cantidad}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin:0 auto">
+                            <p:galleria value="#{adminSolController.vo.fotoList}" var="image" panelWidth="500" panelHeight="313" style="margin:0 auto">
+                                <p:graphicImage value="#{image.url}" class="img-al"/>
+                            </p:galleria>  
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
             <p:dialog id="imgList" widgetVar="imgList" modal="true" closeOnEscape="true" header="Repuestos" position="top">
                 <p:galleria id="galleria" widgetVar="galleria" value="#{tallerSolController.imageList}" var="img">
                     <p:graphicImage value="#{img.url}" width="330" height="290"/>

@@ -11,6 +11,7 @@
 package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
+import com.bila.framework.commons.GeneralFunction;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Aseguradora;
 import com.terzus.autolink.model.Marca;
@@ -28,6 +29,7 @@ import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -80,6 +82,7 @@ public class TallerSolController implements Serializable{
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
     @Getter @Setter private UploadedFile imageFile;
     @Getter @Setter private List<FotoXSolicitudVO> imageList;
+    @Getter @Setter private List<Integer> yearList;
     private int idSol;
     
     public void deleteImage(int id){
@@ -134,6 +137,11 @@ public class TallerSolController implements Serializable{
             tipoVehList = tipoVehService.findAllWithNamedQuery();
             if(idTaller == 0)
                 showMessageIdTallerZero();
+            int yearActual = GeneralFunction.getYear() + 2;
+            int i = 0;
+            yearList = new ArrayList();
+            for(i=1980; i<=yearActual; i++)
+                yearList.add(i);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al recuperar las solicitudes. Favor intente nuevamente");
@@ -256,6 +264,8 @@ public class TallerSolController implements Serializable{
                 FacesHelper.warningMessage(Constants.WARNING, "Debe seleccionar un repuesto");
             else if(repuesto > 0){
                 repSolService.save(idSol, repuesto, cantidad);
+                repuesto = 0;
+                cantidad = 0;
                 repVOList = repSolService.findBySolicitud(idSol);
                 FacesHelper.successMessage(Constants.EXITO, "Se ha guardado el repuesto");
             }
