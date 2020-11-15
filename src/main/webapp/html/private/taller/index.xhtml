@@ -59,28 +59,31 @@
                                             </p:selectOneMenu>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro" a:placeholder="Año de carro:"/>
+                                            <p:selectOneMenu value="#{tallerSolController.model.aniocarro}" class="validate" id="aniocarro" filter="true" filterMatchMode="contains">
+                                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione el año del carro"/>
+                                                <f:selectItems value="#{tallerSolController.yearList}" var="year" itemLabel="#{year}" itemValue="#{year}"/>
+                                            </p:selectOneMenu>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <p:inputMask value="#{tallerSolController.model.placa}" class="validate" id="placa" a:placeholder="Placa:" mask="a*-999999"/>
+                                            <p:inputMask value="#{tallerSolController.model.placa}" class="validate" id="placa" a:placeholder="Placa:" mask="a*-9999"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis" a:placeholder="Chasis:" maxlength="17"/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor" a:placeholder="Motor:"/>
-                                        </div>
-                                        <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza" a:placeholder="Poliza:"/>
+                                            <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis" a:placeholder="Chasis:" maxlength="17" autocomplete="off"/>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro" a:placeholder="Siniestro:"/>
+                                            <h:inputText value="#{tallerSolController.model.motor}" class="validate" id="motor" a:placeholder="Motor:" autocomplete="off"/>
+                                        </div>
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.poliza}" class="validate" id="poliza" a:placeholder="Poliza:" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l6">
+                                            <h:inputText value="#{tallerSolController.model.siniestro}" class="validate" id="siniestro" a:placeholder="Siniestro:" autocomplete="off"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6"></div>
                                     </div>
@@ -110,7 +113,7 @@
                                             <h:outputLabel value="Cantidad:" for="cantidad"/>
                                         </div>
                                         <div class="col s12 m12 l3 input-field">
-                                            <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable mf:msg"/>
+                                            <p:commandButton value="Guardar Repuesto" class="waves-effect waves-light btn" actionListener="#{tallerSolController.saveRepSol()}" update="repTable mf:msg @form"/>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -198,10 +201,10 @@
                                 <p:column headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column style="width:8%;text-align: center">
-                                    <p:commandLink title="Ver piezas" actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                <p:column style="width:5%;text-align: center">
+                                    <!--<p:commandLink title="Ver piezas" actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
                                         <i class="material-icons">content_paste</i>
-                                    </p:commandLink>
+                                    </p:commandLink>-->
                                     <p:commandLink title="Ver todo" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden" onsuccess="PF('dlgInfo').show()">
                                         <i class="material-icons">info</i>
                                     </p:commandLink>
