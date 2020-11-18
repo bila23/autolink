@@ -29,6 +29,7 @@ import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.model.TipoRepuesto;
 import com.terzus.autolink.vo.FotoXSolicitudVO;
+import com.terzus.autolink.vo.HorasVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.RepuestosAllSolVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -71,13 +72,22 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         return dao;
     }
     
-    public List<Integer> prepareHourList(){
-        Calendar today = Calendar.getInstance();
-        int hours = today.get(Calendar.HOUR_OF_DAY);
-        List<Integer> list = new ArrayList();
-        for(int i = hours; i<24; i++){
-            list.add(i);
+    public List<HorasVO> prepareHourList(){
+        List<HorasVO> list = new ArrayList();
+        HorasVO vo = null;
+        for(int i = 1; i<24; i++){
+            vo = new HorasVO();
+            vo.setHora(i);
+            if(i<=9)
+                vo.setText("0" + i);
+            else
+                vo.setText(String.valueOf(i));
+            list.add(vo);
         }
+        vo = new HorasVO();
+        vo.setHora(0);
+        vo.setText("00");
+        list.add(vo);
         return list;
     }
     
@@ -150,15 +160,11 @@ public class SolicitudService extends Service<Solicitud, Integer>{
      * @param hour objeto de tipo Date con la hora de finalizacion
      * @throws Exception 
      */
-    public void updateHorasVigencia(int idSol, int hour) throws Exception{
+    public void updateHorasVigencia(int idSol, int hour, Date fecha) throws Exception{
         Solicitud model = dao.findByKey(idSol);
         if(model != null){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            
             Date ini = new Date();
-            Date end = defineEndDate(hour);
+            Date end = defineEndDate(fecha, hour);
             
             model.setFechainicio(ini);
             model.setFechafin(end);
@@ -167,9 +173,9 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
     }
     
-    private Date defineEndDate(int hours) {
+    private Date defineEndDate(Date fecha, int hours) {
         Calendar newDay = Calendar.getInstance();
-        newDay.setTime(new Date());
+        newDay.setTime(fecha);
         newDay.set(Calendar.HOUR_OF_DAY, hours);
         newDay.set(Calendar.MINUTE, 0);
         return newDay.getTime();

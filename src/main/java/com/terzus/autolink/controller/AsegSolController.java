@@ -20,6 +20,7 @@ import com.terzus.autolink.service.AseguradoraService;
 import com.terzus.autolink.service.OfertaProvService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.vo.HorasVO;
 import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -60,8 +61,9 @@ public class AsegSolController implements Serializable{
     @Getter @Setter private SolicitudVO voOrdenCompra;
     @Getter @Setter private List<OfertaPrecioVO> opList;
     @Getter @Setter private List<RepuestoSolicitudVO> repSolList;
-    @Getter @Setter private List<Integer> hourList;
+    @Getter @Setter private List<HorasVO> hourList;
     @Getter private int codSol;
+    @Getter @Setter private Date fecha;
     @Getter @Setter private int idProv;
     @Getter @Setter private int idSol;
     @Getter @Setter private int horas;
@@ -71,18 +73,15 @@ public class AsegSolController implements Serializable{
 
     public void setCodSol(int codSol) {
         this.codSol = codSol;
-        try{
-            hourList = solService.prepareHourList();
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            FacesHelper.errorMessage("Ha ocurrido un error al definir la lista de horas disponibles");
-        }
+        fecha = new Date();
     }
     
     @PostConstruct
     public void init(){
         try{
             solList = solService.findIngresadas();
+            fecha = new Date();
+            hourList = solService.prepareHourList();
             idAseguradora = asegService.findIdByUser(FacesHelper.getUserLogin());
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -154,10 +153,10 @@ public class AsegSolController implements Serializable{
     
     public void changeCotAbierta(){
         try{
-            if(horas == 0)
-                FacesHelper.warningMessage(Constants.WARNING, "Debe definir el tiempo de vigencia de la solicitud");
+            if(fecha == null)
+                FacesHelper.warningMessage(Constants.WARNING, "Debe definir la fecha de finalizacion");
             else if(codSol > 0){
-                solService.updateHorasVigencia(codSol, horas);
+                solService.updateHorasVigencia(codSol, horas, fecha);
                 solService.updateEstado(codSol, "COA");
                 solList = solService.findIngresadasByAseg(idAseguradora);
                 FacesHelper.successMessage(Constants.EXITO, "Se ha actualizado la solicitud correctamente");
