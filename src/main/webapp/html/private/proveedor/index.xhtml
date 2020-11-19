@@ -74,8 +74,9 @@
                                         <h:outputText value="#{r1.comentariosaseguradora}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column style="text-align:center" headerText="Cotizadas">
-                                    <h:outputLabel rendered="#{r1.viewed ? 'viewed' : 'no-viewed'}">X</h:outputLabel>
+                                <p:column style="text-align:center" headerText="Ya fue cotizada?">
+                                    <h:outputLabel rendered="#{r1.hasOffers}">Si</h:outputLabel>
+                                    <h:outputLabel rendered="#{r1.hasOffers}">No</h:outputLabel>
                                 </p:column>
                                 <p:column headerText="Imagenes" style="text-align:center;width: 8%">
                                     <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">

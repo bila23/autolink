@@ -30,6 +30,7 @@ import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.model.TipoRepuesto;
 import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.HorasVO;
+import com.terzus.autolink.vo.OfertaProveedorVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.RepuestosAllSolVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -379,6 +380,13 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         
         //VERIFICO SI LA OFERTA YA FUE ABIERTA
         vo.setViewed(ofvService.isViewed(vo.getId(), codprv));        
+        
+        //VERIFICO SI LA SOLICITUD POSEE OFERTAS POR EL PROVEEDOR
+        List<OfertaProveedorVO> offerList = opService.findBySolAndProv(vo.getId(), codprv);
+        if(offerList != null && !offerList.isEmpty())
+            vo.setHasOffers(true);
+        else
+            vo.setHasOffers(false);
                 
         //HORA PENDIENTES
         if(vo.getFechafin() != null){
