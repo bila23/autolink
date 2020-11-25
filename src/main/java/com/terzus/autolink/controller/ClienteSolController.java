@@ -315,7 +315,7 @@ public class ClienteSolController implements Serializable {
         } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
         } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
         } else {
             showSaveBtn = false;
         }
@@ -332,7 +332,7 @@ public class ClienteSolController implements Serializable {
             } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
             } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
             } /* else if(model.getPlaca() == null || model.getPlaca().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
             else if(model.getChasis()== null || model.getChasis().equals(""))
@@ -390,7 +390,7 @@ public class ClienteSolController implements Serializable {
             } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
             } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
             } else if (model.getPlaca() == null || model.getPlaca().equals("")) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
             } else if (model.getChasis() == null || model.getChasis().equals("")) {

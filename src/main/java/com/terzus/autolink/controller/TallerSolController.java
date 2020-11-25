@@ -228,29 +228,29 @@ public class TallerSolController implements Serializable{
     private boolean validateForm(){
         boolean flag = false;
         if(model.getNombreasegurado() == null || model.getNombreasegurado().equals(""))
-            FacesHelper.warningMessage("Debe ingresar el nombre del asegurado");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el nombre del asegurado");
         else if(idTipoVehiculo == 0)
-            FacesHelper.warningMessage("Debe ingresar el tipo de vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el tipo de vehiculo");
         else if(model.getIdmarca() == null || model.getIdmarca() == 0)
-            FacesHelper.warningMessage("Debe ingresar la marca del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la marca del vehiculo");
         else if(model.getIdmodelo() == null || model.getIdmodelo() == 0)
-            FacesHelper.warningMessage("Debe ingresar el modelo del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
         else if(model.getAniocarro()== null || model.getAniocarro() == 0)
-            FacesHelper.warningMessage("Debe ingresar el anio del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
         else if(model.getPlaca() == null || model.getPlaca().equals(""))
-            FacesHelper.warningMessage("Debe ingresar la placa del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
         else if(model.getChasis()== null || model.getChasis().equals(""))
-            FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el chasis del vehiculo");
         else if(model.getMotor()== null || model.getMotor().equals(""))
-            FacesHelper.warningMessage("Debe ingresar el motor del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el motor del vehiculo");
         else if(model.getPoliza()== null || model.getPoliza().equals(""))
-            FacesHelper.warningMessage("Debe ingresar la poliza del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la poliza del vehiculo");
         else if(model.getChasis()== null || model.getChasis().equals(""))
-            FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el chasis del vehiculo");
         else if(model.getSiniestro()== null || model.getSiniestro().equals(""))
-            FacesHelper.warningMessage("Debe ingresar el siniestro");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el siniestro");
         else if(model.getChasis().length() != 17)
-            FacesHelper.warningMessage("El chasis debe tener 17 caracteres");
+            FacesHelper.warningMessage(Constants.WARNING, "El chasis debe tener 17 caracteres");
         else
             flag = true;
         return flag;
