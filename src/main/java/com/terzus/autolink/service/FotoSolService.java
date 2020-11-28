@@ -72,12 +72,14 @@ public class FotoSolService extends Service<Fotoxsolicitud, Integer>{
         List<FotoXSolicitudVO> lst = new ArrayList();
         FotoXSolicitudVO vo = null;
         for(Fotoxsolicitud model : list){
-            vo = new FotoXSolicitudVO();
-            vo.setId(model.getId());
-            vo.setFoto(model.getFoto());
-            vo.setUrl(Constants.URL_IMAGE.concat(vo.getFoto()));
-            vo.setIdSol(model.getIdSolicitud().getId());
-            lst.add(vo);
+            if(model.getFoto() != null){
+                vo = new FotoXSolicitudVO();
+                vo.setId(model.getId());
+                vo.setFoto(model.getFoto());
+                vo.setUrl(Constants.URL_IMAGE.concat(vo.getFoto()));
+                vo.setIdSol(model.getIdSolicitud().getId());
+                lst.add(vo);
+            }
         }
         return lst;
     }
