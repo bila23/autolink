@@ -15,6 +15,7 @@ import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.OfertaProvDao;
 import com.terzus.autolink.dao.ProveedorDao;
 import com.terzus.autolink.dao.RepuestoDao;
+import com.terzus.autolink.model.EntregaCliente;
 import com.terzus.autolink.model.Ofertaproveedor;
 import com.terzus.autolink.model.Proveedor;
 import com.terzus.autolink.model.Repuesto;
@@ -22,6 +23,7 @@ import com.terzus.autolink.model.Respuestoxsolicitud;
 import com.terzus.autolink.vo.OfertaPrecioVO;
 import com.terzus.autolink.vo.OfertaProveedorVO;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -45,6 +47,7 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
     @Inject private ProveedorDao provDao;
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private SolicitudDespService solDespService;
+    @Inject private EntregaClienteService entregaClienteService;
 
     @Override
     public Dao<Ofertaproveedor, Integer> getDao() {
@@ -187,9 +190,18 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         //RECUPERO LA OFERTA OPTIMA
         OfertaPrecioVO optima = this.findOfertaOptima(idSol);
         //RECUPERO LOS DIFERENTES PROVEEDORES Y LOS REPUESTOS QUE ESTOS GANAN
+        EntregaCliente entrega = null;
         for(OfertaProveedorVO vo : optima.getList()){
             dao.updateGanadorBySolAndProvAndRep(idSol, vo.getIdproveedor(), vo.getIdrepuesto());
             solDespService.save(idSol, vo.getIdproveedor(), userCrea);
+            entrega = new EntregaCliente();
+            entrega.setDateCreate(new Date());
+            entrega.setEntregado("No");
+            entrega.setProveedor(vo.getIdproveedor());
+            entrega.setRepuesto(vo.getIdrepuesto());
+            entrega.setSolicitud(idSol);
+            entrega.setUserCreate(userCrea);
+            entregaClienteService.save(entrega);
         }
     }
     
@@ -197,6 +209,23 @@ public class OfertaProvService extends Service<Ofertaproveedor, Integer> {
         if(idSol == 0 || idProv == 0) return;
         dao.updateGanador(idSol, idProv);
         solDespService.save(idSol, idProv, usrCrea);
+        saveEntregaCliente(idSol, idProv, usrCrea);
+    }
+    
+    public void saveEntregaCliente(int idSol, int idProv, String usrCrea) throws Exception{
+        //GUARDO EL DETALLE DE ENTREGA A CLIENTE
+        List<Ofertaproveedor> ofertaList = dao.findBySolicitud(idSol);
+        EntregaCliente entrega = null;
+        for(Ofertaproveedor op : ofertaList){
+            entrega = new EntregaCliente();
+            entrega.setDateCreate(new Date());
+            entrega.setEntregado("No");
+            entrega.setProveedor(idProv);
+            entrega.setRepuesto(op.getIdrepuesto());
+            entrega.setSolicitud(idSol);
+            entrega.setUserCreate(usrCrea);
+            entregaClienteService.save(entrega);
+        }
     }
     
     public Proveedor findWinnerBySolicitud(int idSol) throws Exception{

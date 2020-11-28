@@ -11,7 +11,7 @@
             .no-viewed .link, .viewed{color: #484747}
         </style>
         <h:form id="mf">
-            <p:poll listener="#{provSolController.findCotAbierta()}" interval="180" update="totalSolCoa dateSolCoa mf:tab:dtcoa"/>
+            <p:poll listener="#{provSolController.findCotAbierta()}" interval="180" update="totalSolCoa dateSolCoa mf:tab"/>
             <div class="row" style="margin-bottom:5px">
                 <div class="col s12 m12 l6">
                     <h:panelGroup id="totalSolCoa" class="title-of">
@@ -74,9 +74,9 @@
                                         <h:outputText value="#{r1.comentariosaseguradora}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column style="text-align:center" headerText="Ya fue cotizada?">
-                                    <h:outputLabel rendered="#{r1.hasOffers}">Si</h:outputLabel>
-                                    <h:outputLabel rendered="#{r1.hasOffers}">No</h:outputLabel>
+                                <p:column style="text-align:center" headerText="Ya fue cotizada?" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                    <h:outputLabel style="font-weight:bold" rendered="#{r1.hasOffers}">Si</h:outputLabel>
+                                    <h:outputLabel style="font-weight:bold" rendered="#{!r1.hasOffers}">No</h:outputLabel>
                                 </p:column>
                                 <p:column headerText="Imagenes" style="text-align:center;width: 8%">
                                     <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">

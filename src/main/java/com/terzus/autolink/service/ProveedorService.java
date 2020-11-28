@@ -46,6 +46,13 @@ public class ProveedorService extends Service<Proveedor, Integer>{
         return dao;
     }
     
+    public String findName(int idProv) throws Exception{
+        if(idProv == 0) return null;
+        Proveedor prov = dao.findByKey(idProv);
+        if(prov == null) return null;
+        return prov.getNombreproveedor();
+    }
+    
     public Proveedor findByUser(String user) throws Exception{
         if(user == null || user.equals("")) return null;
         return dao.findByUser(user);

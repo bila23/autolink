@@ -37,4 +37,10 @@ public class RepuestoService extends Service<Repuesto, Integer>{
         return dao;
     }
 
+    public String findName(int idRep) throws Exception{
+        if(idRep == 0) return null;
+        Repuesto model = dao.findByKey(idRep);
+        if(model == null) return null;
+        return model.getNombrerepuesto();
+    }
 }

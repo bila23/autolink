@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 m12 l6">
-                                            <p:inputMask value="#{tallerSolController.model.placa}" class="validate" id="placa" a:placeholder="Placa:" mask="a*-9999"/>
+                                            <p:inputText value="#{tallerSolController.model.placa}" class="validate" id="placa" a:placeholder="Placa:"/>
                                         </div>
                                         <div class="input-field col s12 m12 l6">
                                             <h:inputText value="#{tallerSolController.model.chasis}" class="validate" id="chasis" a:placeholder="Chasis:" maxlength="17" autocomplete="off"/>
@@ -235,7 +235,7 @@
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
-                        <p:tab title="DESP. POR PROVEEDOR" id="dpp">
+                        <p:tab title="DESPACHADO POR PROVEEDOR" id="dpp">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtdpp" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column filterBy="#{r1}" filterMatchMode="contains" headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -252,17 +252,17 @@
                                 <p:column filterBy="#{r1}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                <!--<p:column headerText="Ver piezas" style="width:8%;text-align: center">
                                     <p:commandLink actionListener="#{tallerSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
                                         <i class="material-icons">content_paste</i>
                                     </p:commandLink>
-                                </p:column>
-                                <p:column headerText="" style="width:18%;text-align: center">
-                                    <p:commandButton update="mf:pgEsc mf:pgEsc2" value="Entreg. a sat." class="waves-effect waves-light btn" actionListener="#{tallerSolController.verifySatCliente(r1.id)}" onsuccess="PF('dlgEsc').show()"/>
+                                </p:column>-->
+                                <p:column headerText="" style="text-align: center">
+                                    <p:commandButton update="mf:pgEsc mf:pgEsc2" value="Entrega" class="waves-effect waves-light btn" actionListener="#{tallerSolController.verifySatCliente(r1.id)}" onsuccess="PF('dlgEsc').show()"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
-                        <p:tab title="ENT. A SAT. CLIENTE" id="eas">
+                        <p:tab title="ENTREGADO A SATISFACCION DEL CLIENTE" id="eas">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dteas" var="r1" value="#{tallerSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column filterBy="#{r1}" filterMatchMode="contains" headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
@@ -343,14 +343,30 @@
             
             <p:dialog widgetVar="dlgEsc" id="dlgEsc" modal="true" resizable="false" showHeader="false" closeOnEscape="true">
                 <h:panelGroup id="pgEsc" rendered="#{!tallerSolController.flagEsc}">
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <div style="padding-bottom:25px">
                             Esta seguro que desea mover la solicitud al estado "Entregado a Satisfaccion del Cliente"?
                         </div>
                         <p:commandButton update="mf:msg mf" onsuccess="PF('dlgEsc').hide();" value="Si" class="waves-effect waves-light btn" actionListener="#{tallerSolController.despProvToEntSatis()}"/>
                         <p:spacer width="7"/>
                         <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgEsc').hide();" type="button"/>
-                    </div>
+                    </div>-->
+                    <div class="form-group">
+                        Cuando se actualizen todos los repuestos como entregados la solicitud cambiara a "Entregado a satisfaccion del cliente".
+                    </div><br/>
+                    <p:dataTable emptyMessage="No hay repuestos" id="entregaId" var="e" value="#{tallerSolController.entregaClienteList}">
+                        <p:column headerText="Proveedor" sortBy="#{e.nameProveedor}">
+                            <h:outputText value="#{e.nameProveedor}" />
+                        </p:column>
+                        <p:column headerText="Repuesto" sortBy="#{e.nameRepuesto}">
+                            <h:outputText value="#{e.nameRepuesto}" />
+                        </p:column>
+                        <p:column headerText="Ya fue entregado?">
+                            <p:selectBooleanButton value="#{e.seEntrego}" onLabel="Si" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
+                                <p:ajax update="mf:msg mf" onsuccess="PF('dlgEsc').show();" listener="#{tallerSolController.changeEntregado(e.id)}"/>
+                            </p:selectBooleanButton>
+                        </p:column>
+                    </p:dataTable>
                 </h:panelGroup>
                 <h:panelGroup id="pgEsc2" rendered="#{tallerSolController.flagEsc}">
                     <div class="row">
