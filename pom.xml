@@ -28,6 +28,11 @@
     </developers>
     <dependencies>
         <dependency>
+            <groupId>com.mailjet</groupId>
+            <artifactId>mailjet-client</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.core</artifactId>
             <version>2.5.2</version>
@@ -62,6 +67,12 @@
             <artifactId>javax.persistence</artifactId>
             <version>2.1.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

@@ -137,50 +137,31 @@
         <nav class="" style="background-color: #002138bf !important;">
             <div class="nav-wrapper">
                 <a href="#"  class="brand-logo">Autolink </a>
-                <ul id="nav-mobile" class="right">
-                    <li><a href="html/public/registro.xhtml">Registrarse</a></li>
-                    <!--li><a href="inicio.xhtml">Login</a></li-->
-
-                </ul>
             </div>
         </nav>
     </h:head>
     <h:body class="slide_bg">
-
-
         <h:form id="mf">
             <div class="row" style="height: 100%;">
                 <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
                 <div class="col s12 m12 l4 xl4" style="height: 100%;vertical-align: middle;">
-                    <img src="images/login/avatar_login.svg" alt="avatar" class="avatar"/>
                     <div class="z-depth-5 box-login" style="background-color:rgba(255,255,255,.89);border-radius:45px;padding: 25px">
-                        <h4 style="text-align: center; margin-bottom: 22px">Bienvenid@</h4>
+                        <span style="text-align: center; margin-bottom: 22px;font-size:19px">Ingrese su correo, se mandara una notificación para que recupere su contraseña.</span>
+                        <br/><br/><br/>
                         <h:panelGroup>
                             <div class="input-field" style="padding-bottom:25px">
-                                <i class="material-icons prefix">person</i>
-                                <p:inputText value="#{loginController.vo.username}" id="user" class="form-control validate" a:autofocus="true"  />
-                                <h:outputLabel for="user" value="Usuario" />
-                            </div>
-                        </h:panelGroup>
-                        <h:panelGroup>
-                            <div class="input-field">
-                                <i class="material-icons prefix">vpn_key</i>
-                                <h:inputSecret value="#{loginController.vo.password}" id="pass" class="form-control validate"/>
-                                <h:outputLabel for="pass" value="Contraseña" />
+                                <p:inputText value="#{recoverPasswordController.userMail}" id="userMail" class="form-control validate" a:autofocus="true"  required="true" requiredMessage="Debe ingresar su correo" />
+                                <h:outputLabel for="userMail" value="Correo:" />
+                                <p:message for="userMail" id="userMailMsg"/>
                             </div>
                         </h:panelGroup>
                         <div class="form-group" style="text-align: center;">
-                            <!--p:commandButton class="waves-effect waves-light btn blue-grey lighten-5" style="color: #022238"  value="Registrarse" /-->
-                            <p:commandButton class="waves-effect waves-light btn" value="Ingresar" action="#{loginController.login()}"/>
+                            <p:commandButton class="waves-effect waves-light btn" value="Recuperar" action="#{recoverPasswordController.send()}" update="mf:userMailMsg mf:msg"/>
                         </div>
                         <div class="form-group" style="text-align: center;">
-                            <p:messages closable="true" globalOnly="true" showDetail="true"/>
-                        </div>
-                        <div class="form-group" style="text-align: center;">
-                            <p:link value="Recuperar contraseña" outcome="/recuperar.xhtml" transient="true"/>
+                            <p:messages id="msg" closable="true" globalOnly="true" showDetail="true"/>
                         </div>
                     </div>
-
                 </div>
                 <label class="subtitle-footer">Encuentra tu repuesto. Lo buscamos por ti.</label>
                 <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
