@@ -1,19 +1,25 @@
 package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
-import com.mailjet.client.ClientOptions;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Emailv31;
+import com.terzus.autolink.model.RecuperarClave;
+import com.terzus.autolink.service.RecuperarClaveService;
+import com.terzus.autolink.service.UsuarioService;
 import java.io.Serializable;
+import java.util.Date;
+import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * @author terzus
@@ -31,12 +37,45 @@ import org.json.JSONObject;
 @Slf4j
 public class RecoverPasswordController implements Serializable{
 
+    @Resource(name = "mail/cel")
+    private Session mailSession;
     @Getter @Setter private String userMail;
-    private String API_KEY = "3e8e4b3133dca6613258b441ea9be238";
-    private String API_KEY_PRIVATE = "b5c84504d510891527419f202558f779";
+    @Inject private RecuperarClaveService recuperarClaveService;
+    @EJB private UsuarioService usuarioService;
+    
+    /*private String API_KEY = "3e8e4b3133dca6613258b441ea9be238";
+    private String API_KEY_PRIVATE = "b5c84504d510891527419f202558f779";*/
     
     public void send(){
         try{
+            //VERIFICO SI EL USUARIO ESTA EN EL SISTEMA
+            boolean exist = usuarioService.existUser(userMail);
+            if(!exist){
+                FacesHelper.warningMessage("El usuario que ha ingresado no existe en el sistema");
+                return;
+            }
+
+            //GUARDO LA CLAVE
+            RecuperarClave model = new RecuperarClave();
+            model.setCreacion(new Date());
+            model.setEstado("P");
+            model.setUsuario(userMail.toLowerCase());
+            String randomString = randomString();
+            model.setClave(randomString);
+            recuperarClaveService.save(model);
+
+            //MANDO EL CORREO
+            String url = "http://localhost:8080/autolink/newPassword.xhtml?q=".concat(randomString);
+            String from = "help.autolink@gmail.com";
+            String subject = "Autolink - Recuperar contraseña";
+            String text = "<html><body>Buen día<br/>Ha solicitado un cambio de contraseña, favor ingrese a este link para realizarlo.<br/><a href=''>[Cambiar contraseña]</a></body></html>";
+            sendMail(from, userMail, subject, text);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            System.out.println(e.getMessage());
+            FacesHelper.errorMessage("Ha ocurrido un error al tratar de enviar la notificación");
+        }
+        /*try{
             MailjetClient client;
             MailjetRequest request;
             MailjetResponse response;
@@ -61,6 +100,21 @@ public class RecoverPasswordController implements Serializable{
             log.error(e.getMessage(), e);
             System.out.println(e.getMessage());
             FacesHelper.errorMessage("Ha ocurrido un error al tratar de enviar la notificación");
-        }
+        }*/
+    }
+    
+    private void sendMail(String from, String to, String subject, String body) throws Exception {
+        MimeMessage message = new MimeMessage(mailSession);
+        message.setFrom(new InternetAddress(from));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        message.setSubject(subject);
+        message.setSentDate(new Date());
+        message.setText(body, "utf-8", "html");
+        Transport.send(message);
+        message = null;
+    }
+    
+    private String randomString(){
+        return RandomStringUtils.randomAlphanumeric(20);
     }
 }
