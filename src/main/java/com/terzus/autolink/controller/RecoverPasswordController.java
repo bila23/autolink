@@ -1,6 +1,7 @@
 package com.terzus.autolink.controller;
 
 import com.bila.framework.commons.FacesHelper;
+import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.RecuperarClave;
 import com.terzus.autolink.service.RecuperarClaveService;
 import com.terzus.autolink.service.UsuarioService;
@@ -61,7 +62,7 @@ public class RecoverPasswordController implements Serializable{
             recuperarClaveService.save(model);
 
             //MANDO EL CORREO
-            String url = "http://localhost:8080/autolink/newPassword.xhtml?q=".concat(randomString);
+            String url = Constants.URL_NEW_PASSWORD.concat(randomString);
             String subject = "Autolink - Recuperar contraseña";
             String text = "<html><body>Buen día<br/>Ha solicitado un cambio de contraseña, favor ingrese a este link para realizarlo.<br/><a href='".concat(url).concat("'>[Cambiar contraseña]</a></body></html>");
             sendMail(FROM, userMail, subject, text);
