@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "recuperarclave")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RecuperarClave.findAll", query = "SELECT r FROM RecuperarClave r")
+    @NamedQuery(name = "RecuperarClave.findByClaveAndState", query = "SELECT r FROM RecuperarClave r WHERE r.clave = :clave AND r.estado = :estado")
 })
 public class RecuperarClave implements Serializable {
 

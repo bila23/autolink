@@ -12,6 +12,7 @@ import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.RecuperarClaveDao;
 import com.terzus.autolink.model.RecuperarClave;
+import com.terzus.autolink.model.Usuario;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,9 +33,24 @@ import javax.inject.Inject;
 public class RecuperarClaveService extends Service<RecuperarClave, Integer>{
 
     @Inject private RecuperarClaveDao dao;
+    @Inject private UsuarioService usuarioService;
 
     @Override
     public Dao<RecuperarClave, Integer> getDao() {
         return dao;
+    }
+    
+    public RecuperarClave findByClaveAndState(String clave, String state) throws Exception{
+        if(clave == null || clave.equals("") || state == null || state.equals("")) return null;
+        return dao.findByClaveAndState(clave, state);
+    }
+    
+    public void changePassword(RecuperarClave model, String newPassword) throws Exception{
+        if(model == null) return;
+        Usuario user = usuarioService.findByUser(model.getUsuario());
+        user.setPass(newPassword);
+        usuarioService.update(user);
+        model.setEstado("U");
+        dao.update(model);
     }
 }
