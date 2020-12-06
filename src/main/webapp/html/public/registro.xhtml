@@ -32,6 +32,9 @@
                 max-width: 1000px;
                 margin: auto;
             }
+            .uppercase{
+                text-transform: uppercase;
+            }
         </style>
     </h:head>
     <h:body>
@@ -67,14 +70,14 @@
                         <div class="row">
                             <div class="col s12 m12 l6">
                                 <h:panelGroup class="input-field">
-                                    <p:inputText value="#{registroController.registro.nombre}" class="validate" id="nombre" required="true" a:autofocus="true" />
-                                    <p:outputLabel id="lblnombre" for="nombre" value="Nombre"  />
+                                    <p:inputText value="#{registroController.registro.nombre}" class="validate uppercase" id="nombre" required="true" a:autofocus="true" />
+                                    <p:outputLabel id="lblnombre"  for="nombre" value="Nombre"  />
                                 </h:panelGroup>
                             </div>                     
                             <div class="col s12 m12 l6">
                                 <h:panelGroup class="input-field">
-                                    <p:inputText value="#{registroController.registro.apellido}" class="validate" required="true" id="apellido" a:autofocus="true" />
-                                    <h:outputLabel for="apellido" value="Apellido" />
+                                    <p:inputText value="#{registroController.registro.apellido}" class="validate uppercase" required="true" id="apellido" a:autofocus="true" />
+                                    <h:outputLabel for="apellido"  value="Apellido" />
                                 </h:panelGroup>
                             </div>
                         </div>  
@@ -173,7 +176,12 @@
 
 
                         <div class="card-action">
-                            <p:commandButton value="Guardar y Enviar" class="waves-effect waves-light btn" update="rf:msg" validateClient="true" actionListener="#{registroController.guardarRegistro()}" />
+                            <h:panelGroup rendered="#{registroController.show_btnlogin}">
+                                  <a  href="../../inicio.xhtml"  class="waves-effect waves-light btn orange darken-4"> Identificarse </a>
+                            </h:panelGroup>
+                          
+                            <p:spacer width="10" />
+                            <p:commandButton value="Guardar y Enviar" class="waves-effect waves-light btn" update="rf:msg @form" validateClient="true" actionListener="#{registroController.guardarRegistro()}" />
                         </div>
 
                     </div>
@@ -188,6 +196,8 @@
             </div>
 
         </h:form>
+         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>
 

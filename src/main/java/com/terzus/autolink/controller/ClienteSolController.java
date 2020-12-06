@@ -25,6 +25,7 @@ import com.terzus.autolink.service.FotoSolService;
 import com.terzus.autolink.service.RegistroService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudService;
+import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
 import java.io.Serializable;
@@ -92,6 +93,9 @@ public class ClienteSolController implements Serializable {
     @Getter
     @Setter
     private boolean showSaveBtn;
+        @Getter
+    @Setter
+    private boolean showPdatos;
     @Setter
     private List<Repuesto> repList;
     @Getter
@@ -122,9 +126,7 @@ public class ClienteSolController implements Serializable {
     @Getter
     @Setter
     private UploadedFile imageFile;
-    @Getter
-    @Setter
-    private List<StreamedContent> imageList;
+    @Getter @Setter private List<FotoXSolicitudVO> imageList;
     @Getter
     @Setter
     private Map<Integer, Integer> anios = new HashMap<Integer, Integer>();
@@ -144,6 +146,9 @@ public class ClienteSolController implements Serializable {
     private String textoBuscar;
 
     private List<Solicitud> listSolicitudes;
+     @Getter
+    @Setter
+    private int resumenVehiculo;
     @Getter
     @Setter
     private int totalCotizado;
@@ -154,7 +159,7 @@ public class ClienteSolController implements Serializable {
                 if (imageFile != null) {
                     fotoSolService.save(idSol, imageFile.getInputstream(), imageFile.getFileName());
                     FacesHelper.successMessage(Constants.EXITO, "Se ha guardado correctamente la imagen");
-                    //imageList = fotoSolService.findImageBySol(idSol);
+                    imageList = fotoSolService.findImageBySol(idSol);
                 }
             } else {
                 FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un problema al tratar de asociar la imagen a la solicitud");
@@ -167,6 +172,7 @@ public class ClienteSolController implements Serializable {
 
     @PostConstruct
     public void init() {
+        showPdatos=false;
         try {
             itemsTipos = new HashMap<>();
             itemsTipos.put("Sedan", "0");
@@ -198,6 +204,7 @@ public class ClienteSolController implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml?i=" + tipo);
                 }
                 showSaveBtn = false;
+                showPdatos=true;
                 idSol = model.getId();
                 repVOList = repSolService.findBySolicitud(idSol);
                 chargeModelos();
@@ -243,6 +250,9 @@ public class ClienteSolController implements Serializable {
                             break;
                         case "fin":
                             solList = solService.findByEstadoAndCliente("fin", user);
+                            break;
+                        case "cpd":
+                            solList = solService.findByEstadoAndCliente("cpd", user);
                             break;
                         case "pen":
                             showSaveBtn = true;
@@ -310,14 +320,20 @@ public class ClienteSolController implements Serializable {
     public void empezar() {
         if (model.getTipovehiculo() == null || model.getTipovehiculo().equals("")) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el tipo de vehiculo");
+            showPdatos= false;
         } else if (model.getIdmarca() == null || model.getIdmarca() == 0) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la marca del vehiculo");
+            showPdatos= false;
         } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
+            showPdatos= false;
         } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+            showPdatos= false;
         } else {
             showSaveBtn = false;
+            showPdatos= true;
+            //resumenVehiculo= marcaList.
         }
 
     }
@@ -380,7 +396,7 @@ public class ClienteSolController implements Serializable {
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al asociar un repuesto a la solicitud");
         }
     }
-
+   
     public void enviarSol() {
         try {
             if (model.getTipovehiculo() == null || model.getTipovehiculo().equals("")) {
@@ -400,12 +416,15 @@ public class ClienteSolController implements Serializable {
             } else {
                 model.setEstado("COA");
                 model.setTipovehiculo(getNombreTipoCar(tipo));
+                model.setComentariosaseguradora(model.getComentariostaller());
                 model.setFechacreacion(new Date());
                 solService.update(model);
+                solService.updateHorasVigenciaForCliente(model.getId(), 2);
                 showSaveBtn = false;
                 repVOList = new ArrayList<>();
                 model = new Solicitud();
-                FacesHelper.successMessage(Constants.EXITO, "Se ha enviado la solicitud correctamente, posteriormente recibira una cotización de esta solicitud");
+                FacesHelper.successMessage(Constants.EXITO, "Se ha enviado la solicitud correctamente, en un periodo de 2 horas habiles recibira una cotización de esta solicitud");
+                showPdatos=false;
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

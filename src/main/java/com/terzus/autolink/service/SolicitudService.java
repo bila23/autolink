@@ -14,6 +14,7 @@ import com.bila.framework.commons.GeneralFunction;
 import com.bila.framework.dao.Dao;
 import com.bila.framework.service.Service;
 import com.terzus.autolink.dao.AseguradoraDao;
+import com.terzus.autolink.dao.HorariosDao;
 import com.terzus.autolink.dao.MarcaDao;
 import com.terzus.autolink.dao.ModeloDao;
 import com.terzus.autolink.dao.RepuestoDao;
@@ -21,6 +22,7 @@ import com.terzus.autolink.dao.SolicitudDao;
 import com.terzus.autolink.dao.TallerDao;
 import com.terzus.autolink.dao.TipoRepuestoDao;
 import com.terzus.autolink.model.Aseguradora;
+import com.terzus.autolink.model.Horarios;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Proveedor;
@@ -51,45 +53,57 @@ import org.apache.commons.beanutils.PropertyUtils;
  * </p>
  */
 @Stateless
-public class SolicitudService extends Service<Solicitud, Integer>{
-    
-    @Inject private SolicitudDao dao;
-    @Inject private TallerDao tallerDao;
-    @Inject private AseguradoraDao asegDao;
-    @Inject private MarcaDao marcaDao;
-    @Inject private ModeloDao modeloDao;
-    @Inject private RepuestoDao repDao;
-    @Inject private OfertaProvService opService;
-    @Inject private RepuestoSolicitudService rsService;
-    @Inject private OfertaSolicitudVistaService ofvService;
-    @Inject private FotoSolService fotoService;
-    @Inject private TipoRepuestoDao tipoRepDao;
-    
+public class SolicitudService extends Service<Solicitud, Integer> {
+
+    @Inject
+    private SolicitudDao dao;
+    @Inject
+    private TallerDao tallerDao;
+    @Inject
+    private AseguradoraDao asegDao;
+    @Inject
+    private MarcaDao marcaDao;
+    @Inject
+    private ModeloDao modeloDao;
+    @Inject
+    private RepuestoDao repDao;
+    @Inject
+    private OfertaProvService opService;
+    @Inject
+    private RepuestoSolicitudService rsService;
+    @Inject
+    private OfertaSolicitudVistaService ofvService;
+    @Inject
+    private FotoSolService fotoService;
+    @Inject
+    private TipoRepuestoDao tipoRepDao;
+    @Inject
+    private HorariosDao horariosDao;
 
     @Override
     public Dao<Solicitud, Integer> getDao() {
         return dao;
     }
-    
-    public List<Integer> prepareHourList(){
+
+    public List<Integer> prepareHourList() {
         Calendar today = Calendar.getInstance();
         int hours = today.get(Calendar.HOUR_OF_DAY);
         List<Integer> list = new ArrayList();
-        for(int i = hours; i<24; i++){
+        for (int i = hours; i < 24; i++) {
             list.add(i);
         }
         return list;
     }
-    
-    public void changeCoaToPea() throws Exception{
+
+    public void changeCoaToPea() throws Exception {
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
-        int hours  = today.get(Calendar.HOUR_OF_DAY);
+        int hours = today.get(Calendar.HOUR_OF_DAY);
         dao.changeCoaToPea(hours);
     }
-    
-     public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
-        return repDao.findByTipoRep(tipo!=null? tipo.getId():0);
+
+    public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
+        return repDao.findByTipoRep(tipo != null ? tipo.getId() : 0);
     }
 
     private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception {
@@ -148,25 +162,25 @@ public class SolicitudService extends Service<Solicitud, Integer>{
      *
      * @param idSol codigo de la solicitud - int
      * @param hour objeto de tipo Date con la hora de finalizacion
-     * @throws Exception 
+     * @throws Exception
      */
-    public void updateHorasVigencia(int idSol, int hour) throws Exception{
+    public void updateHorasVigencia(int idSol, int hour) throws Exception {
         Solicitud model = dao.findByKey(idSol);
-        if(model != null){
+        if (model != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.set(Calendar.HOUR_OF_DAY, hour);
-            
+
             Date ini = new Date();
             Date end = defineEndDate(hour);
-            
+
             model.setFechainicio(ini);
             model.setFechafin(end);
             model.setHoraFinal(hour);
             dao.update(model);
         }
     }
-    
+
     private Date defineEndDate(int hours) {
         Calendar newDay = Calendar.getInstance();
         newDay.setTime(new Date());
@@ -178,8 +192,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<Repuesto> findRepuestoActive() throws Exception {
         return repDao.findActive();
     }
-    
-    public Solicitud save(Solicitud model, String user, int idTaller) throws Exception{
+
+    public Solicitud save(Solicitud model, String user, int idTaller) throws Exception {
         model.setEstado("ING");
         model.setFechacreacion(new Date());
         model.setIdtaller(idTaller);
@@ -212,8 +226,8 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<Modelo> findActiveByMarca(Integer idMarca) throws Exception {
         return modeloDao.findActiveByMarca(idMarca);
     }
-    
-    private SolicitudVO prepareModel(Solicitud model) throws Exception{
+
+    private SolicitudVO prepareModel(Solicitud model) throws Exception {
         SolicitudVO vo = new SolicitudVO();
         PropertyUtils.copyProperties(vo, model);
         if (model.getIdaseguradora() != null && model.getIdaseguradora() > 0) {
@@ -240,31 +254,35 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
         return vo;
     }
-    
-    private SolicitudVO modelToVO(Solicitud model, int codprv) throws Exception{
-        if(model == null) return null;
+
+    private SolicitudVO modelToVO(Solicitud model, int codprv) throws Exception {
+        if (model == null) {
+            return null;
+        }
         SolicitudVO vo = prepareModel(model);
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
-        
+
         //TIPO VEHICULO
-        if(model.getIdTipoVehiculo() != null){
+        if (model.getIdTipoVehiculo() != null) {
             vo.setIdTipoVeh(model.getIdTipoVehiculo().getId());
             vo.setTipovehiculo(model.getIdTipoVehiculo().getNombre());
         }
-        
+
         //RECUPERO LAS IMAGENES
         List<FotoXSolicitudVO> fotoList = fotoService.findImageBySol(vo.getId());
-        if(fotoList != null)
+        if (fotoList != null) {
             vo.setFotoList(fotoList);
-        
+        }
+
         //VERIFICO SI LA SOLICITUD ES DE REPUESTOS PARCIAL O NO
         boolean isParcial = rsService.isSolRepParcial(vo.getId());
-        if(isParcial)
+        if (isParcial) {
             vo.setParcial("Parcial (Repuestos)");
-        else
+        } else {
             vo.setParcial("Todos los repuestos");
-        
+        }
+
         //VERIFICO SI LA SOLICITUD TIENE UN GANADOR
         Proveedor prov = opService.findWinnerBySolicitud(vo.getId());
         if (prov != null) {
@@ -273,10 +291,10 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
 
         //HORA PENDIENTES
-        if(vo.getFechafin() != null){
+        if (vo.getFechafin() != null) {
             long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();
-            long diffHours = diffInMillies / (60*60*1000);
-            long diffMinutes = diffInMillies / (60*1000) % 60;
+            long diffHours = diffInMillies / (60 * 60 * 1000);
+            long diffMinutes = diffInMillies / (60 * 1000) % 60;
             vo.setPendingHours(diffHours + " : " + diffMinutes);
         }
         return vo;
@@ -338,54 +356,62 @@ public class SolicitudService extends Service<Solicitud, Integer>{
     public List<SolicitudVO> findCotAbierta() throws Exception {
         return findByEstado("COA");
     }
-    
+
     /* METODOS SOLO PARA PROVEEDOR QUE BUSCA SUS OFERTAS*/
-    public List<SolicitudVO> findCotAbierta(int codprv) throws Exception{
+    public List<SolicitudVO> findCotAbierta(int codprv) throws Exception {
         return findByEstadoForProveedor("COA", codprv);
     }
-    
-    public List<SolicitudVO> findByEstadoForProveedor(String estado, int codprv) throws Exception{
-        if(estado == null || estado.equals("")) return null;
+
+    public List<SolicitudVO> findByEstadoForProveedor(String estado, int codprv) throws Exception {
+        if (estado == null || estado.equals("")) {
+            return null;
+        }
         List<Solicitud> list = dao.findByEstado(estado);
-        if(list == null || list.isEmpty()) return null;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         return listModelToVOForProveedor(list, codprv);
     }
-    
-    private List<SolicitudVO> listModelToVOForProveedor(List<Solicitud> list, int codprv) throws Exception{
-        if(list == null || list.isEmpty()) return null;
+
+    private List<SolicitudVO> listModelToVOForProveedor(List<Solicitud> list, int codprv) throws Exception {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         List<SolicitudVO> lst = new ArrayList();
         int i = 0, size = list.size();
-        for(i = 0; i<size; i++){
+        for (i = 0; i < size; i++) {
             lst.add(modelToVOForProveedor(list.get(i), codprv));
         }
         return lst;
     }
-    
-    public List<RepuestoSolicitudVO> findRepAplicaBySol(int idSolicitud, int idProveedor) throws Exception{
+
+    public List<RepuestoSolicitudVO> findRepAplicaBySol(int idSolicitud, int idProveedor) throws Exception {
         return rsService.findAplicaBySolicitud(idSolicitud, idProveedor);
     }
-    
-    private SolicitudVO modelToVOForProveedor(Solicitud model, int codprv) throws Exception{
-        if(model == null) return null;
+
+    private SolicitudVO modelToVOForProveedor(Solicitud model, int codprv) throws Exception {
+        if (model == null) {
+            return null;
+        }
         SolicitudVO vo = prepareModel(model);
         List<RepuestoSolicitudVO> repList = rsService.findAplicaBySolicitud(vo.getId(), codprv);
         vo.setRepAplicaList(repList);
-        
+
         //VERIFICO SI LA OFERTA YA FUE ABIERTA
-        vo.setViewed(ofvService.isViewed(vo.getId(), codprv));        
-                
+        vo.setViewed(ofvService.isViewed(vo.getId(), codprv));
+
         //HORA PENDIENTES
-        if(vo.getFechafin() != null){
+        if (vo.getFechafin() != null) {
             long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();
-            long diffHours = diffInMillies / (60*60*1000);
-            long diffMinutes = diffInMillies / (60*1000) % 60;
+            long diffHours = diffInMillies / (60 * 60 * 1000);
+            long diffMinutes = diffInMillies / (60 * 1000) % 60;
             vo.setPendingHours(diffHours + " : " + diffMinutes);
         }
         return vo;
     }
+
     /* FIN METODOS SOLO PARA PROVEEDOR QUE BUSCA SUS OFERTAS*/
-    
-    public List<SolicitudVO> findCerradaDesierta() throws Exception{
+    public List<SolicitudVO> findCerradaDesierta() throws Exception {
         return findByEstado("CPD");
     }
 
@@ -558,7 +584,7 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         }
         return listModelToVO(list, 0);
     }
-    
+
     public List<Solicitud> findByEstadoAndClienteSol(String estado, String user) throws Exception {
         return dao.findByEstadoAndCliente(estado, user);
     }
@@ -573,20 +599,147 @@ public class SolicitudService extends Service<Solicitud, Integer>{
         if (list == null || list.isEmpty()) {
             return null;
         }
-        return list.size()>0?list.get(0):null;
+        return list.size() > 0 ? list.get(0) : null;
     }
     //***** FIN CONSULTA DE SOLICITUDES POR CLIENTE *****//
 
-    
-    public List<TipoRepuesto> findAllTipoRepuestos() throws Exception{
+    public List<TipoRepuesto> findAllTipoRepuestos() throws Exception {
         return tipoRepDao.getTipoRepuestoActivo();
     }
-    
-    public boolean existeOfertaToCliente(int id) throws Exception{
-         Integer codprv;
-        if(id == 0) return false;      
-        codprv=opService.getIdProveedorWinnerBySolicitudCliente(id);
-       return !GeneralFunction.isNullOrEmptyOrZero(codprv);
+
+    public boolean existeOfertaToCliente(int id) throws Exception {
+        Integer codprv;
+        if (id == 0) {
+            return false;
+        }
+        codprv = opService.getIdProveedorWinnerBySolicitudCliente(id);
+        return !GeneralFunction.isNullOrEmptyOrZero(codprv);
     }
-    
+
+    /**
+     * Pone la hora de vigencia de la solicitud del cliente para que los
+     * proveedores puedan ofertar
+     *
+     * @param idSol codigo de la solicitud - int
+     * @param hour objeto de tipo Date con la hora de finalizacion
+     * @throws Exception
+     */
+    public void updateHorasVigenciaForCliente(int idSol, int hour) throws Exception {
+        Solicitud model = dao.findByKey(idSol);
+        if (model != null) {
+
+            Date ini = new Date();
+            Date end = addDate(ini, hour, Calendar.HOUR_OF_DAY);
+            end = getFechaFinForSol(end, hour);
+
+            model.setFechainicio(ini);
+            model.setFechafin(end);
+            model.setHoraFinal(end.getHours());
+            dao.update(model);
+        }
+    }
+
+    private static Date addDate(Date fecha, int cantidad, int tipo) throws Exception {
+        Calendar newDay = Calendar.getInstance();
+        newDay.setTime(fecha);
+        newDay.add(tipo, cantidad);
+        return newDay.getTime();
+    }
+
+    private Date getFechaFinForSol(Date fechaFin, int cantidad) throws Exception {
+        String letraD = "";
+        int nD = -1;
+        Horarios horario;
+        Calendar DayCurrent = Calendar.getInstance();
+
+        nD = DayCurrent.get(Calendar.DAY_OF_WEEK);
+
+        letraD = getLetrasDia(nD);
+        horario = horariosDao.getHorarioByDiaAndJornada(letraD, 1);
+
+        if (horario != null) {
+            Calendar dateleave = Calendar.getInstance();
+
+            dateleave.setTime(new Date());
+            dateleave.set(Calendar.HOUR_OF_DAY, horario.getHoraFin());
+            dateleave.set(Calendar.MINUTE, 0);
+
+            long var = dateleave.getTimeInMillis() - DayCurrent.getTimeInMillis();
+
+            if (var >= 0) { //la solicitud es antes de la hora de salir.
+                long currenTime = var - (cantidad * 1000 * 60 * 60);
+                if (currenTime >= 0) { // La solicitud esta en tiempo para ser resuelta
+                    return fechaFin;
+                } else { //Queda tiempo restando para la proximo dia o jornada de trabajo.
+                    DayCurrent = getNextDiaLaboral(DayCurrent);
+                    DayCurrent.add(Calendar.MILLISECOND, Integer.parseInt(String.valueOf(Math.abs(currenTime))));
+                    fechaFin = DayCurrent.getTime();
+                    return fechaFin;
+                }
+
+            } else { //la solicitud es despues de la hora de salir.
+                DayCurrent = getNextDiaLaboral(DayCurrent);
+                DayCurrent.add(Calendar.HOUR_OF_DAY, cantidad);
+                fechaFin = DayCurrent.getTime();
+                return fechaFin;
+            }
+        } else {
+            DayCurrent = getNextDiaLaboral(DayCurrent);
+            DayCurrent.add(Calendar.HOUR_OF_DAY, cantidad);
+            fechaFin = DayCurrent.getTime();
+            return fechaFin;
+        }
+    }
+
+    private Calendar getNextDiaLaboral(Calendar dayCurrent) throws Exception {
+        int nd, count=0;
+        String letraD;
+        Horarios horarioCurrent = null;
+        do {
+            count++;
+            dayCurrent.add(Calendar.DAY_OF_MONTH, 1);
+            nd = dayCurrent.get(Calendar.DAY_OF_WEEK);
+            letraD = getLetrasDia(nd);
+            horarioCurrent = horariosDao.getHorarioByDiaAndJornada(letraD, 1);
+        } while (horarioCurrent == null || count>7);
+
+        dayCurrent.set(Calendar.HOUR_OF_DAY, horarioCurrent.getHoraInicio());
+        /*  if(horarioCurrent.getHoraInicio()<=12){
+          dayCurrent.set(Calendar.HOUR , horarioCurrent.getHoraInicio());
+          }else{
+              dayCurrent.set(Calendar.HOUR , horarioCurrent.getHoraInicio()-12);
+          }*/
+        dayCurrent.set(Calendar.MINUTE, 0);
+
+        return dayCurrent;
+    }
+
+    private String getLetrasDia(int nD) throws Exception {
+        String letraD = "";
+        switch (nD) {
+            case 1:
+                letraD = "DO";
+                break;
+            case 2:
+                letraD = "LU";
+                break;
+            case 3:
+                letraD = "MA";
+                break;
+            case 4:
+                letraD = "MI";
+                break;
+            case 5:
+                letraD = "JU";
+                break;
+            case 6:
+                letraD = "VI";
+                break;
+            case 7:
+                letraD = "SA";
+                break;
+        }
+        return letraD;
+    }
+
 }

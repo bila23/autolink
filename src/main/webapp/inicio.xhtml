@@ -123,15 +123,32 @@
             }
 
             .subtitle-footer{
-                font-size: 1.5em;
+
                 width: 100%;
                 display: block;
                 position: absolute;
-                top: 85%;
+                top: 84%;
                 text-align: center;
-                color: #ffffff;
-                text-shadow: 0 0 13px black;
+                background: rgba(0,0,0,.4);
+                padding: 6px;
+
             }
+            .subtitle-footer .uno{
+                font-size: 1.2em;
+                display: block;
+                text-shadow: 0 0 13px black;
+                color: #ffffff;
+                font-weight: lighter;
+            }
+            .subtitle-footer .dos{
+                font-size: 1.9em;
+                top: 89%;
+                display: block;
+                text-shadow: 0 0 13px black;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
 
         </style>
         <nav class="" style="background-color: #002138bf !important;">
@@ -182,7 +199,10 @@
                     </div>
 
                 </div>
-                <label class="subtitle-footer">Encuentra tu repuesto. Lo buscamos por ti.</label>
+                <div class="subtitle-footer">
+                    <label class=" uno">¿No encuentras tu repuesto?</label>
+                    <label class=" dos" > Lo buscamos por ti</label>
+                </div>
                 <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
             </div>
         </h:form>

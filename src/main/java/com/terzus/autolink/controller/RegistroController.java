@@ -16,11 +16,13 @@ import com.terzus.autolink.service.MunicipioService;
 import com.terzus.autolink.service.RegistroService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.UsuarioService;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -68,6 +70,9 @@ public class RegistroController implements Serializable {
     @Getter
     @Setter
     private boolean cambiopass;
+    @Getter
+    @Setter
+    private boolean show_btnlogin;
 
     public RegistroController() {
     }
@@ -133,7 +138,14 @@ public class RegistroController implements Serializable {
                     } else if (!password.equals(passreplay)) {
                         FacesHelper.warning("Las contraseñas no coinciden");
                     } else {
+                        if (registro.getNombre() != null) {
+                            registro.setNombre(registro.getNombre().toUpperCase());
+                        }
+                        if (registro.getApellido() != null) {
+                            registro.setApellido(registro.getApellido().toUpperCase());
+                        }
                         regService.save(registro, password);
+                        show_btnlogin = true;
                         registro = new Registro();
                         password = null;
                         passreplay = null;
@@ -167,5 +179,5 @@ public class RegistroController implements Serializable {
             FacesHelper.error("Ha ocurrido un error al tratar de actualizar el registro de usuario");
         }
     }
-
+    
 }

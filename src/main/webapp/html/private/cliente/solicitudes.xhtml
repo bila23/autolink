@@ -80,7 +80,7 @@
                 <div class="col s12">
                     <p:growl globalOnly="true" id="msg" showDetail="true"/>
                     <p:tabView scrollable="true" id="tab">
-                        <p:ajax event="tabChange" listener="#{clienteSolController.onTabChange}" update="mf:msg dtcoa  dtofe dtenv  dtoka dtfin "/>                       
+                        <p:ajax event="tabChange" listener="#{clienteSolController.onTabChange}" update="mf:msg dtcoa  dtofe dtenv  dtoka dtfin dtcdp "/>                       
                         <p:tab title="PENDIENTE" id="ini" class="fa fa-oil-can">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtcoa" var="r1" value="#{clienteSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
                                 <p:column headerText="Codigo" >
@@ -216,6 +216,30 @@
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
+                         <p:tab title="CERR. POR DESIERTA" id="cpd">
+                            <p:dataTable emptyMessage="No hay solicitudes" id="dtcdp" var="r1" value="#{clienteSolController.solList}" stickyHeader="true" stickyTopAt=".layout-topbar" reflow="true" rows="6" paginator="true">
+                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                    <h:outputText value="#{r1.codigosolicitud}" />
+                                </p:column>
+                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                    <h:outputText value="#{r1.marca}" />
+                                </p:column>
+                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                    <h:outputText value="#{r1.modelo}" />
+                                </p:column>
+                                <p:column headerText="Anio" sortBy="#{r1.aniocarro}">
+                                    <h:outputText value="#{r1.aniocarro}" />
+                                </p:column>
+                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                    <h:outputText value="#{r1.placa}" />
+                                </p:column>
+                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
+                                    <p:commandLink actionListener="#{clienteSolController.showRep(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
+                                        <i class="material-icons">content_paste</i>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
 
                     </p:tabView>
                 </div>
@@ -232,7 +256,7 @@
                 </div>
             </p:dialog>
             <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
-                <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{clienteSolController.repSolList}">
+                <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{clienteSolController.repSolList}" scrollable="true" scrollHeight="200">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
                     </p:column>
@@ -243,7 +267,7 @@
             </p:dialog>
 
             <p:dialog widgetVar="dlgRepC" id="dlgRepC" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
-                <p:dataTable emptyMessage="No hay repuestos" id="repSolTableC" var="r1" value="#{clienteSolController.repSolList}"  sortBy="#{r1.idsolicitud}">
+                <p:dataTable emptyMessage="No hay repuestos" id="repSolTableC" var="r1" value="#{clienteSolController.repSolList}"  sortBy="#{r1.idsolicitud}" scrollable="true" scrollHeight="200">
                     <p:column headerText="Repuesto Cotizados por Proveedor" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
                     </p:column>

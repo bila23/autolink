@@ -5,7 +5,9 @@
  */
 package com.terzus.autolink.dao;
 
+import com.bila.framework.commons.GeneralFunction;
 import com.bila.framework.dao.Dao;
+import com.google.protobuf.Empty;
 import com.terzus.autolink.model.Registro;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -34,10 +36,14 @@ public class RegistroDao extends Dao<Registro, Integer> {
 
     public Registro getRegistroByUser(String user) throws Exception {
         Query q = em.createNamedQuery("Registro.findByEmail", Registro.class);
-        q.setParameter("email", user!=null?user.toLowerCase():"");
+        q.setParameter("email", user != null ? user.toLowerCase() : "");
         List<Registro> list = q.getResultList();
-        if (list != null) {
-            return list.get(0);
+        if (!GeneralFunction.isNullOrEmpty(list)) {
+            if (list.size() > 0) {
+                return list.get(0);
+            } else {
+                return null;
+            }
         }
         return null;
     }
