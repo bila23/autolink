@@ -112,9 +112,16 @@ public class SolicitudService extends Service<Solicitud, Integer> {
         int hours = today.get(Calendar.HOUR_OF_DAY);
         dao.changeCoaToPea(hours);
     }
-
-    public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
-        return repDao.findByTipoRep(tipo != null ? tipo.getId() : 0);
+    
+    public void updateDesiertas() throws Exception{
+        Calendar today = Calendar.getInstance();
+        today.setTime(new Date());
+        int hours  = today.get(Calendar.HOUR_OF_DAY);
+        dao.updateDesiertas(hours);        
+    }
+    
+     public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
+        return repDao.findByTipoRep(tipo!=null? tipo.getId():0);
     }
 
     private SolicitudVO injectFK(Solicitud model, SolicitudVO vo) throws Exception {

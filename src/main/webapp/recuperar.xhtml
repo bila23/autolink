@@ -72,7 +72,7 @@
                 background-size: cover;
                 background-repeat: no-repeat;
                 backface-visibility: hidden;
-                animation: slideBg 30s linear infinite 0s;
+                animation: slideBg 40s linear infinite 0s;
                 animation-timing-function: ease-in-out;
                 background-image: url("images/login/auto_parts.jpg");
                 background-position-y: 30%;
@@ -122,16 +122,33 @@
 
             }
 
-            .subtitle-footer{
-                font-size: 1.5em;
+          .subtitle-footer{
+
                 width: 100%;
                 display: block;
                 position: absolute;
-                top: 85%;
+                top: 84%;
                 text-align: center;
-                color: #ffffff;
-                text-shadow: 0 0 13px black;
+                background: rgba(0,0,0,.4);
+                padding: 6px;
+
             }
+            .subtitle-footer .uno{
+                font-size: 1.2em;
+                display: block;
+                text-shadow: 0 0 13px black;
+                color: #ffffff;
+                font-weight: lighter;
+            }
+            .subtitle-footer .dos{
+                font-size: 1.9em;
+                top: 89%;
+                display: block;
+                text-shadow: 0 0 13px black;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
 
         </style>
         <nav class="" style="background-color: #002138bf !important;">
@@ -159,11 +176,17 @@
                             <p:commandButton class="waves-effect waves-light btn" value="Recuperar" action="#{recoverPasswordController.send()}" update="mf:userMailMsg mf:msg"/>
                         </div>
                         <div class="form-group" style="text-align: center;">
+                            <a href="/autolink">Ir a pantalla de inicio</a>
+                        </div>
+                        <div class="form-group" style="text-align: center;">
                             <p:messages id="msg" closable="true" globalOnly="true" showDetail="true"/>
                         </div>
                     </div>
                 </div>
-                <label class="subtitle-footer">Encuentra tu repuesto. Lo buscamos por ti.</label>
+                  <div class="subtitle-footer">
+                    <label class=" uno">¿No encuentras tu repuesto?</label>
+                    <label class=" dos" > Lo buscamos por ti</label>
+                </div>
                 <div class="col s4 m4 l4 xl4 hide-on-small-only" style="height: 100%;"></div>
             </div>
         </h:form>
