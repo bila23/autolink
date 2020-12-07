@@ -46,7 +46,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -169,6 +168,19 @@ public class ClienteSolController implements Serializable {
             FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de guardar la imagen");
         }
     }
+    
+       public void deleteImage(int id){
+        try{
+            if(id > 0){
+                fotoSolService.delete(id);
+                FacesHelper.successMessage(Constants.EXITO, "Se ha eliminado correctamente la imagen");
+                imageList = fotoSolService.findImageBySol(idSol);
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.errorMessage(Constants.ERROR, "Ha ocurrido un error al tratar de eliminar la imagen");            
+        }
+    }
 
     @PostConstruct
     public void init() {
@@ -207,6 +219,7 @@ public class ClienteSolController implements Serializable {
                 showPdatos=true;
                 idSol = model.getId();
                 repVOList = repSolService.findBySolicitud(idSol);
+                imageList = fotoSolService.findImageBySol(idSol);
                 chargeModelos();
             }
             asegList = solService.findAsegActive();
@@ -318,6 +331,7 @@ public class ClienteSolController implements Serializable {
     }
 
     public void empezar() {
+        model.setTipovehiculo(getNombreTipoCar(tipo));
         if (model.getTipovehiculo() == null || model.getTipovehiculo().equals("")) {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el tipo de vehiculo");
             showPdatos= false;
@@ -328,8 +342,9 @@ public class ClienteSolController implements Serializable {
             FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
             showPdatos= false;
         } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+            FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
             showPdatos= false;
+
         } else {
             showSaveBtn = false;
             showPdatos= true;
@@ -348,7 +363,7 @@ public class ClienteSolController implements Serializable {
             } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
             } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
             } /* else if(model.getPlaca() == null || model.getPlaca().equals(""))
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
             else if(model.getChasis()== null || model.getChasis().equals(""))
@@ -406,7 +421,7 @@ public class ClienteSolController implements Serializable {
             } else if (model.getIdmodelo() == null || model.getIdmodelo() == 0) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el modelo del vehiculo");
             } else if (model.getAniocarro() == null || model.getAniocarro() == 0) {
-                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el anio del vehiculo");
+                FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar el año del vehiculo");
             } else if (model.getPlaca() == null || model.getPlaca().equals("")) {
                 FacesHelper.warningMessage(Constants.WARNING, "Debe ingresar la placa del vehiculo");
             } else if (model.getChasis() == null || model.getChasis().equals("")) {

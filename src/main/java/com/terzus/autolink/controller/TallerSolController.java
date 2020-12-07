@@ -14,17 +14,20 @@ import com.bila.framework.commons.FacesHelper;
 import com.bila.framework.commons.GeneralFunction;
 import com.terzus.autolink.commons.Constants;
 import com.terzus.autolink.model.Aseguradora;
+import com.terzus.autolink.model.EntregaCliente;
 import com.terzus.autolink.model.Marca;
 import com.terzus.autolink.model.Modelo;
 import com.terzus.autolink.model.Repuesto;
 import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.TipoVehiculo;
+import com.terzus.autolink.service.EntregaClienteService;
 import com.terzus.autolink.service.FotoSolService;
 import com.terzus.autolink.service.RepuestoSolicitudService;
 import com.terzus.autolink.service.SolicitudDespService;
 import com.terzus.autolink.service.SolicitudService;
 import com.terzus.autolink.service.TallerService;
 import com.terzus.autolink.service.TipoVehiculoService;
+import com.terzus.autolink.vo.EntregaClienteVO;
 import com.terzus.autolink.vo.FotoXSolicitudVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -62,6 +65,8 @@ public class TallerSolController implements Serializable{
     @Inject private RepuestoSolicitudService repSolService;
     @Inject private TallerService tallerService;
     @Inject private TipoVehiculoService tipoVehService;
+    @Inject private EntregaClienteService entregaClienteService;
+    @Getter @Setter private List<EntregaClienteVO> entregaClienteList;
     @Getter @Setter private List<TipoVehiculo> tipoVehList;
     @Getter @Setter private List<SolicitudVO> solList;
     @Getter @Setter private int codeChange;
@@ -236,9 +241,11 @@ public class TallerSolController implements Serializable{
         else if(model.getIdmodelo() == null || model.getIdmodelo() == 0)
             FacesHelper.warningMessage("Debe ingresar el modelo del vehiculo");
         else if(model.getAniocarro()== null || model.getAniocarro() == 0)
-            FacesHelper.warningMessage("Debe ingresar el anio del vehiculo");
+            FacesHelper.warningMessage("Debe ingresar el año del vehiculo");
         else if(model.getPlaca() == null || model.getPlaca().equals(""))
             FacesHelper.warningMessage("Debe ingresar la placa del vehiculo");
+        else if(model.getPlaca().length() < 7)
+            FacesHelper.warningMessage("La placa del vehiculo no puede tener menos de 7 caracteres/digitos");
         else if(model.getChasis()== null || model.getChasis().equals(""))
             FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
         else if(model.getMotor()== null || model.getMotor().equals(""))
@@ -327,11 +334,32 @@ public class TallerSolController implements Serializable{
     public void verifySatCliente(int idSol){
         try{
             flagEsc = solDespService.existBySolWithStateN(idSol);
-            if(!flagEsc)
+            if(!flagEsc){
                 this.codeChange = idSol;
+                entregaClienteList = entregaClienteService.findVOBySolicitud(idSol);
+            }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             FacesHelper.error("Ha ocurrido un error inesperado al tratar de verificar la solicitud");
+        }
+    }
+    
+    public void changeEntregado(int id){
+        try{
+            EntregaCliente entregaCliente = entregaClienteService.findByKey(id);
+            if(entregaCliente != null){
+                if(entregaCliente.getEntregado().toLowerCase().equals("Si"))
+                    entregaCliente.setEntregado("No");
+                else
+                    entregaCliente.setEntregado("Si");
+                entregaClienteService.update(entregaCliente);
+                List<EntregaCliente> entregaList = entregaClienteService.findBySolAndEntregado(entregaCliente.getSolicitud(), "No");
+                if(entregaList == null || entregaList.isEmpty())
+                    despProvToEntSatis();
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.error("Ha ocurrido un error inesperado al tratar de cambiar el estado del repuesto");            
         }
     }
 }

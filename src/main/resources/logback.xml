@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>Autolink: [%-5level]: %d{dd/MM/yyyy - HH:mm:ss.SSS} \n%logger \nMensaje: %msg \nMetodo: %M \nLinea: %L \n%ex</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/opt/glassfish4/logs/autolink.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>Autolink: [%-5level]: %d{dd/MM/yyyy - HH:mm:ss.SSS} \n%logger \nMensaje: %msg \nMetodo: %M \nLinea: %L \n%ex</Pattern>
+        </encoder>
+ 
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <FileNamePattern>/opt/glassfish4/logs/autolink.%i.log.zip</FileNamePattern>
+            <MinIndex>1</MinIndex>
+            <MaxIndex>10</MaxIndex>
+        </rollingPolicy>
+ 
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>2MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <logger name="org.apache.commons.beanutils.converters.ArrayConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.BeanUtils" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.StringConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.DateConverter" level="OFF"/>
+    
+    <logger name="org.apache.commons.beanutils.converters.IntegerConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.ShortConverter" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.export.JRPdfExporter" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.BaseReportFiller" level="OFF"/>
+    <logger name="net.sf.jasperreports.extensions.ExtensionsEnvironment" level="OFF"/>
+    <logger name="net.sf.jasperreports.extensions.DefaultExtensionsRegistry" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.util.JRLoader" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.FillReturnValues" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.ElementEvaluationAction" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.DelayedFillActions" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.JRFillTextField" level="OFF"/>
+    
+    <logger name="org.apache.commons.beanutils.converters.FloatConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.LongConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.CharacterConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.ByteConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.BooleanConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.BigIntegerConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.BigDecimalConverter" level="OFF"/>
+    <logger name="org.apache.commons.beanutils.converters.DoubleConverter" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.util.DeduplicableRegistry" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fonts.FontExtensionsRegistry" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fonts.SimpleFontFace" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.JRFillBand" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.JRFillDatasetRun" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.JRVerticalFiller" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.JRBaseFiller" level="OFF"/>
+    <logger name="net.sf.jasperreports.engine.fill.SimpleTextLineWrapper" level="OFF"/>
+    
+    <logger name="com.terzus.autolink" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

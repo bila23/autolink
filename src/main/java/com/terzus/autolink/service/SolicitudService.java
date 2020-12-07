@@ -31,6 +31,8 @@ import com.terzus.autolink.model.Solicitud;
 import com.terzus.autolink.model.Taller;
 import com.terzus.autolink.model.TipoRepuesto;
 import com.terzus.autolink.vo.FotoXSolicitudVO;
+import com.terzus.autolink.vo.HorasVO;
+import com.terzus.autolink.vo.OfertaProveedorVO;
 import com.terzus.autolink.vo.RepuestoSolicitudVO;
 import com.terzus.autolink.vo.RepuestosAllSolVO;
 import com.terzus.autolink.vo.SolicitudVO;
@@ -84,14 +86,23 @@ public class SolicitudService extends Service<Solicitud, Integer> {
     public Dao<Solicitud, Integer> getDao() {
         return dao;
     }
-
-    public List<Integer> prepareHourList() {
-        Calendar today = Calendar.getInstance();
-        int hours = today.get(Calendar.HOUR_OF_DAY);
-        List<Integer> list = new ArrayList();
-        for (int i = hours; i < 24; i++) {
-            list.add(i);
+    
+    public List<HorasVO> prepareHourList(){
+        List<HorasVO> list = new ArrayList();
+        HorasVO vo = null;
+        for(int i = 1; i<24; i++){
+            vo = new HorasVO();
+            vo.setHora(i);
+            if(i<=9)
+                vo.setText("0" + i);
+            else
+                vo.setText(String.valueOf(i));
+            list.add(vo);
         }
+        vo = new HorasVO();
+        vo.setHora(0);
+        vo.setText("00");
+        list.add(vo);
         return list;
     }
 
@@ -164,26 +175,22 @@ public class SolicitudService extends Service<Solicitud, Integer> {
      * @param hour objeto de tipo Date con la hora de finalizacion
      * @throws Exception
      */
-    public void updateHorasVigencia(int idSol, int hour) throws Exception {
+    public void updateHorasVigencia(int idSol, int hour, Date fecha) throws Exception{
         Solicitud model = dao.findByKey(idSol);
-        if (model != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-
+        if(model != null){
             Date ini = new Date();
-            Date end = defineEndDate(hour);
-
+            Date end = defineEndDate(fecha, hour);
+            
             model.setFechainicio(ini);
             model.setFechafin(end);
             model.setHoraFinal(hour);
             dao.update(model);
         }
     }
-
-    private Date defineEndDate(int hours) {
+    
+    private Date defineEndDate(Date fecha, int hours) {
         Calendar newDay = Calendar.getInstance();
-        newDay.setTime(new Date());
+        newDay.setTime(fecha);
         newDay.set(Calendar.HOUR_OF_DAY, hours);
         newDay.set(Calendar.MINUTE, 0);
         return newDay.getTime();
@@ -398,8 +405,15 @@ public class SolicitudService extends Service<Solicitud, Integer> {
         vo.setRepAplicaList(repList);
 
         //VERIFICO SI LA OFERTA YA FUE ABIERTA
-        vo.setViewed(ofvService.isViewed(vo.getId(), codprv));
-
+        vo.setViewed(ofvService.isViewed(vo.getId(), codprv));        
+        
+        //VERIFICO SI LA SOLICITUD POSEE OFERTAS POR EL PROVEEDOR
+        List<OfertaProveedorVO> offerList = opService.findBySolAndProv(vo.getId(), codprv);
+        if(offerList != null && !offerList.isEmpty())
+            vo.setHasOffers(true);
+        else
+            vo.setHasOffers(false);
+                
         //HORA PENDIENTES
         if (vo.getFechafin() != null) {
             long diffInMillies = vo.getFechafin().getTime() - new Date().getTime();

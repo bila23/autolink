@@ -11,7 +11,7 @@
             .no-viewed .link, .viewed{color: #484747}
         </style>
         <h:form id="mf">
-            <p:poll listener="#{provSolController.findCotAbierta()}" interval="180" update="totalSolCoa dateSolCoa mf:tab:dtcoa"/>
+            <p:poll listener="#{provSolController.findCotAbierta()}" interval="180" update="totalSolCoa dateSolCoa mf:tab"/>
             <div class="row" style="margin-bottom:5px">
                 <div class="col s12 m12 l6">
                     <h:panelGroup id="totalSolCoa" class="title-of">
@@ -44,35 +44,39 @@
                                         #{r1.pendingHours}<br/> <span class="hf">Hora fin: #{of:formatDate(r1.fechafin, 'HH:mm')}</span>
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.codigosolicitud}" filterMatchMode="contains" headerText="Codigo" sortBy="#{r1.codigosolicitud}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.codigosolicitud}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.marca}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.modelo}" /> / <h:outputText value="#{r1.aniocarro}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Motor" sortBy="#{r1.motor}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.motor}" filterMatchMode="contains" headerText="Motor" sortBy="#{r1.motor}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.motor}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Chasis" sortBy="#{r1.chasis}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.chasis}" filterMatchMode="contains" headerText="Chasis" sortBy="#{r1.chasis}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.chasis}" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Comentario" sortBy="#{r1.comentariosaseguradora}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                <p:column filterBy="#{r1.comentariosaseguradora}" filterMatchMode="contains" headerText="Comentario" sortBy="#{r1.comentariosaseguradora}" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
                                     <p:commandLink ajax="false" action="#{provSolController.goToOferta(r1.id)}" class="#{r1.viewed ? 'viewed' : 'link'}">
                                         <h:outputText value="#{r1.comentariosaseguradora}" />
                                     </p:commandLink>
+                                </p:column>
+                                <p:column style="text-align:center" headerText="Ya fue cotizada?" class="#{r1.viewed ? 'viewed' : 'no-viewed'}">
+                                    <h:outputLabel style="font-weight:bold" rendered="#{r1.hasOffers}">Si</h:outputLabel>
+                                    <h:outputLabel style="font-weight:bold" rendered="#{!r1.hasOffers}">No</h:outputLabel>
                                 </p:column>
                                 <p:column headerText="Imagenes" style="text-align:center;width: 8%">
                                     <p:commandLink actionListener="#{tallerSolController.findImage(r1.id)}" onsuccess="PF('imgList').show()" title="Ver imagenes" update="mf:galleria">
@@ -106,24 +110,24 @@
                                 </p:rowExpansion>
                             </p:dataTable>
                         </p:tab>
-                        <p:tab title="GENERADOR ORDEN DE COMPRA" id="goc">
+                        <p:tab title="COTIZACIONES GANADAS" id="goc">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtgoc" var="r1" value="#{provSolController.solList}" rows="6" paginator="true">
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                <p:column filterBy="#{r1.codigosolicitud}" filterMatchMode="contains" headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" /> / <h:outputText value="#{r1.aniocarro}" />
                                 </p:column>
-                                <p:column headerText="Motor" sortBy="#{r1.motor}">
+                                <p:column filterBy="#{r1.motor}" filterMatchMode="contains" headerText="Motor" sortBy="#{r1.motor}">
                                     <h:outputText value="#{r1.motor}" />
                                 </p:column>
-                                <p:column headerText="Chasis" sortBy="#{r1.chasis}">
+                                <p:column filterBy="#{r1.chasis}" filterMatchMode="contains" headerText="Chasis" sortBy="#{r1.chasis}">
                                     <h:outputText value="#{r1.chasis}" />
                                 </p:column>
-                                <p:column headerText="Comentario" sortBy="#{r1.comentariosaseguradora}">
+                                <p:column filterBy="#{r1.comentariosaseguradora}" filterMatchMode="contains" headerText="Comentario" sortBy="#{r1.comentariosaseguradora}">
                                     <h:outputText value="#{r1.comentariosaseguradora}" />
                                 </p:column>
                                 <p:column style="width:8%;text-align: center">
@@ -135,22 +139,22 @@
                         </p:tab>
                         <p:tab title="DESPACHADA POR PROVEEDOR" id="dpp">
                             <p:dataTable emptyMessage="No hay solicitudes" id="dtdpp" var="r1" value="#{provSolController.solList}" rows="6" paginator="true">
-                                <p:column headerText="Codigo" sortBy="#{r1.codigosolicitud}">
+                                <p:column filterBy="#{r1.codigosolicitud}" filterMatchMode="contains" headerText="Codigo" sortBy="#{r1.codigosolicitud}">
                                     <h:outputText value="#{r1.codigosolicitud}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" /> / <h:outputText value="#{r1.aniocarro}" />
                                 </p:column>
-                                <p:column headerText="Motor" sortBy="#{r1.motor}">
+                                <p:column filterBy="#{r1.motor}" filterMatchMode="contains" headerText="Motor" sortBy="#{r1.motor}">
                                     <h:outputText value="#{r1.motor}" />
                                 </p:column>
-                                <p:column headerText="Chasis" sortBy="#{r1.chasis}">
+                                <p:column filterBy="#{r1.chasis}" filterMatchMode="contains" headerText="Chasis" sortBy="#{r1.chasis}">
                                     <h:outputText value="#{r1.chasis}" />
                                 </p:column>
-                                <p:column headerText="Comentario" sortBy="#{r1.comentariosaseguradora}">
+                                <p:column filterBy="#{r1.comentarioaseguradora}" filterMatchMode="contains" headerText="Comentario" sortBy="#{r1.comentariosaseguradora}">
                                     <h:outputText value="#{r1.comentariosaseguradora}" />
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="width:8%;text-align: center">

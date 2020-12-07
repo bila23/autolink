@@ -7,6 +7,7 @@ package com.terzus.autolink.dao;
 
 import com.bila.framework.dao.Dao;
 import com.terzus.autolink.model.Horarios;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,28 +20,30 @@ import org.omnifaces.util.Utils;
  */
 @Stateless
 public class HorariosDao extends Dao<Horarios, Integer> {
-
+    
     public HorariosDao() {
         super(Horarios.class);
     }
-
+    
     @PersistenceContext(unitName = "PU")
     private EntityManager em;
-
+    
     @Override
     public EntityManager getEntityManager() {
         return em;
     }
-
+    
     public Horarios getHorarioByDiaAndJornada(String dia, int jornada) throws Exception {
         Query q = em.createNamedQuery("Horarios.findByDiaAndJornada", Horarios.class);
         q.setParameter("dia", dia);
         q.setParameter("jornada", jornada);
-        Object obj = q.getSingleResult();
-        if (obj != null && !Utils.isEmpty(obj)) {
-            return (Horarios) obj;
+        List<Object> list = q.getResultList();
+        if (list != null) {
+            if (list.size() > 0) {
+                return (Horarios) list.get(0);
+            }
         }
         return null;
     }
-
+    
 }

@@ -214,7 +214,7 @@ public class RepuestoSolicitudService extends Service<Respuestoxsolicitud, Integ
             cantidad=cantidad + model.getCantidad();
         }
         model.setEstado("A");
-        model.setAplica("N");
+        model.setAplica("S");
         model.setIdrepuesto(idRep);
         model.setIdsolicitud(idSol);
         model.setCantidad(cantidad);

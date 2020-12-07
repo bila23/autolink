@@ -122,13 +122,13 @@
                     max-width: 100%;
                 }
             }
-               
+
             h6{
                 border-bottom: solid 1px #cecece; padding: 10px;
             }
 
         </style>
-        <h:form id="form" style="max-width: 1500px"> 
+        <h:form id="form" style="max-width: 1500px" enctype="multipart/form-data"> 
             <nav style="position: relative">
                 <div class="nav-wrapper">
                     <div class="col s6 l6">
@@ -217,124 +217,130 @@
                     </div>
                     <div class="col s12 m2 l2" >
                         <p:spacer height="20" width="5" />
-                        <p:commandButton value="Empezar" class="amber darken-4 btn-empezar" update="form:btnProcesar form:rep form:pdatos" actionListener="#{clienteSolController.empezar()}" style="height: 53px"/>
+                        <p:commandButton value="Empezar" class="amber darken-4 btn-empezar" update="form:msg form:btnProcesar form:rep form:pdatos form:btnSaveImg" actionListener="#{clienteSolController.empezar()}" style="height: 53px"/>
                     </div>
 
                 </div>
 
             </div>
-
             <h:panelGroup id="pdatos">
+                <h:panelGroup  rendered="#{clienteSolController.showPdatos?'true':'false'}">
 
-                <div class="containerss">
-                    <div style="padding: 10px;
-                         float: right;
-                         background: #dbdbdb;
-                         border-radius: 4px;
-                         text-align: center;">
-                        <a href="#datos" class="hover-underline-animation" >Datos Solicitud <i class="fas fa-angle-double-down"></i></a>
-                    </div>
+                    <div class="containerss">
+                        <div style="padding: 10px;
+                             float: right;
+                             background: #dbdbdb;
+                             border-radius: 4px;
+                             text-align: center;">
+                            <a href="#datos" class="hover-underline-animation" >Datos Solicitud <i class="fas fa-angle-double-down"></i></a>
+                        </div>
 
 
-                    <p:dataGrid var="trep" value="#{clienteSolController.listTipoRep}" columns="4" layout="grid" rendered="#{clienteSolController.showPdatos?'true':'false'}"
-                                rows="12" paginator="true" id="rep" 
-                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-                                rowsPerPageTemplate="6,12,16">
+                        <p:dataGrid var="trep" value="#{clienteSolController.listTipoRep}" columns="4" layout="grid" rendered="#{clienteSolController.showPdatos?'true':'false'}"
+                                    rows="12" paginator="true" id="rep" 
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                    rowsPerPageTemplate="6,12,16">
 
-                        <f:facet name="header">
-                            <h4> <i class="fas fa-oil-can" style="color: #39c1cd; font-size:1.4em">  </i> ¿Que Busca?</h4>
-                            <div class="row">
-                                <div class="col s1 m1 l1" />
-                                <div class="col s8 m9 l9">
-                                    <h:panelGroup class="input-field">
-                                        <p:inputText value="#{clienteSolController.textoBuscar}"  class="validate" id="categoria" a:autofocus="true" />
-                                        <p:outputLabel for="categoria" value="Tipo de repuestos a buscar" />
-                                    </h:panelGroup>
+                            <f:facet name="header">
+                                <h4> <i class="fas fa-oil-can" style="color: #39c1cd; font-size:1.4em">  </i> ¿Que Busca?</h4>
+                                <div class="row">
+                                    <div class="col s1 m1 l1" />
+                                    <div class="col s8 m9 l9">
+                                        <h:panelGroup class="input-field">
+                                            <p:inputText value="#{clienteSolController.textoBuscar}"  class="validate" id="categoria" a:autofocus="true" />
+                                            <p:outputLabel for="categoria" value="Tipo de repuestos a buscar" />
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="col s2 m1 l1">
+                                        <p:commandButton icon="fa fa-search" actionListener="#{clienteSolController.filtrarTiposRepuestos()}" update=":form:rep" class="waves-effect waves-light teal darken-4 btn-large" style="width: 100%" />
+                                    </div>
+                                    <div class="col s1 m1 l1" />
                                 </div>
-                                <div class="col s2 m1 l1">
-                                    <p:commandButton icon="fa fa-search" actionListener="#{clienteSolController.filtrarTiposRepuestos()}" update=":form:rep" class="waves-effect waves-light teal darken-4 btn-large" style="width: 100%" />
-                                </div>
-                                <div class="col s1 m1 l1" />
-                            </div>
-                        </f:facet>
+                            </f:facet>
 
-                        <p:panel   style="text-align:center; box-shadow: 0 24px 64px -2px rgba(0, 0, 0, 0.02), 0 6px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.08);">
+                            <p:panel   style="text-align:center; box-shadow: 0 24px 64px -2px rgba(0, 0, 0, 0.02), 0 6px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.08);">
 
-                            <p:panelGrid columns="1" style="width:100% ">
+                                <p:panelGrid columns="1" style="width:100% ">
 
-                                <f:facet name="header">                                      
-                                    <p:graphicImage class="img-tiporep" url="/images/store/#{trep.image}" style="margin: auto; display: block"/> 
-                                </f:facet>
+                                    <f:facet name="header">                                      
+                                        <p:graphicImage class="img-tiporep" url="/images/store/#{trep.image}" style="margin: auto; display: block"/> 
+                                    </f:facet>
 
 
 
 
-                                <h:outputText value="#{trep.nombre}" />
+                                    <h:outputText value="#{trep.nombre}" />
 
-                                <p:commandLink update=":form:carDetail :form:dialogRep" oncomplete="PF('carDialog').show()"  actionListener="#{clienteSolController.resetListRepuestos()}"  title="Ver Detalle" style="color: #39c1cd">
-                                    <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/> Ver Detalle
-                                    <f:setPropertyActionListener value="#{trep}" target="#{clienteSolController.tipoRep}" />
-                                </p:commandLink>
-                            </p:panelGrid>
-                        </p:panel>
-
-                    </p:dataGrid>
-                </div>
-
-                                <p:spacer height="30"/>
-                <div class="container">
-                    <div class="row" id="datos">
-                        <div class="col s12">
-                              <h6> <i class="fas fa-list" style="color: #39c1cd; font-size:1.4em">  </i> Lista de Repuestos Seleccionados</h6>
-                            <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{clienteSolController.repVOList}" scrollable="true" scrollHeight="200">
-                               
-                                <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
-                                    <h:outputText value="#{rep.repuesto}" />
-                                </p:column>
-                                <p:column headerText="Cantidad" sortBy="#{rep.cantidad}" style="text-align:center; width: 12%">
-                                    <h:outputText value="#{rep.cantidad}" />
-                                </p:column>
-                                <p:column headerText="Eliminar" style="text-align:center;width: 10%; font-size: 0.8em">
-                                    <p:commandLink actionListener="#{clienteSolController.deleteRepSol(rep.id)}" style="color: #f44336" update="form:msg repTable">
-                                        <i class="material-icons">delete</i>
+                                    <p:commandLink update=":form:carDetail :form:dialogRep" oncomplete="PF('carDialog').show()"  actionListener="#{clienteSolController.resetListRepuestos()}"  title="Ver Detalle" style="color: #39c1cd">
+                                        <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/> Ver Detalle
+                                        <f:setPropertyActionListener value="#{trep}" target="#{clienteSolController.tipoRep}" />
                                     </p:commandLink>
-                                </p:column>
-                            </p:dataTable>
-                        </div>
+                                </p:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
                     </div>
 
-                    <div class="row">
-                        <div class="col s12">
-                            <h6> 
-                                <i class="far fa-images" style="color: #39c1cd; font-size:1.4em"> </i> Agregue las imagenes asociadas a la solicitud:</h6>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m12 l9 input-field">
-                            <p:fileUpload value="#{clienteSolController.imageFile}" mode="simple" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
-                        </div>
-                        <div class="col s12 m12 l3 input-field right-align">
-                            <p:commandButton disabled="#{clienteSolController.showSaveBtn}"  icon="fa fa-images" value="Guardar Image" style="text-transform: capitalize; font-size: 1em" class="waves-effect waves-light btn" ajax="false" action="#{clienteSolController.saveImage()}"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p:dataTable emptyMessage="No hay imagenes agregadas" id="dtimg" var="img" value="#{clienteSolController.imageList}" rows="1" paginator="true">
-                                <p:column>
-                                    <p:graphicImage value="#{img}" library="images"/>
-                                </p:column>
-                            </p:dataTable>
-                        </div>
-                    </div>
+                    <p:spacer height="30"/>
+                    <div class="container">
+                        <div class="row" id="datos">
+                            <div class="col s12">
+                                <h6> <i class="fas fa-list" style="color: #39c1cd; font-size:1.4em">  </i> Lista de Repuestos Seleccionados</h6>
+                                <p:dataTable emptyMessage="No hay repuestos" id="repTable" var="rep" value="#{clienteSolController.repVOList}" scrollable="true" scrollHeight="200">
 
-                    <div style="text-align: center; padding: 20px">
-                        <p:commandButton id="btnProcesar"  value="Procesar Solicitud" class="waves-effect waves-light btn-large  blue darken-1" update=":form:solDetail" oncomplete="PF('solDialog').show()" 
-                                         disabled="#{clienteSolController.showSaveBtn}"
-                                         actionListener="#{clienteSolController.procesarSolicitud()}"
-                                         icon="fa fa-car-side" iconPos="right" >                   
-                        </p:commandButton>
+                                    <p:column headerText="Repuesto" sortBy="#{rep.repuesto}">
+                                        <h:outputText value="#{rep.repuesto}" />
+                                    </p:column>
+                                    <p:column headerText="Cantidad" sortBy="#{rep.cantidad}" style="text-align:center; width: 12%">
+                                        <h:outputText value="#{rep.cantidad}" />
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="text-align:center;width: 10%; font-size: 0.8em">
+                                        <p:commandLink actionListener="#{clienteSolController.deleteRepSol(rep.id)}" style="color: #f44336" update="form:msg repTable">
+                                            <i class="material-icons">delete</i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12">
+                                <h6> 
+                                    <i class="far fa-images" style="color: #39c1cd; font-size:1.4em"> </i> Agregue las imagenes asociadas a la solicitud:</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12 l9 input-field">
+                                <p:fileUpload value="#{clienteSolController.imageFile}" mode="simple" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                            </div>
+                            <div class="col s12 m12 l3 input-field right-align">
+                                <p:commandButton id="btnSaveImg" disabled="#{clienteSolController.showSaveBtn}"  icon="fa fa-images" value="Guardar Image" style="text-transform: capitalize; font-size: 1em" class="waves-effect waves-light btn" ajax="false" action="#{clienteSolController.saveImage()}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <p:dataTable emptyMessage="No hay imagenes agregadas" id="dtimg" var="img" value="#{clienteSolController.imageList}" rows="1" paginator="true">
+                                    <p:column headerText="Imagen">
+                                        <p:graphicImage value="#{img.url}" width="230" height="190"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="text-align:center;width: 15%">
+                                        <p:commandLink actionListener="#{clienteSolController.deleteImage(img.id)}" style="color: #f44336" update="form:msg dtimg">
+                                            <i class="material-icons">delete</i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; padding: 20px">
+                            <p:commandButton id="btnProcesar"  value="Procesar Solicitud" class="waves-effect waves-light btn-large  blue darken-1" update=":form:solDetail" oncomplete="PF('solDialog').show()" 
+                                             disabled="#{clienteSolController.showSaveBtn}"
+                                             actionListener="#{clienteSolController.procesarSolicitud()}"
+                                             icon="fa fa-car-side" iconPos="right" >                   
+                            </p:commandButton>
+                        </div>
                     </div>
-                </div>
+                </h:panelGroup>
             </h:panelGroup>
 
             <p:dialog id="dialogRep" header="#{clienteSolController.tipoRep.nombre}" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" position="center">
@@ -363,7 +369,7 @@
 
                     <div class="row">
 
-                        <p:commandButton id="agregar" value="Agregar" disabled="#{empty clienteSolController.repuestoSelected}" class="waves-effect waves-light btn" actionListener="#{clienteSolController.saveRepSol()}" oncomplete="handleSubmit(args,'carDialog');" update="form:repTable form:msg" style="margin-top: 10px"/>
+                        <p:commandButton id="agregar" value="Agregar" disabled="#{empty clienteSolController.repuestoSelected}" class="waves-effect waves-light btn" actionListener="#{clienteSolController.saveRepSol()}" oncomplete="handleSubmit(args,'carDialog');" update="form:repTable form:msg form:btnSaveImg" style="margin-top: 10px"/>
 
                     </div>
                 </p:outputPanel>

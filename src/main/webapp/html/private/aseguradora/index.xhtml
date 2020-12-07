@@ -15,19 +15,19 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}" style="text-align:center">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
-                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                <p:column filterBy="#{r1.placa}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                <p:column filterBy="#{r1.siniestro}" filterMatchMode="contains" headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                <p:column filterBy="#{r1.taller}" filterMatchMode="contains" headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Acciones" style="width:10%;text-align: center">
@@ -42,7 +42,7 @@
                                     </p:commandLink>
                                 </p:column>
                                 <p:column style="text-align: center">
-                                    <p:commandButton style="font-size:10px" value="Cotizacion abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()"/>
+                                    <p:commandButton style="font-size:10px" value="Cotizacion abierta" class="waves-effect waves-light btn" actionListener="#{asegSolController.setCodSol(r1.id)}" onsuccess="PF('dlgCotAb').show()" update="dcab:capg"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
@@ -54,25 +54,22 @@
                                 <p:column headerText="Fin" sortBy="#{r1.fechafin}">
                                     #{of:formatDate(r1.fechafin, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
-                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                <p:column filterBy="#{r1.placa}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                <p:column filterBy="#{r1.siniestro}" filterMatchMode="contains" headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                <p:column filterBy="#{r1.taller}" filterMatchMode="contains" headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
-                                <p:column headerText="Ver piezas" style="width:8%;text-align: center">
-                                    <p:commandLink actionListener="#{asegSolController.showRepAplica(r1.id)}" update="mf:msg mf:repSolTable" onsuccess="PF('dlgRep').show()">
-                                        <i class="material-icons">content_paste</i>
-                                    </p:commandLink>
+                                <p:column headerText="" style="width:5%;text-align: center">
                                     <p:commandLink title="Ver todo" actionListener="#{adminSolController.seeSol(r1.id)}" update="mf:msg mf:pgDlgOrden2" onsuccess="PF('dlgInfo').show()">
                                         <i class="material-icons">info</i>
                                     </p:commandLink>
@@ -84,19 +81,19 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm')}
                                 </p:column>
-                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                <p:column filterBy="#{r1.placa}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                <p:column filterBy="#{r1.siniestro}" filterMatchMode="contains" headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                <p:column filterBy="#{r1.taller}" filterMatchMode="contains" headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="" style="width:8%;text-align: center">
@@ -114,19 +111,19 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                <p:column filterBy="#{r1.placa}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                <p:column filterBy="#{r1.siniestro}" filterMatchMode="contains" headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                <p:column filterBy="#{r1.taller}" filterMatchMode="contains" headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column headerText="Ver piezas" style="width:8%;text-align: center">
@@ -141,19 +138,19 @@
                                 <p:column headerText="Fecha sol." sortBy="#{r1.fechacreacion}">
                                     #{of:formatDate(r1.fechacreacion, 'dd/MM/yyyy HH:mm:ss')}
                                 </p:column>
-                                <p:column headerText="Placa" sortBy="#{r1.placa}">
+                                <p:column filterBy="#{r1.placa}" filterMatchMode="contains" headerText="Placa" sortBy="#{r1.placa}">
                                     <h:outputText value="#{r1.placa}" />
                                 </p:column>
-                                <p:column headerText="Marca" sortBy="#{r1.marca}">
+                                <p:column filterBy="#{r1.marca}" filterMatchMode="contains" headerText="Marca" sortBy="#{r1.marca}">
                                     <h:outputText value="#{r1.marca}" />
                                 </p:column>
-                                <p:column headerText="Modelo" sortBy="#{r1.modelo}">
+                                <p:column filterBy="#{r1.modelo}" filterMatchMode="contains" headerText="Modelo" sortBy="#{r1.modelo}">
                                     <h:outputText value="#{r1.modelo}" />
                                 </p:column>
-                                <p:column headerText="Siniestro" sortBy="#{r1.siniestro}">
+                                <p:column filterBy="#{r1.siniestro}" filterMatchMode="contains" headerText="Siniestro" sortBy="#{r1.siniestro}">
                                     <h:outputText value="#{r1.siniestro}" />
                                 </p:column>
-                                <p:column headerText="Taller" sortBy="#{r1.taller}">
+                                <p:column filterBy="#{r1.taller}" filterMatchMode="contains" headerText="Taller" sortBy="#{r1.taller}">
                                     <h:outputText value="#{r1.taller}" />
                                 </p:column>
                                 <p:column style="width:8%;text-align: center">
@@ -233,27 +230,6 @@
                         </p:selectBooleanButton>
                     </p:column>
                 </p:dataTable>
-            </p:dialog>
-            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" closeOnEscape="true" closable="true" position="top" dynamic="true">
-                <div class="row">
-                    <div class="col s12">
-                        <span style="width: 60%">
-                            Para pasar la solicitud a "Cotizacion Abierta" debe definir la hora maxima que tienen los proveedores <br/>para generar sus ofertas.
-                        </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12" style="text-align: center">
-                        <p:selectOneMenu value="#{asegSolController.horas}" id="minMax">
-                            <f:selectItems var="hour" value="#{asegSolController.hourList}" itemValue="#{hour}" itemLabel="#{hour}"/>
-                        </p:selectOneMenu>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <p:commandButton onsuccess="PF('dlgCotAb').hide();" update="mf:msg :mf:tab:dting" value="Guardar" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
-                    </div>
-                </div>
             </p:dialog>
             <p:dialog widgetVar="dglInfo" id="dglInfo" modal="true" closeOnEscape="true" header="Manejo de Solicitud" width="750px" closable="true">
                 <div class="row">
@@ -411,6 +387,36 @@
                                     </p:column>
                                 </p:summaryRow>
                             </p:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+        </h:form>
+        <h:form id="dcab">
+            <p:dialog widgetVar="dlgCotAb" id="dlgCotAb" closeOnEscape="true" closable="true" position="top" dynamic="true">
+                <h:panelGroup id="capg">
+                    <div class="row">
+                        <div class="col s12">
+                            <span style="width: 60%">
+                                Para pasar la solicitud a "Cotizacion Abierta" debe definir la fecha y hora maxima que tienen los proveedores <br/>para generar sus ofertas.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6" style="text-align: center">
+                            <div>Fecha:</div>
+                            <p:calendar id="fechaProg" value="#{asegSolController.fecha}" mask="true" pattern="dd/MM/yyyy"/>
+                        </div>
+                        <div class="col s6" style="text-align: center">
+                            <div>Hora:</div>
+                            <p:selectOneMenu value="#{asegSolController.horas}" id="minMax">
+                                <f:selectItems var="hour" value="#{asegSolController.hourList}" itemValue="#{hour.hora}" itemLabel="#{hour.text}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p:commandButton onsuccess="PF('dlgCotAb').hide();" update="mf:msg :mf:tab:dting" value="Guardar" class="waves-effect waves-light btn" actionListener="#{asegSolController.changeCotAbierta()}"/>
                         </div>
                     </div>
                 </h:panelGroup>

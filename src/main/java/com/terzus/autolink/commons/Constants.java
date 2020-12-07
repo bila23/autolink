@@ -25,7 +25,8 @@ public class Constants {
     public static String EXITO = "Exito";
     public static String ERROR = "Error";
     public static String WARNING = "Advertencia";
-    public static String PATH_IMAGE = "/home/adminautolink/Documents/payara5/glassfish/domains/domain1/applications/autolink-images/images";
-    public static String URL_IMAGE = "https://52.247.124.170:8181/autolink-images/images/";
+    public static String PATH_IMAGE = "/home/adminautolink/Documents/payara5/glassfish/domains/domain1/applications/autolink-images/";
+    public static String URL_IMAGE = "https://52.247.124.170:8181/autolink-images/";
+    public static String URL_NEW_PASSWORD = "https://52.247.124.170:8181/autolink/newPassword.xhtml?q=";
 
 }
