@@ -29,7 +29,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -56,6 +55,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Solicitud.findByEstadoAndAseg", query = "SELECT s FROM Solicitud s WHERE UPPER(s.estado) = :estado AND s.idaseguradora = :idaseguradora ORDER BY s.id DESC"),
     @NamedQuery(name = "Solicitud.updateEstado", query = "UPDATE Solicitud s SET s.estado = :estado WHERE s.id = :id"),
     @NamedQuery(name = "Solicitud.updateCoaTOPea", query = "UPDATE Solicitud s SET s.estado = 'PEA' WHERE s.estado = 'COA' AND s.horaFinal = :horaFinal"),
+    
+    @NamedQuery(name = "Solicitud.updateDesiertas", query = "UPDATE Solicitud s SET s.estado = 'CPD' WHERE s.estado = 'COA' AND s.horaFinal = :horaFinal AND s.id NOT IN (SELECT o.idsolicitud FROM Ofertaproveedor o WHERE o.idsolicitud = s.id)"),
+    
     @NamedQuery(name = "Solicitud.findByEstadoAndCliente", query = "SELECT s FROM Solicitud s WHERE LOWER(s.estado) = LOWER(:estado) AND LOWER(s.usuariocrea) = LOWER(:user) ORDER BY s.id DESC")
 })
 public class Solicitud implements Serializable {
