@@ -120,6 +120,7 @@ public class SolicitudService extends Service<Solicitud, Integer> {
         dao.updateDesiertas(hours);        
     }
     
+    
      public List<Repuesto> findRepuestoByTipo(TipoRepuesto tipo) throws Exception {
         return repDao.findByTipoRep(tipo!=null? tipo.getId():0);
     }
