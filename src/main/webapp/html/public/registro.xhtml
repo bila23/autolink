@@ -105,7 +105,7 @@
                                 <h:panelGroup >
                                     <p:outputLabel for="departamento" value="Departamento" style="display: block"/>
                                     <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar Departamento" required="true" value="#{registroController.registro.iddepartamento}" class="validate" id="departamento" converter="omnifaces.SelectItemsConverter" style="border-color: #c7c5c5" >
-                                        <f:selectItem itemLabel="Seleccione un Departamento" itemValue="0"/>
+                                        <f:selectItem itemLabel="Seleccione un Departamento" itemValue=""/>
                                         <f:selectItems value="#{registroController.listDeptos}" var="dep" itemLabel="#{dep.nombre}" itemValue="#{dep}"/>
                                         <p:ajax update="municipio"  listener="#{registroController.resetMunicipio}"/>
                                     </p:selectOneMenu>
@@ -116,7 +116,7 @@
                                 <h:panelGroup >
                                     <h:outputLabel  for="municipio" value="Municipio"  style="display: block"/>
                                     <p:selectOneMenu filter="true" filterMatchMode="contains" filterPlaceholder="Buscar Municipio" required="true" value="#{registroController.registro.idmunicipio}" class="validate" id="municipio" converter="omnifaces.SelectItemsConverter" style="border-color: #c7c5c5" >
-                                        <f:selectItem itemLabel="Seleccione un Municipio" itemValue="0"/>
+                                        <f:selectItem itemLabel="Seleccione un Municipio" itemValue=""/>
                                         <f:selectItems value="#{registroController.listMunicipio}" var="mun" itemLabel="#{mun.nombre}" itemValue="#{mun}"/>
                                     </p:selectOneMenu>
 
@@ -196,7 +196,7 @@
             </div>
 
         </h:form>
-         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>
