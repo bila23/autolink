@@ -244,7 +244,7 @@ public class TallerSolController implements Serializable{
             FacesHelper.warningMessage("Debe ingresar el año del vehiculo");
         else if(model.getPlaca() == null || model.getPlaca().equals(""))
             FacesHelper.warningMessage("Debe ingresar la placa del vehiculo");
-        else if(model.getPlaca().length() < 7)
+        else if(model.getPlaca().length() < 3)
             FacesHelper.warningMessage("La placa del vehiculo no puede tener menos de 7 caracteres/digitos");
         else if(model.getChasis()== null || model.getChasis().equals(""))
             FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
