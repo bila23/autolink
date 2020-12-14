@@ -340,20 +340,13 @@
                 </div>
             </div>
             
-            <p:dialog widgetVar="dlgEsc" id="dlgEsc" modal="true" resizable="false" showHeader="false" closeOnEscape="true">
+            <p:dialog widgetVar="dlgEsc" id="dlgEsc" modal="true" showHeader="false" closeOnEscape="true" closable="true" width="560">
+                <p:ajax event="close" update="mf" listener="#{tallerSolController.changeEntregadoFinal()}" />
                 <h:panelGroup id="pgEsc" rendered="#{!tallerSolController.flagEsc}">
-                    <!--<div class="form-group">
-                        <div style="padding-bottom:25px">
-                            Esta seguro que desea mover la solicitud al estado "Entregado a Satisfaccion del Cliente"?
-                        </div>
-                        <p:commandButton update="mf:msg mf" onsuccess="PF('dlgEsc').hide();" value="Si" class="waves-effect waves-light btn" actionListener="#{tallerSolController.despProvToEntSatis()}"/>
-                        <p:spacer width="7"/>
-                        <p:commandButton value="No" class="waves-effect waves-light btn" onclick="PF('dlgEsc').hide();" type="button"/>
-                    </div>-->
                     <div class="form-group">
                         Cuando se actualizen todos los repuestos como entregados la solicitud cambiara a "Entregado a satisfaccion del cliente".
                     </div><br/>
-                    <p:dataTable emptyMessage="No hay repuestos" id="entregaId" var="e" value="#{tallerSolController.entregaClienteList}">
+                    <p:dataTable emptyMessage="No hay repuestos" id="entregaId" var="e" value="#{tallerSolController.entregaClienteList}" rows="3" paginator="true">
                         <p:column headerText="Proveedor" sortBy="#{e.nameProveedor}">
                             <h:outputText value="#{e.nameProveedor}" />
                         </p:column>
@@ -362,10 +355,11 @@
                         </p:column>
                         <p:column headerText="Ya fue entregado?">
                             <p:selectBooleanButton value="#{e.seEntrego}" onLabel="Si" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
-                                <p:ajax update="mf:msg mf" onsuccess="PF('dlgEsc').show();" listener="#{tallerSolController.changeEntregado(e.id)}"/>
+                                <p:ajax listener="#{tallerSolController.changeEntregado(e.id)}"/>
                             </p:selectBooleanButton>
                         </p:column>
                     </p:dataTable>
+                    <!--<p:commandButton update="mf" value="Cerrar" actionListener="#{tallerSolController.changeEntregadoFinal()}" class="waves-effect waves-light btn" oncomplete="PF('dlgEsc').hide()"/>-->
                 </h:panelGroup>
                 <h:panelGroup id="pgEsc2" rendered="#{tallerSolController.flagEsc}">
                     <div class="row">
@@ -382,7 +376,6 @@
             </p:dialog>
             
             <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
-                <p:scrollPanel>
                     <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{tallerSolController.repSolList}" rows="5" paginator="true">
                         <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                             <h:outputText value="#{r1.repuesto}" />
@@ -392,7 +385,6 @@
                             <h:outputText value="No" rendered="#{r1.aplica == 'N'}"/>
                         </p:column>
                     </p:dataTable>
-                </p:scrollPanel>
             </p:dialog>
             <p:dialog widgetVar="dlgInfo" id="dlgInfo" modal="true" closeOnEscape="true" header="Informacion de solicitud" closable="true" position="top" dynamic="true" width="990">
                 <h:panelGroup id="pgDlgOrden">
