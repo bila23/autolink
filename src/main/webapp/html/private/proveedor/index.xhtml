@@ -173,7 +173,7 @@
                 </p:galleria>
             </p:dialog>
             <p:dialog widgetVar="dlgRep" id="dlgRep" modal="true" closeOnEscape="true" header="Repuestos de Solicitud" dynamic="true" width="290px">
-                <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{asegSolController.repSolList}">
+                <p:dataTable emptyMessage="No hay repuestos" id="repSolTable" var="r1" value="#{asegSolController.repSolList}" rows="5" paginator="true">
                     <p:column headerText="Repuesto" sortBy="#{r1.repuesto}">
                         <h:outputText value="#{r1.repuesto}" />
                     </p:column>
@@ -198,7 +198,7 @@
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="winnerTable" var="r1" value="#{provSolController.voOrdenCompra.repAplicaList}">
+                            <p:dataTable sortBy="#{r1.idsolicitud}" emptyMessage="No hay repuestos" id="winnerTable" var="r1" value="#{provSolController.voOrdenCompra.repAplicaList}" rows="5" paginator="true">
                                 <p:column headerText="Repuesto">
                                     <h:outputText value="#{r1.repuesto}"/>
                                 </p:column>

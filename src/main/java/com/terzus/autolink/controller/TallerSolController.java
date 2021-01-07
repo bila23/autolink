@@ -244,7 +244,7 @@ public class TallerSolController implements Serializable{
             FacesHelper.warningMessage("Debe ingresar el año del vehiculo");
         else if(model.getPlaca() == null || model.getPlaca().equals(""))
             FacesHelper.warningMessage("Debe ingresar la placa del vehiculo");
-        else if(model.getPlaca().length() < 7)
+        else if(model.getPlaca().length() < 3)
             FacesHelper.warningMessage("La placa del vehiculo no puede tener menos de 7 caracteres/digitos");
         else if(model.getChasis()== null || model.getChasis().equals(""))
             FacesHelper.warningMessage("Debe ingresar el chasis del vehiculo");
@@ -344,18 +344,28 @@ public class TallerSolController implements Serializable{
         }
     }
     
+    public void changeEntregadoFinal(){
+        try{
+            List<EntregaCliente> entregaList = entregaClienteService.findBySolAndEntregado(this.codeChange, "No");
+            if(entregaList == null || entregaList.isEmpty()){
+                despProvToEntSatis();
+                FacesHelper.success("Se ha cambiado el estado de la solicitud");
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            FacesHelper.error("Ha ocurrido un error inesperado al tratar de cambiar el estado del repuesto");                        
+        }
+    }
+    
     public void changeEntregado(int id){
         try{
             EntregaCliente entregaCliente = entregaClienteService.findByKey(id);
             if(entregaCliente != null){
-                if(entregaCliente.getEntregado().toLowerCase().equals("Si"))
+                if(entregaCliente.getEntregado().toLowerCase().equals("si"))
                     entregaCliente.setEntregado("No");
                 else
                     entregaCliente.setEntregado("Si");
                 entregaClienteService.update(entregaCliente);
-                List<EntregaCliente> entregaList = entregaClienteService.findBySolAndEntregado(entregaCliente.getSolicitud(), "No");
-                if(entregaList == null || entregaList.isEmpty())
-                    despProvToEntSatis();
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
