@@ -161,7 +161,7 @@ public class ClienteSolController implements Serializable {
                     imageList = fotoSolService.findImageBySol(idSol);
                 }
             } else {
-                FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un problema al tratar de asociar la imagen a la solicitud");
+                FacesHelper.warningMessage(Constants.WARNING, "Ha ocurrido un problema al tratar de asociar la imagen a la solicitud, aun no hay un repuesto agregado");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
