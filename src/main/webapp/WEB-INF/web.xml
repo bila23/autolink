@@ -143,7 +143,7 @@
         <display-name>Restricted to users with role</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted Access</web-resource-name>
-            <url-pattern>/faces/html/private/admin/*</url-pattern>
+            <url-pattern>/html/private/admin/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>ADMIN</role-name>
@@ -154,7 +154,7 @@
         <display-name>Restricted to users with role</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted Access</web-resource-name>
-            <url-pattern>/faces/html/private/taller/*</url-pattern>
+            <url-pattern>/html/private/taller/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>TALLER</role-name>
@@ -165,7 +165,7 @@
         <display-name>Restricted to users with role</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted Access</web-resource-name>
-            <url-pattern>/faces/html/private/aseguradora/*</url-pattern>
+            <url-pattern>/html/private/aseguradora/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>ASEGURADORA</role-name>
@@ -176,7 +176,7 @@
         <display-name>Restricted to users with role</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted Access</web-resource-name>
-            <url-pattern>/faces/html/private/proveedor/*</url-pattern>
+            <url-pattern>/html/private/proveedor/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>PROVEEDOR</role-name>
